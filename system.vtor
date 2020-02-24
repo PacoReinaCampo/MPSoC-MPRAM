@@ -1,0 +1,6 @@
+rtl/verilog/ahb3/mpsoc_ahb3_mpram.sv
+rtl/verilog/wb/mpsoc_wb_mpram.sv
+rtl/verilog/core/mpsoc_ram_1r1w.sv
+rtl/verilog/core/mpsoc_ram_1r1w_generic.sv
+
+bench/verilog/regression/mpsoc_msi_testbench.sv

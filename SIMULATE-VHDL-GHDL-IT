@@ -1,0 +1,13 @@
+ghdl -i rtl/vhdl/pkg/mpsoc_pkg.vhd
+ghdl -i rtl/vhdl/ahb3/mpsoc_misd_ahb3_mpram.vhd
+ghdl -i rtl/vhdl/ahb3/mpsoc_simd_ahb3_mpram.vhd
+ghdl -i rtl/vhdl/wb/mpsoc_misd_wb_mpram.vhd
+ghdl -i rtl/vhdl/wb/mpsoc_simd_wb_mpram.vhd
+ghdl -i rtl/vhdl/core/mpsoc_ram_1r1w.vhd
+ghdl -i rtl/vhdl/core/mpsoc_ram_1r1w_generic.vhd
+
+ghdl -i bench/vhdl/regression/mpsoc_msi_testbench.vhd
+
+ghdl -m mpsoc_msi_testbench
+
+ghdl -r mpsoc_msi_testbench --ieee-asserts=disable-at-0 --disp-tree=inst > mpsoc_msi_testbench.tree

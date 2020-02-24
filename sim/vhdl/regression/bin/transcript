@@ -1,0 +1,18 @@
+# vsim -c -do "run.do" work.mpsoc_msi_testbench 
+# Start time: 01:16:55 on Feb 24,2020
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.mpsoc_pkg
+# Loading work.mpsoc_msi_testbench(rtl)
+# Loading work.mpsoc_misd_ahb3_mpram(rtl)
+# Loading work.mpsoc_ram_1r1w(rtl)
+# Loading work.mpsoc_ram_1r1w_generic(rtl)
+# Loading work.mpsoc_simd_ahb3_mpram(rtl)
+# Loading work.mpsoc_misd_wb_mpram(rtl)
+# Loading work.mpsoc_simd_wb_mpram(rtl)
+# do run.do
+# End time: 01:16:55 on Feb 24,2020, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
