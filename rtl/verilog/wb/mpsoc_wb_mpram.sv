@@ -10,8 +10,8 @@
 //                                                                            //
 //                                                                            //
 //              MPSoC-RISCV CPU                                               //
-//              Multi Port SRAM                                               //
-//              AMBA3 AHB-Lite Bus Interface                                  //
+//              Generic RAM                                                   //
+//              Wishbone Bus Interface                                        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -40,186 +40,159 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-`include "mpsoc_pkg.sv"
+module mpsoc_wb_spram #(
+  //Wishbone parameters
+  parameter DW = 32,
 
-module mpsoc_wb_mpram #(
-  parameter MEM_SIZE          = 0,   //Memory in Bytes
-  parameter MEM_DEPTH         = 256, //Memory depth
-  parameter HADDR_SIZE        = 64,
-  parameter HDATA_SIZE        = 32,
-  parameter CORES_PER_TILE    = 8,
-  parameter TECHNOLOGY        = "GENERIC",
-  parameter REGISTERED_OUTPUT = "NO"
+  //Memory parameters
+  parameter DEPTH   = 256,
+  parameter AW      = $clog2(DEPTH),
+  parameter MEMFILE = ""
 )
   (
-    input                       HRESETn,
-                                HCLK,
+    input           wb_clk_i,
+    input           wb_rst_i,
 
-    //AHB Slave Interfaces (receive data from AHB Masters)
-    //AHB Masters connect to these ports
-    input      [CORES_PER_TILE-1:0]                 HSEL,
-    input      [CORES_PER_TILE-1:0][HADDR_SIZE-1:0] HADDR,
-    input      [CORES_PER_TILE-1:0][HDATA_SIZE-1:0] HWDATA,
-    output reg [CORES_PER_TILE-1:0][HDATA_SIZE-1:0] HRDATA,
-    input      [CORES_PER_TILE-1:0]                 HWRITE,
-    input      [CORES_PER_TILE-1:0][           2:0] HSIZE,
-    input      [CORES_PER_TILE-1:0][           2:0] HBURST,
-    input      [CORES_PER_TILE-1:0][           3:0] HPROT,
-    input      [CORES_PER_TILE-1:0][           1:0] HTRANS,
-    input      [CORES_PER_TILE-1:0]                 HMASTLOCK,
-    output reg [CORES_PER_TILE-1:0]                 HREADYOUT,
-    input      [CORES_PER_TILE-1:0]                 HREADY,
-    output     [CORES_PER_TILE-1:0]                 HRESP
+    input  [AW-1:0] wb_adr_i,
+    input  [DW-1:0] wb_dat_i,
+    input  [3:0]    wb_sel_i,
+    input           wb_we_i,
+    input  [1:0]    wb_bte_i,
+    input  [2:0]    wb_cti_i,
+    input           wb_cyc_i,
+    input           wb_stb_i,
+
+    output reg      wb_ack_o,
+    output          wb_err_o,
+    output [DW-1:0] wb_dat_o
   );
 
   //////////////////////////////////////////////////////////////////
   //
   // Constants
   //
+  parameter CLASSIC_CYCLE = 1'b0;
+  parameter BURST_CYCLE   = 1'b1;
 
-  localparam BE_SIZE        = (HDATA_SIZE+7)/8;
+  parameter READ  = 1'b0;
+  parameter WRITE = 1'b1;
 
-  localparam MEM_SIZE_DEPTH = 8*MEM_SIZE / HDATA_SIZE;
-  localparam REAL_MEM_DEPTH = MEM_DEPTH > MEM_SIZE_DEPTH ? MEM_DEPTH : MEM_SIZE_DEPTH;
-  localparam MEM_ABITS      = $clog2(REAL_MEM_DEPTH);
-  localparam MEM_ABITS_LSB  = $clog2(BE_SIZE);
+  parameter [2:0] CTI_CLASSIC      = 3'b000;
+  parameter [2:0] CTI_CONST_BURST  = 3'b001;
+  parameter [2:0] CTI_INC_BURST    = 3'b010;
+  parameter [2:0] CTI_END_OF_BURST = 3'b111;
 
-  //////////////////////////////////////////////////////////////////
-  //
-  // Variables
-  //
-  genvar                 t;
-
-  logic                  we         [CORES_PER_TILE];
-  logic [BE_SIZE   -1:0] be         [CORES_PER_TILE];
-  logic [HADDR_SIZE-1:0] waddr      [CORES_PER_TILE];
-  logic                  contention [CORES_PER_TILE];
-  logic                  ready      [CORES_PER_TILE];
-
-  logic [HDATA_SIZE-1:0] dout       [CORES_PER_TILE];
+  parameter [1:0] BTE_LINEAR  = 2'd0;
+  parameter [1:0] BTE_WRAP_4  = 2'd1;
+  parameter [1:0] BTE_WRAP_8  = 2'd2;
+  parameter [1:0] BTE_WRAP_16 = 2'd3;
 
   //////////////////////////////////////////////////////////////////
   //
   // Functions
   //
+  function get_cycle_type;
+    input [2:0] cti;
+    begin
+      get_cycle_type = (cti === CTI_CLASSIC) ? CLASSIC_CYCLE : BURST_CYCLE;
+    end
+  endfunction
 
-  function [BE_SIZE-1:0] gen_be;
-    input [           2:0] hsize;
-    input [HADDR_SIZE-1:0] haddr;
+  function wb_is_last;
+    input [2:0] cti;
+    begin
+      case (cti)
+        CTI_CLASSIC      : wb_is_last = 1'b1;
+        CTI_CONST_BURST  : wb_is_last = 1'b0;
+        CTI_INC_BURST    : wb_is_last = 1'b0;
+        CTI_END_OF_BURST : wb_is_last = 1'b1;
+      endcase
+    end
+  endfunction
 
-    logic [127:0] full_be;
-    logic [  6:0] haddr_masked;
-    logic [  6:0] address_offset;
+  function [31:0] wb_next_adr;
+    input [31:0] adr_i;
+    input [2:0]  cti_i;
+    input [2:0]  bte_i;
 
-    //get number of active lanes for a 1024bit databus (max width) for this HSIZE
-    case (hsize)
-      `HSIZE_B1024 : full_be = 128'hffff_ffff_ffff_ffff_ffff_ffff_ffff_ffff; 
-      `HSIZE_B512  : full_be = 128'h0000_0000_0000_0000_ffff_ffff_ffff_ffff;
-      `HSIZE_B256  : full_be = 128'h0000_0000_0000_0000_0000_0000_ffff_ffff;
-      `HSIZE_B128  : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_ffff;
-      `HSIZE_DWORD : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_00ff;
-      `HSIZE_WORD  : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_000f;
-      `HSIZE_HWORD : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_0003;
-      default      : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_0001;
-    endcase
+    input integer dw;
 
-    //What are the lesser bits in HADDR?
-    case (HDATA_SIZE)
-      1024    : address_offset = 7'b111_1111; 
-      0512    : address_offset = 7'b011_1111;
-      0256    : address_offset = 7'b001_1111;
-      0128    : address_offset = 7'b000_1111;
-      0064    : address_offset = 7'b000_0111;
-      0032    : address_offset = 7'b000_0011;
-      0016    : address_offset = 7'b000_0001;
-      default : address_offset = 7'b000_0000;
-    endcase
+    reg [31:0] adr;
 
-    //generate masked address
-    haddr_masked = haddr & address_offset;
+    integer shift;
+    begin
+      if (dw == 64) shift = 3;
+      else if (dw == 32) shift = 2;
+      else if (dw == 16) shift = 1;
+      else shift = 0;
+      adr = adr_i >> shift;
+      if (cti_i == CTI_INC_BURST)
+        case (bte_i)
+          BTE_LINEAR   : adr = adr + 1;
+          BTE_WRAP_4   : adr = {adr[31:2], adr[1:0]+2'd1};
+          BTE_WRAP_8   : adr = {adr[31:3], adr[2:0]+3'd1};
+          BTE_WRAP_16  : adr = {adr[31:4], adr[3:0]+4'd1};
+        endcase // case (burst_type_i)
+      wb_next_adr = adr << shift;
+    end
+  endfunction
 
-    //create byte-enable
-    gen_be = full_be[BE_SIZE-1:0] << haddr_masked;
-  endfunction //gen_be
+  //////////////////////////////////////////////////////////////////
+  //
+  // Variables
+  //
+  reg  [AW-1:0] adr_r;
+  wire [AW-1:0] next_adr;
+  wire          valid;
+  reg           valid_r;
+  reg           is_last_r;
+  wire          new_cycle;
+  wire [AW-1:0] adr;
+  wire          ram_we;
 
   //////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
+  assign valid = wb_cyc_i & wb_stb_i;
 
-  generate
-    for (t=0; t < CORES_PER_TILE; t=t+1) begin
-      //generate internal write signal
-      //This causes read/write contention[t], which is handled by memory
-      always @(posedge HCLK) begin
-        if (HREADY[t]) we[t] <= HSEL[t] & HWRITE[t] & (HTRANS[t] != `HTRANS_BUSY) & (HTRANS[t] != `HTRANS_IDLE);
-        else           we[t] <= 1'b0;
-      end
-      //decode Byte-Enables
-      always @(posedge HCLK) begin
-        if (HREADY[t]) be[t] <= gen_be(HSIZE[t], HADDR[t]);
-      end
+  always @(posedge wb_clk_i) begin
+    is_last_r <= wb_is_last(wb_cti_i);
+  end
 
-      //store write address
-      always @(posedge HCLK) begin
-        if (HREADY[t]) waddr[t] <= HADDR[t];
-      end
+  assign new_cycle = (valid & !valid_r) | is_last_r;
 
-      //Is there read/write contention[t] on the memory?
-      assign contention[t] = (waddr[t][MEM_ABITS_LSB +: MEM_ABITS] == HADDR[t][MEM_ABITS_LSB +: MEM_ABITS]) & we[t] &
-        HSEL[t] & HREADY[t] & ~HWRITE[t] & (HTRANS[t] != `HTRANS_BUSY) & (HTRANS[t] != `HTRANS_IDLE);
+  assign next_adr = wb_next_adr(adr_r, wb_cti_i, wb_bte_i, DW);
 
-      //if all bytes were written contention[t] is/can be handled by memory
-      //otherwise stall a cycle (forced by N3S)
-      //We could do an exception for N3S here, but this file should be technology agnostic
-      assign ready[t] = ~(contention[t] & ~&be[t]);
+  assign adr = new_cycle ? wb_adr_i : next_adr;
 
-      /*
-       * Hookup Memory Wrapper
-       * Use two-port memory, due to pipelined AHB bus;
-       *   the actual write to memory is 1 cycle late, causing read/write overlap
-       * This assumes there are input registers on the memory
-       */
-
-      mpsoc_ram_1r1w #(
-        .ABITS      ( MEM_ABITS  ),
-        .DBITS      ( HDATA_SIZE ),
-        .TECHNOLOGY ( TECHNOLOGY ) 
-      )
-      ram_1r1w (
-        .rst_ni  ( HRESETn                                 ),
-        .clk_i   ( HCLK                                    ),
-
-        .waddr_i ( waddr  [t][MEM_ABITS_LSB +: MEM_ABITS]  ),
-        .we_i    ( we     [t]                              ),
-        .be_i    ( be     [t]                              ),
-        .din_i   ( HWDATA [t]                              ),
-
-        .re_i    ( 1'b0                                    ),
-        .raddr_i ( HADDR  [t][MEM_ABITS_LSB +: MEM_ABITS]  ),
-        .dout_o  ( dout   [t]                              )
-      );
-
-      //AHB bus response
-      assign HRESP[t] = `HRESP_OKAY; //always OK
-
-      if (REGISTERED_OUTPUT == "NO") begin
-        always @(posedge HCLK,negedge HRESETn) begin
-          if (!HRESETn) HREADYOUT[t] <= 1'b1;
-          else          HREADYOUT[t] <= ready[t];
-        end
-        always @* HRDATA[t] = dout[t];
-      end 
-      else begin
-        always @(posedge HCLK,negedge HRESETn) begin
-          if (!HRESETn)                                       HREADYOUT[t] <= 1'b1;
-          else if (HTRANS[t] == `HTRANS_NONSEQ && !HWRITE[t]) HREADYOUT[t] <= 1'b0;
-          else                                                HREADYOUT[t] <= 1'b1;
-        end
-        always @(posedge HCLK) begin
-          if (HREADY[t]) HRDATA[t] <= dout[t];
-        end
-      end
+  always@(posedge wb_clk_i) begin
+    adr_r   <= adr;
+    valid_r <= valid;
+    //Ack generation
+    wb_ack_o <= valid & (!((wb_cti_i == 3'b000) | (wb_cti_i == 3'b111)) | !wb_ack_o);
+    if(wb_rst_i) begin
+      adr_r    <= {AW{1'b0}};
+      valid_r  <= 1'b0;
+      wb_ack_o <= 1'b0;
     end
-  endgenerate
+  end
+
+  assign ram_we = wb_we_i & valid & wb_ack_o;
+
+  //TODO:ck for burst address errors
+  assign wb_err_o =  1'b0;
+
+  mpsoc_wb_ram_generic #(
+    .DEPTH   (DEPTH/4),
+    .MEMFILE (MEMFILE)
+  )
+  ram0 (
+    .clk   (wb_clk_i),
+    .we    ({4{ram_we}} & wb_sel_i),
+    .din   (wb_dat_i),
+    .waddr (adr_r[AW-1:2]),
+    .raddr (adr[AW-1:2]),
+    .dout  (wb_dat_o)
+  );
 endmodule
