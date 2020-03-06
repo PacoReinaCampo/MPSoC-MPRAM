@@ -55,6 +55,15 @@ module mpsoc_msi_testbench;
   localparam SYNC_DEPTH = 3;
   localparam TECHNOLOGY = "GENERIC";
 
+
+  //Wishbone parameters
+  parameter DW = 32;
+
+  //Memory parameters
+  parameter DEPTH   = 256;
+  parameter AW      = $clog2(DEPTH);
+  parameter MEMFILE = "";
+
   //////////////////////////////////////////////////////////////////
   //
   // Variables
@@ -64,19 +73,33 @@ module mpsoc_msi_testbench;
   wire                                     HRESETn;
   wire                                     HCLK;
 
-  wire  [MASTERS-1:0]                      mst_mram_HSEL;
-  wire  [MASTERS-1:0][PLEN           -1:0] mst_mram_HADDR;
-  wire  [MASTERS-1:0][XLEN           -1:0] mst_mram_HWDATA;
-  wire  [MASTERS-1:0][XLEN           -1:0] mst_mram_HRDATA;
-  wire  [MASTERS-1:0]                      mst_mram_HWRITE;
-  wire  [MASTERS-1:0][                2:0] mst_mram_HSIZE;
-  wire  [MASTERS-1:0][                2:0] mst_mram_HBURST;
-  wire  [MASTERS-1:0][                3:0] mst_mram_HPROT;
-  wire  [MASTERS-1:0][                1:0] mst_mram_HTRANS;
-  wire  [MASTERS-1:0]                      mst_mram_HMASTLOCK;
-  wire  [MASTERS-1:0]                      mst_mram_HREADY;
-  wire  [MASTERS-1:0]                      mst_mram_HREADYOUT;
-  wire  [MASTERS-1:0]                      mst_mram_HRESP;
+  //AHB3 signals
+  wire  [MASTERS-1:0]                      mst_mpram_HSEL;
+  wire  [MASTERS-1:0][PLEN           -1:0] mst_mpram_HADDR;
+  wire  [MASTERS-1:0][XLEN           -1:0] mst_mpram_HWDATA;
+  wire  [MASTERS-1:0][XLEN           -1:0] mst_mpram_HRDATA;
+  wire  [MASTERS-1:0]                      mst_mpram_HWRITE;
+  wire  [MASTERS-1:0][                2:0] mst_mpram_HSIZE;
+  wire  [MASTERS-1:0][                2:0] mst_mpram_HBURST;
+  wire  [MASTERS-1:0][                3:0] mst_mpram_HPROT;
+  wire  [MASTERS-1:0][                1:0] mst_mpram_HTRANS;
+  wire  [MASTERS-1:0]                      mst_mpram_HMASTLOCK;
+  wire  [MASTERS-1:0]                      mst_mpram_HREADY;
+  wire  [MASTERS-1:0]                      mst_mpram_HREADYOUT;
+  wire  [MASTERS-1:0]                      mst_mpram_HRESP;
+
+  //WB signals
+  wire  [MASTERS-1:0][AW             -1:0] mst_mpram_adr_i;
+  wire  [MASTERS-1:0][DW             -1:0] mst_mpram_dat_i;
+  wire  [MASTERS-1:0][                3:0] mst_mpram_sel_i;
+  wire  [MASTERS-1:0]                      mst_mpram_we_i;
+  wire  [MASTERS-1:0][                1:0] mst_mpram_bte_i;
+  wire  [MASTERS-1:0][                2:0] mst_mpram_cti_i;
+  wire  [MASTERS-1:0]                      mst_mpram_cyc_i;
+  wire  [MASTERS-1:0]                      mst_mpram_stb_i;
+  reg   [MASTERS-1:0]                      mst_mpram_ack_o;
+  wire  [MASTERS-1:0]                      mst_mpram_err_o;
+  wire  [MASTERS-1:0][DW             -1:0] mst_mpram_dat_o;
 
   //////////////////////////////////////////////////////////////////
   //
@@ -100,47 +123,45 @@ module mpsoc_msi_testbench;
     .HRESETn   ( HRESETn ),
     .HCLK      ( HCLK    ),
 
-    .HSEL      ( mst_mram_HSEL      ),
-    .HADDR     ( mst_mram_HADDR     ),
-    .HWDATA    ( mst_mram_HWDATA    ),
-    .HRDATA    ( mst_mram_HRDATA    ),
-    .HWRITE    ( mst_mram_HWRITE    ),
-    .HSIZE     ( mst_mram_HSIZE     ),
-    .HBURST    ( mst_mram_HBURST    ),
-    .HPROT     ( mst_mram_HPROT     ),
-    .HTRANS    ( mst_mram_HTRANS    ),
-    .HMASTLOCK ( mst_mram_HMASTLOCK ),
-    .HREADYOUT ( mst_mram_HREADYOUT ),
-    .HREADY    ( mst_mram_HREADY    ),
-    .HRESP     ( mst_mram_HRESP     )
+    .HSEL      ( mst_mpram_HSEL      ),
+    .HADDR     ( mst_mpram_HADDR     ),
+    .HWDATA    ( mst_mpram_HWDATA    ),
+    .HRDATA    ( mst_mpram_HRDATA    ),
+    .HWRITE    ( mst_mpram_HWRITE    ),
+    .HSIZE     ( mst_mpram_HSIZE     ),
+    .HBURST    ( mst_mpram_HBURST    ),
+    .HPROT     ( mst_mpram_HPROT     ),
+    .HTRANS    ( mst_mpram_HTRANS    ),
+    .HMASTLOCK ( mst_mpram_HMASTLOCK ),
+    .HREADYOUT ( mst_mpram_HREADYOUT ),
+    .HREADY    ( mst_mpram_HREADY    ),
+    .HRESP     ( mst_mpram_HRESP     )
   );
 
+  //DUT WB
   mpsoc_wb_mpram #(
-    .MEM_SIZE          ( 0 ),
-    .MEM_DEPTH         ( 256 ),
-    .HADDR_SIZE        ( PLEN ),
-    .HDATA_SIZE        ( XLEN ),
-    .CORES_PER_TILE    ( MASTERS ),
-    .TECHNOLOGY        ( TECHNOLOGY ),
-    .REGISTERED_OUTPUT ( "NO" )
+    .DW      ( DW      ),
+    .DEPTH   ( DEPTH   ),
+    .AW      ( AW      ),
+    .MEMFILE ( MEMFILE ),
+
+    .CORES_PER_TILE ( MASTERS )
   )
   wb_mpram (
-    //AHB Slave Interface
-    .HRESETn   ( HRESETn ),
-    .HCLK      ( HCLK    ),
+    //Wishbone Master interface
+    .wb_clk_i ( HRESETn ),
+    .wb_rst_i ( HCLK    ),
 
-    .HSEL      (       ),
-    .HADDR     (      ),
-    .HWDATA    (     ),
-    .HRDATA    (     ),
-    .HWRITE    (     ),
-    .HSIZE     (      ),
-    .HBURST    (     ),
-    .HPROT     (      ),
-    .HTRANS    (     ),
-    .HMASTLOCK (  ),
-    .HREADYOUT (  ),
-    .HREADY    (     ),
-    .HRESP     (      )
+    .wb_adr_i ( mst_mpram_adr_i ),
+    .wb_dat_i ( mst_mpram_dat_i ),
+    .wb_sel_i ( mst_mpram_sel_i ),
+    .wb_we_i  ( mst_mpram_we_i  ),
+    .wb_bte_i ( mst_mpram_bte_i ),
+    .wb_cti_i ( mst_mpram_cti_i ),
+    .wb_cyc_i ( mst_mpram_cyc_i ),
+    .wb_stb_i ( mst_mpram_stb_i ),
+    .wb_ack_o ( mst_mpram_ack_o ),
+    .wb_err_o ( mst_mpram_err_o ),
+    .wb_dat_o ( mst_mpram_dat_o )
   );
 endmodule

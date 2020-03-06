@@ -10,7 +10,7 @@
 //                                                                            //
 //                                                                            //
 //              MPSoC-RISCV CPU                                               //
-//              Generic RAM                                                   //
+//              Multi Port RAM                                                //
 //              Wishbone Bus Interface                                        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
@@ -40,31 +40,33 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-module mpsoc_wb_spram #(
+module mpsoc_wb_mpram #(
   //Wishbone parameters
   parameter DW = 32,
 
   //Memory parameters
   parameter DEPTH   = 256,
   parameter AW      = $clog2(DEPTH),
-  parameter MEMFILE = ""
+  parameter MEMFILE = "",
+
+  parameter CORES_PER_TILE = 8
 )
   (
-    input           wb_clk_i,
-    input           wb_rst_i,
+    input                                   wb_clk_i,
+    input                                   wb_rst_i,
 
-    input  [AW-1:0] wb_adr_i,
-    input  [DW-1:0] wb_dat_i,
-    input  [3:0]    wb_sel_i,
-    input           wb_we_i,
-    input  [1:0]    wb_bte_i,
-    input  [2:0]    wb_cti_i,
-    input           wb_cyc_i,
-    input           wb_stb_i,
+    input      [CORES_PER_TILE-1:0][AW-1:0] wb_adr_i,
+    input      [CORES_PER_TILE-1:0][DW-1:0] wb_dat_i,
+    input      [CORES_PER_TILE-1:0][   3:0] wb_sel_i,
+    input      [CORES_PER_TILE-1:0]         wb_we_i,
+    input      [CORES_PER_TILE-1:0][   1:0] wb_bte_i,
+    input      [CORES_PER_TILE-1:0][   2:0] wb_cti_i,
+    input      [CORES_PER_TILE-1:0]         wb_cyc_i,
+    input      [CORES_PER_TILE-1:0]         wb_stb_i,
 
-    output reg      wb_ack_o,
-    output          wb_err_o,
-    output [DW-1:0] wb_dat_o
+    output reg [CORES_PER_TILE-1:0]         wb_ack_o,
+    output     [CORES_PER_TILE-1:0]         wb_err_o,
+    output     [CORES_PER_TILE-1:0][DW-1:0] wb_dat_o
   );
 
   //////////////////////////////////////////////////////////////////
@@ -141,58 +143,64 @@ module mpsoc_wb_spram #(
   //
   // Variables
   //
-  reg  [AW-1:0] adr_r;
-  wire [AW-1:0] next_adr;
-  wire          valid;
-  reg           valid_r;
-  reg           is_last_r;
-  wire          new_cycle;
-  wire [AW-1:0] adr;
-  wire          ram_we;
+  reg  [CORES_PER_TILE-1:0][AW-1:0] adr_r;
+  wire [CORES_PER_TILE-1:0][AW-1:0] next_adr;
+  wire [CORES_PER_TILE-1:0]         valid;
+  reg  [CORES_PER_TILE-1:0]         valid_r;
+  reg  [CORES_PER_TILE-1:0]         is_last_r;
+  wire [CORES_PER_TILE-1:0]         new_cycle;
+  wire [CORES_PER_TILE-1:0][AW-1:0] adr;
+  wire [CORES_PER_TILE-1:0]         ram_we;
+
+  genvar t;
 
   //////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
-  assign valid = wb_cyc_i & wb_stb_i;
+  generate
+    for (t=0; t < CORES_PER_TILE; t=t+1) begin
+      assign valid[t] = wb_cyc_i[t] & wb_stb_i[t];
 
-  always @(posedge wb_clk_i) begin
-    is_last_r <= wb_is_last(wb_cti_i);
-  end
+      always @(posedge wb_clk_i) begin
+        is_last_r[t] <= wb_is_last(wb_cti_i[t]);
+      end
 
-  assign new_cycle = (valid & !valid_r) | is_last_r;
+      assign new_cycle[t] = (valid[t] & !valid_r[t]) | is_last_r[t];
 
-  assign next_adr = wb_next_adr(adr_r, wb_cti_i, wb_bte_i, DW);
+      assign next_adr[t] = wb_next_adr(adr_r[t], wb_cti_i[t], wb_bte_i[t], DW);
 
-  assign adr = new_cycle ? wb_adr_i : next_adr;
+      assign adr[t] = new_cycle[t] ? wb_adr_i[t] : next_adr[t];
 
-  always@(posedge wb_clk_i) begin
-    adr_r   <= adr;
-    valid_r <= valid;
-    //Ack generation
-    wb_ack_o <= valid & (!((wb_cti_i == 3'b000) | (wb_cti_i == 3'b111)) | !wb_ack_o);
-    if(wb_rst_i) begin
-      adr_r    <= {AW{1'b0}};
-      valid_r  <= 1'b0;
-      wb_ack_o <= 1'b0;
+      always@(posedge wb_clk_i) begin
+        adr_r   [t] <= adr[t];
+        valid_r [t] <= valid[t];
+        //Ack generation
+        wb_ack_o[t] <= valid[t] & (!((wb_cti_i[t] == 3'b000) | (wb_cti_i[t] == 3'b111)) | !wb_ack_o[t]);
+        if(wb_rst_i) begin
+          adr_r    [t] <= {AW{1'b0}};
+          valid_r  [t] <= 1'b0;
+          wb_ack_o [t] <= 1'b0;
+        end
+      end
+
+      assign ram_we[t] = wb_we_i[t] & valid[t] & wb_ack_o[t];
+
+      //TODO:ck for burst address errors
+      assign wb_err_o[t] =  1'b0;
+
+      mpsoc_wb_ram_generic #(
+        .DEPTH   (DEPTH/4),
+        .MEMFILE (MEMFILE)
+      )
+      ram0 (
+        .clk   (wb_clk_i),
+        .we    ({4{ram_we[t]}} & wb_sel_i[t]),
+        .din   (wb_dat_i[t]),
+        .waddr (adr_r[t][AW-1:2]),
+        .raddr (adr[t][AW-1:2]),
+        .dout  (wb_dat_o[t])
+      );
     end
-  end
-
-  assign ram_we = wb_we_i & valid & wb_ack_o;
-
-  //TODO:ck for burst address errors
-  assign wb_err_o =  1'b0;
-
-  mpsoc_wb_ram_generic #(
-    .DEPTH   (DEPTH/4),
-    .MEMFILE (MEMFILE)
-  )
-  ram0 (
-    .clk   (wb_clk_i),
-    .we    ({4{ram_we}} & wb_sel_i),
-    .din   (wb_dat_i),
-    .waddr (adr_r[AW-1:2]),
-    .raddr (adr[AW-1:2]),
-    .dout  (wb_dat_o)
-  );
+  endgenerate
 endmodule

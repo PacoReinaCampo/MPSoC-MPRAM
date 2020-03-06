@@ -42,5 +42,5 @@
 
 ../../../../rtl/vhdl/pkg/mpsoc_pkg.vhd
 
-../../../../rtl/vhdl/ram/mpsoc_ram_1r1w.vhd
-../../../../rtl/vhdl/ram/mpsoc_ram_1r1w_generic.vhd
+../../../../rtl/vhdl/ahb3/mpsoc_ram_1r1w.vhd
+../../../../rtl/vhdl/ahb3/mpsoc_ram_1r1w_generic.vhd

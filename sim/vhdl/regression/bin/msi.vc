@@ -44,9 +44,9 @@
 
 ../../../../rtl/vhdl/ahb3/mpsoc_misd_ahb3_mpram.vhd
 ../../../../rtl/vhdl/ahb3/mpsoc_simd_ahb3_mpram.vhd
+../../../../rtl/vhdl/ahb3/mpsoc_ram_1r1w.vhd
+../../../../rtl/vhdl/ahb3/mpsoc_ram_1r1w_generic.vhd
 ../../../../rtl/vhdl/wb/mpsoc_misd_wb_mpram.vhd
 ../../../../rtl/vhdl/wb/mpsoc_simd_wb_mpram.vhd
-../../../../rtl/vhdl/core/mpsoc_ram_1r1w.vhd
-../../../../rtl/vhdl/core/mpsoc_ram_1r1w_generic.vhd
 
 ../../../../bench/vhdl/regression/mpsoc_msi_testbench.vhd
