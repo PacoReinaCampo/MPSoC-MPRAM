@@ -142,6 +142,10 @@ package mpsoc_pkg is
 
   constant BUFFER_DEPTH           : integer := 4;
 
+  constant DW                     : integer := 32;
+  constant DEPTH                  : integer := 256;
+  constant AW                     : integer := integer(log2(real(DEPTH)));
+
   --RF access
   constant RDPORTS                : integer := 2;
   constant WRPORTS                : integer := 1;
@@ -222,6 +226,9 @@ package mpsoc_pkg is
   type M_CORES_PER_TILE_3 is array (CORES_PER_TILE-1 downto 0) of std_logic_vector(3 downto 0);
   type M_CORES_PER_TILE_2 is array (CORES_PER_TILE-1 downto 0) of std_logic_vector(2 downto 0);
   type M_CORES_PER_TILE_1 is array (CORES_PER_TILE-1 downto 0) of std_logic_vector(1 downto 0);
+
+  type M_CORES_PER_TILE_AW is array (CORES_PER_TILE-1 downto 0) of std_logic_vector(AW-1 downto 0);
+  type M_CORES_PER_TILE_DW is array (CORES_PER_TILE-1 downto 0) of std_logic_vector(DW-1 downto 0);
 
   type M_2CORES_PER_MISD_PLEN is array (2*CORES_PER_MISD-1 downto 0) of std_logic_vector(PLEN-1 downto 0);
   type M_2CORES_PER_MISD_XLEN is array (2*CORES_PER_MISD-1 downto 0) of std_logic_vector(XLEN-1 downto 0);
