@@ -1,0 +1,4 @@
+rm -rf spram.vvp
+iverilog -g2012 -o spram.vvp -c spram.vtor -s wb_spram_tb \
+-I rtl/verilog/pkg
+vvp spram.vvp
