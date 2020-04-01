@@ -1,5 +1,5 @@
 # vsim -c -do "run.do" work.mpsoc_mpram_testbench 
-# Start time: 21:46:05 on Apr 01,2020
+# Start time: 01:07:55 on Apr 02,2020
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
@@ -16,5 +16,5 @@
 #    Time: 0 ps  Iteration: 0  Instance: /mpsoc_mpram_testbench/wb_mpram File: ../../../../rtl/vhdl/wb/mpsoc_wb_mpram.vhd Line: 69
 # FATAL ERROR while loading design
 # Error loading design
-# End time: 21:46:05 on Apr 01,2020, Elapsed time: 0:00:00
+# End time: 01:07:55 on Apr 02,2020, Elapsed time: 0:00:00
 # Errors: 1, Warnings: 0

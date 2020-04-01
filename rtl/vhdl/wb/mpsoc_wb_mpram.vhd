@@ -201,17 +201,6 @@ architecture RTL of mpsoc_wb_mpram is
     return wb_next_adr_return;
   end wb_next_adr;
 
-  function to_stdlogic (
-    input : boolean
-    ) return std_logic is
-  begin
-    if input then
-      return('1');
-    else
-      return('0');
-    end if;
-  end function to_stdlogic;
-
 --////////////////////////////////////////////////////////////////
 --
 -- Variables
