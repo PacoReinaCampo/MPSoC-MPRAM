@@ -48,33 +48,32 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
+use work.mpsoc_mpram_wb_pkg.all;
+
 entity mpsoc_wb_ram_generic is
   generic (
     DEPTH   : integer := 256;
-    MEMFILE : string  := ""
+    MEMFILE : string  := "";
+
+    AW : integer := integer(log2(real(DEPTH)));
+    DW : integer := 32
     );
   port (
     clk   : in  std_logic;
     we    : in  std_logic_vector(3 downto 0);
-    din   : in  std_logic_vector(31 downto 0);
-    waddr : in  std_logic_vector(integer(log2(real(DEPTH)))-1 downto 0);
-    raddr : in  std_logic_vector(integer(log2(real(DEPTH)))-1 downto 0);
-    dout  : out std_logic_vector(31 downto 0)
+    din   : in  std_logic_vector(DW-1 downto 0);
+    waddr : in  std_logic_vector(AW-1 downto 0);
+    raddr : in  std_logic_vector(AW-1 downto 0);
+    dout  : out std_logic_vector(DW-1 downto 0)
     );
 end mpsoc_wb_ram_generic;
 
 architecture RTL of mpsoc_wb_ram_generic is
   --////////////////////////////////////////////////////////////////
   --
-  -- Types
-  --
-  type M_DEPTH_31 is array (DEPTH-1 downto 0) of std_logic_vector(31 downto 0);
-
-  --////////////////////////////////////////////////////////////////
-  --
   -- Variables
   --
-  signal mem : M_DEPTH_31;
+  signal mem : std_logic_matrix(DEPTH-1 downto 0)(DW-1 downto 0);
 
 begin
   --////////////////////////////////////////////////////////////////

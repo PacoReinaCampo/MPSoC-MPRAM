@@ -42,22 +42,25 @@
 
 module mpsoc_wb_ram_generic #(
   parameter DEPTH   = 256,
-  parameter MEMFILE = ""
+  parameter MEMFILE = "",
+
+  parameter AW = $clog2(DEPTH),
+  parameter DW = 32
 )
   (
-    input                          clk,
-    input      [3:0]               we,
-    input      [31:0]              din,
-    input      [$clog2(DEPTH)-1:0] waddr,
-    input      [$clog2(DEPTH)-1:0] raddr,
-    output reg [31:0]              dout
+    input               clk,
+    input      [   3:0] we,
+    input      [DW-1:0] din,
+    input      [AW-1:0] waddr,
+    input      [AW-1:0] raddr,
+    output reg [DW-1:0] dout
   );
 
   //////////////////////////////////////////////////////////////////
   //
   // Variables
   //
-  reg [31:0] mem [0:DEPTH-1];
+  reg [DW-1:0] mem [0:DEPTH-1];
 
   //////////////////////////////////////////////////////////////////
   //

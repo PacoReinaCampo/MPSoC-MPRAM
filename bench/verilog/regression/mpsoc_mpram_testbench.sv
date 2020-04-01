@@ -40,7 +40,7 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-module mpsoc_msi_testbench;
+module mpsoc_mpram_testbench;
 
   //////////////////////////////////////////////////////////////////
   //
@@ -49,20 +49,18 @@ module mpsoc_msi_testbench;
   localparam XLEN = 64;
   localparam PLEN = 64;
 
-  localparam MASTERS = 5;
-  localparam SLAVES  = 5;
-
   localparam SYNC_DEPTH = 3;
   localparam TECHNOLOGY = "GENERIC";
 
+  //Memory parameters
+  parameter DEPTH   = 256;
+  parameter MEMFILE = "";
 
   //Wishbone parameters
   parameter DW = 32;
+  parameter AW = $clog2(DEPTH);
 
-  //Memory parameters
-  parameter DEPTH   = 256;
-  parameter AW      = $clog2(DEPTH);
-  parameter MEMFILE = "";
+  localparam CORES_PER_TILE = 8;
 
   //////////////////////////////////////////////////////////////////
   //
@@ -74,32 +72,32 @@ module mpsoc_msi_testbench;
   wire                                     HCLK;
 
   //AHB3 signals
-  wire  [MASTERS-1:0]                      mst_mpram_HSEL;
-  wire  [MASTERS-1:0][PLEN           -1:0] mst_mpram_HADDR;
-  wire  [MASTERS-1:0][XLEN           -1:0] mst_mpram_HWDATA;
-  wire  [MASTERS-1:0][XLEN           -1:0] mst_mpram_HRDATA;
-  wire  [MASTERS-1:0]                      mst_mpram_HWRITE;
-  wire  [MASTERS-1:0][                2:0] mst_mpram_HSIZE;
-  wire  [MASTERS-1:0][                2:0] mst_mpram_HBURST;
-  wire  [MASTERS-1:0][                3:0] mst_mpram_HPROT;
-  wire  [MASTERS-1:0][                1:0] mst_mpram_HTRANS;
-  wire  [MASTERS-1:0]                      mst_mpram_HMASTLOCK;
-  wire  [MASTERS-1:0]                      mst_mpram_HREADY;
-  wire  [MASTERS-1:0]                      mst_mpram_HREADYOUT;
-  wire  [MASTERS-1:0]                      mst_mpram_HRESP;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_HSEL;
+  wire  [CORES_PER_TILE-1:0][PLEN           -1:0] mst_mpram_HADDR;
+  wire  [CORES_PER_TILE-1:0][XLEN           -1:0] mst_mpram_HWDATA;
+  wire  [CORES_PER_TILE-1:0][XLEN           -1:0] mst_mpram_HRDATA;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_HWRITE;
+  wire  [CORES_PER_TILE-1:0][                2:0] mst_mpram_HSIZE;
+  wire  [CORES_PER_TILE-1:0][                2:0] mst_mpram_HBURST;
+  wire  [CORES_PER_TILE-1:0][                3:0] mst_mpram_HPROT;
+  wire  [CORES_PER_TILE-1:0][                1:0] mst_mpram_HTRANS;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_HMASTLOCK;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_HREADY;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_HREADYOUT;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_HRESP;
 
   //WB signals
-  wire  [MASTERS-1:0][AW             -1:0] mst_mpram_adr_i;
-  wire  [MASTERS-1:0][DW             -1:0] mst_mpram_dat_i;
-  wire  [MASTERS-1:0][                3:0] mst_mpram_sel_i;
-  wire  [MASTERS-1:0]                      mst_mpram_we_i;
-  wire  [MASTERS-1:0][                1:0] mst_mpram_bte_i;
-  wire  [MASTERS-1:0][                2:0] mst_mpram_cti_i;
-  wire  [MASTERS-1:0]                      mst_mpram_cyc_i;
-  wire  [MASTERS-1:0]                      mst_mpram_stb_i;
-  reg   [MASTERS-1:0]                      mst_mpram_ack_o;
-  wire  [MASTERS-1:0]                      mst_mpram_err_o;
-  wire  [MASTERS-1:0][DW             -1:0] mst_mpram_dat_o;
+  wire  [CORES_PER_TILE-1:0][AW             -1:0] mst_mpram_adr_i;
+  wire  [CORES_PER_TILE-1:0][DW             -1:0] mst_mpram_dat_i;
+  wire  [CORES_PER_TILE-1:0][                3:0] mst_mpram_sel_i;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_we_i;
+  wire  [CORES_PER_TILE-1:0][                1:0] mst_mpram_bte_i;
+  wire  [CORES_PER_TILE-1:0][                2:0] mst_mpram_cti_i;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_cyc_i;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_stb_i;
+  reg   [CORES_PER_TILE-1:0]                      mst_mpram_ack_o;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_err_o;
+  wire  [CORES_PER_TILE-1:0][DW             -1:0] mst_mpram_dat_o;
 
   //////////////////////////////////////////////////////////////////
   //
@@ -110,13 +108,14 @@ module mpsoc_msi_testbench;
 
   //Instantiate RISC-V RAM
   mpsoc_ahb3_mpram #(
-    .MEM_SIZE          ( 0 ),
+    .MEM_SIZE          ( 256 ),
     .MEM_DEPTH         ( 256 ),
-    .HADDR_SIZE        ( PLEN ),
-    .HDATA_SIZE        ( XLEN ),
-    .CORES_PER_TILE    ( MASTERS ),
+    .PLEN              ( PLEN ),
+    .XLEN              ( XLEN ),
     .TECHNOLOGY        ( TECHNOLOGY ),
-    .REGISTERED_OUTPUT ( "NO" )
+    .REGISTERED_OUTPUT ( "NO" ),
+
+    .CORES_PER_TILE ( CORES_PER_TILE )
   )
   ahb3_mpram (
     //AHB Slave Interface
@@ -140,12 +139,13 @@ module mpsoc_msi_testbench;
 
   //DUT WB
   mpsoc_wb_mpram #(
-    .DW      ( DW      ),
     .DEPTH   ( DEPTH   ),
-    .AW      ( AW      ),
     .MEMFILE ( MEMFILE ),
 
-    .CORES_PER_TILE ( MASTERS )
+    .DW      ( DW ),
+    .AW      ( AW ),
+
+    .CORES_PER_TILE ( CORES_PER_TILE )
   )
   wb_mpram (
     //Wishbone Master interface

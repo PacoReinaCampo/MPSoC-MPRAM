@@ -70,7 +70,7 @@ module mpsoc_msi_wb_bfm_master #(
   // Constants
   //
 
-  `include "mpsoc_msi_wb_pkg.v"
+  `include "mpsoc_mpram_wb_pkg.v"
 
   parameter BUFFER_WIDTH = $clog2(MAX_BURST_LEN);
   parameter ADR_LSB      = $clog2(DW/8);
@@ -332,5 +332,5 @@ module mpsoc_msi_wb_bfm_master #(
         @(posedge wb_clk_i);
       data = wb_dat_i;
     end
-  endtask // while
+  endtask
 endmodule

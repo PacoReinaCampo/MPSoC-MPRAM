@@ -1,4 +1,4 @@
--- Converted from verilog/mpsoc_ram/mpsoc_misd_ahb3_mpram.sv
+-- Converted from verilog/mpsoc_ram/mpsoc_ahb3_mpram.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -48,16 +48,18 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-use work.mpsoc_pkg.all;
+use work.mpsoc_mpram_ahb3_pkg.all;
 
-entity mpsoc_misd_ahb3_mpram is
+entity mpsoc_ahb3_mpram is
   generic (
     MEM_SIZE          : integer := 256;  --Memory in Bytes
     MEM_DEPTH         : integer := 256;  --Memory depth
     PLEN              : integer := 64;
     XLEN              : integer := 64;
     TECHNOLOGY        : string  := "GENERIC";
-    REGISTERED_OUTPUT : string  := "NO"
+    REGISTERED_OUTPUT : string  := "NO";
+
+    CORES_PER_TILE : integer := 8
     );
   port (
     HRESETn : in std_logic;
@@ -65,23 +67,23 @@ entity mpsoc_misd_ahb3_mpram is
 
     --AHB Slave Interfaces (receive data from AHB Masters)
     --AHB Masters connect to these ports
-    HSEL      : in  std_logic_vector(CORES_PER_MISD-1 downto 0);
-    HADDR     : in  M_CORES_PER_MISD_PLEN;
-    HWDATA    : in  M_CORES_PER_MISD_XLEN;
-    HRDATA    : out M_CORES_PER_MISD_XLEN;
-    HWRITE    : in  std_logic_vector(CORES_PER_MISD-1 downto 0);
-    HSIZE     : in  M_CORES_PER_MISD_2;
-    HBURST    : in  M_CORES_PER_MISD_2;
-    HPROT     : in  M_CORES_PER_MISD_3;
-    HTRANS    : in  M_CORES_PER_MISD_1;
-    HMASTLOCK : in  std_logic_vector(CORES_PER_MISD-1 downto 0);
-    HREADYOUT : out std_logic_vector(CORES_PER_MISD-1 downto 0);
-    HREADY    : in  std_logic_vector(CORES_PER_MISD-1 downto 0);
-    HRESP     : out std_logic_vector(CORES_PER_MISD-1 downto 0)
+    HSEL      : in  std_logic_vector(CORES_PER_TILE-1 downto 0);
+    HADDR     : in  std_logic_matrix(CORES_PER_TILE-1 downto 0)(PLEN-1 downto 0);
+    HWDATA    : in  std_logic_matrix(CORES_PER_TILE-1 downto 0)(XLEN-1 downto 0);
+    HRDATA    : out std_logic_matrix(CORES_PER_TILE-1 downto 0)(XLEN-1 downto 0);
+    HWRITE    : in  std_logic_vector(CORES_PER_TILE-1 downto 0);
+    HSIZE     : in  std_logic_matrix(CORES_PER_TILE-1 downto 0)(2 downto 0);
+    HBURST    : in  std_logic_matrix(CORES_PER_TILE-1 downto 0)(2 downto 0);
+    HPROT     : in  std_logic_matrix(CORES_PER_TILE-1 downto 0)(3 downto 0);
+    HTRANS    : in  std_logic_matrix(CORES_PER_TILE-1 downto 0)(1 downto 0);
+    HMASTLOCK : in  std_logic_vector(CORES_PER_TILE-1 downto 0);
+    HREADYOUT : out std_logic_vector(CORES_PER_TILE-1 downto 0);
+    HREADY    : in  std_logic_vector(CORES_PER_TILE-1 downto 0);
+    HRESP     : out std_logic_vector(CORES_PER_TILE-1 downto 0)
     );
-end mpsoc_misd_ahb3_mpram;
+end mpsoc_ahb3_mpram;
 
-architecture RTL of mpsoc_misd_ahb3_mpram is
+architecture RTL of mpsoc_ahb3_mpram is
   component mpsoc_ram_1r1w
     generic (
       ABITS      : integer := 10;
@@ -120,19 +122,13 @@ architecture RTL of mpsoc_misd_ahb3_mpram is
   --
   -- Variables
   --
-  type M_CORES_PER_MISD_BE_SIZE is array (CORES_PER_MISD-1 downto 0) of std_logic_vector(BE_SIZE-1 downto 0);
+  signal we         : std_logic_vector(CORES_PER_TILE-1 downto 0);
+  signal be         : std_logic_matrix(CORES_PER_TILE-1 downto 0)(BE_SIZE-1 downto 0);
+  signal waddr      : std_logic_matrix(CORES_PER_TILE-1 downto 0)(PLEN-1 downto 0);
+  signal contention : std_logic_vector(CORES_PER_TILE-1 downto 0);
+  signal ready      : std_logic_vector(CORES_PER_TILE-1 downto 0);
 
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Variables
-  --
-  signal we         : std_logic_vector(CORES_PER_MISD-1 downto 0);
-  signal be         : M_CORES_PER_MISD_BE_SIZE;
-  signal waddr      : M_CORES_PER_MISD_PLEN;
-  signal contention : std_logic_vector(CORES_PER_MISD-1 downto 0);
-  signal ready      : std_logic_vector(CORES_PER_MISD-1 downto 0);
-
-  signal dout : M_CORES_PER_MISD_XLEN;
+  signal dout : std_logic_matrix(CORES_PER_TILE-1 downto 0)(XLEN-1 downto 0);
 
   --////////////////////////////////////////////////////////////////
   --
@@ -225,7 +221,7 @@ begin
   -- Module Body
   --
 
-  generating_0 : for t in 0 to CORES_PER_MISD - 1 generate
+  generating_0 : for t in 0 to CORES_PER_TILE - 1 generate
     --generate internal write signal
     --This causes read/write contention, which is handled by memory
     processing_0 : process (HCLK)

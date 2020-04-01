@@ -41,13 +41,13 @@
  */
 
 module mpsoc_wb_spram #(
-  //Wishbone parameters
-  parameter DW = 32,
-
   //Memory parameters
   parameter DEPTH   = 256,
-  parameter AW      = $clog2(DEPTH),
-  parameter MEMFILE = ""
+  parameter MEMFILE = "",
+
+  //Wishbone parameters
+  parameter DW = 32,
+  parameter AW = $clog2(DEPTH)
 )
   (
     input           wb_clk_i,
@@ -55,10 +55,10 @@ module mpsoc_wb_spram #(
 
     input  [AW-1:0] wb_adr_i,
     input  [DW-1:0] wb_dat_i,
-    input  [3:0]    wb_sel_i,
+    input  [   3:0] wb_sel_i,
     input           wb_we_i,
-    input  [1:0]    wb_bte_i,
-    input  [2:0]    wb_cti_i,
+    input  [   1:0] wb_bte_i,
+    input  [   2:0] wb_cti_i,
     input           wb_cyc_i,
     input           wb_stb_i,
 
@@ -185,7 +185,10 @@ module mpsoc_wb_spram #(
 
   mpsoc_wb_ram_generic #(
     .DEPTH   (DEPTH/4),
-    .MEMFILE (MEMFILE)
+    .MEMFILE (MEMFILE),
+
+    .AW ($clog2(DEPTH/4)),
+    .DW (DW)
   )
   ram0 (
     .clk   (wb_clk_i),

@@ -40,10 +40,4 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-../../../../rtl/verilog/ahb3/mpsoc_ahb3_mpram.sv
-../../../../rtl/verilog/ahb3/mpsoc_ram_1r1w.sv
-../../../../rtl/verilog/ahb3/mpsoc_ram_1r1w_generic.sv
-../../../../rtl/verilog/wb/mpsoc_wb_mpram.v
-../../../../rtl/verilog/wb/mpsoc_wb_ram_generic.v
-
-../../../../bench/verilog/regression/mpsoc_msi_testbench.sv
+../../../../bench/verilog/regression/mpsoc_mpram_testbench.sv

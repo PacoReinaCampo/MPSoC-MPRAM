@@ -40,16 +40,17 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-`include "mpsoc_pkg.sv"
+`include "mpsoc_mpram_ahb3_pkg.sv"
 
 module mpsoc_ahb3_mpram #(
-  parameter MEM_SIZE          = 0,   //Memory in Bytes
-  parameter MEM_DEPTH         = 256, //Memory depth
-  parameter HADDR_SIZE        = 64,
-  parameter HDATA_SIZE        = 32,
-  parameter CORES_PER_TILE    = 8,
+  parameter MEM_SIZE          = 256,  //Memory in Bytes
+  parameter MEM_DEPTH         = 256,  //Memory depth
+  parameter PLEN              = 64,
+  parameter XLEN              = 64,
   parameter TECHNOLOGY        = "GENERIC",
-  parameter REGISTERED_OUTPUT = "NO"
+  parameter REGISTERED_OUTPUT = "NO",
+
+  parameter CORES_PER_TILE    = 8
 )
   (
     input                       HRESETn,
@@ -57,19 +58,19 @@ module mpsoc_ahb3_mpram #(
 
     //AHB Slave Interfaces (receive data from AHB Masters)
     //AHB Masters connect to these ports
-    input      [CORES_PER_TILE-1:0]                 HSEL,
-    input      [CORES_PER_TILE-1:0][HADDR_SIZE-1:0] HADDR,
-    input      [CORES_PER_TILE-1:0][HDATA_SIZE-1:0] HWDATA,
-    output reg [CORES_PER_TILE-1:0][HDATA_SIZE-1:0] HRDATA,
-    input      [CORES_PER_TILE-1:0]                 HWRITE,
-    input      [CORES_PER_TILE-1:0][           2:0] HSIZE,
-    input      [CORES_PER_TILE-1:0][           2:0] HBURST,
-    input      [CORES_PER_TILE-1:0][           3:0] HPROT,
-    input      [CORES_PER_TILE-1:0][           1:0] HTRANS,
-    input      [CORES_PER_TILE-1:0]                 HMASTLOCK,
-    output reg [CORES_PER_TILE-1:0]                 HREADYOUT,
-    input      [CORES_PER_TILE-1:0]                 HREADY,
-    output     [CORES_PER_TILE-1:0]                 HRESP
+    input      [CORES_PER_TILE-1:0]           HSEL,
+    input      [CORES_PER_TILE-1:0][PLEN-1:0] HADDR,
+    input      [CORES_PER_TILE-1:0][XLEN-1:0] HWDATA,
+    output reg [CORES_PER_TILE-1:0][XLEN-1:0] HRDATA,
+    input      [CORES_PER_TILE-1:0]           HWRITE,
+    input      [CORES_PER_TILE-1:0][     2:0] HSIZE,
+    input      [CORES_PER_TILE-1:0][     2:0] HBURST,
+    input      [CORES_PER_TILE-1:0][     3:0] HPROT,
+    input      [CORES_PER_TILE-1:0][     1:0] HTRANS,
+    input      [CORES_PER_TILE-1:0]           HMASTLOCK,
+    output reg [CORES_PER_TILE-1:0]           HREADYOUT,
+    input      [CORES_PER_TILE-1:0]           HREADY,
+    output     [CORES_PER_TILE-1:0]           HRESP
   );
 
   //////////////////////////////////////////////////////////////////
@@ -77,9 +78,9 @@ module mpsoc_ahb3_mpram #(
   // Constants
   //
 
-  localparam BE_SIZE        = (HDATA_SIZE+7)/8;
+  localparam BE_SIZE        = (XLEN+7)/8;
 
-  localparam MEM_SIZE_DEPTH = 8*MEM_SIZE / HDATA_SIZE;
+  localparam MEM_SIZE_DEPTH = 8*MEM_SIZE / XLEN;
   localparam REAL_MEM_DEPTH = MEM_DEPTH > MEM_SIZE_DEPTH ? MEM_DEPTH : MEM_SIZE_DEPTH;
   localparam MEM_ABITS      = $clog2(REAL_MEM_DEPTH);
   localparam MEM_ABITS_LSB  = $clog2(BE_SIZE);
@@ -88,15 +89,15 @@ module mpsoc_ahb3_mpram #(
   //
   // Variables
   //
-  genvar                 t;
+  genvar              t;
 
-  logic                  we         [CORES_PER_TILE];
-  logic [BE_SIZE   -1:0] be         [CORES_PER_TILE];
-  logic [HADDR_SIZE-1:0] waddr      [CORES_PER_TILE];
-  logic                  contention [CORES_PER_TILE];
-  logic                  ready      [CORES_PER_TILE];
+  logic               we         [CORES_PER_TILE];
+  logic [BE_SIZE-1:0] be         [CORES_PER_TILE];
+  logic [PLEN   -1:0] waddr      [CORES_PER_TILE];
+  logic               contention [CORES_PER_TILE];
+  logic               ready      [CORES_PER_TILE];
 
-  logic [HDATA_SIZE-1:0] dout       [CORES_PER_TILE];
+  logic [XLEN   -1:0] dout       [CORES_PER_TILE];
 
   //////////////////////////////////////////////////////////////////
   //
@@ -104,8 +105,8 @@ module mpsoc_ahb3_mpram #(
   //
 
   function [BE_SIZE-1:0] gen_be;
-    input [           2:0] hsize;
-    input [HADDR_SIZE-1:0] haddr;
+    input [         2:0] hsize;
+    input [PLEN    -1:0] haddr;
 
     logic [127:0] full_be;
     logic [  6:0] haddr_masked;
@@ -124,7 +125,7 @@ module mpsoc_ahb3_mpram #(
     endcase
 
     //What are the lesser bits in HADDR?
-    case (HDATA_SIZE)
+    case (XLEN)
       1024    : address_offset = 7'b111_1111; 
       0512    : address_offset = 7'b011_1111;
       0256    : address_offset = 7'b001_1111;
@@ -183,7 +184,7 @@ module mpsoc_ahb3_mpram #(
 
       mpsoc_ram_1r1w #(
         .ABITS      ( MEM_ABITS  ),
-        .DBITS      ( HDATA_SIZE ),
+        .DBITS      ( XLEN       ),
         .TECHNOLOGY ( TECHNOLOGY ) 
       )
       ram_1r1w (

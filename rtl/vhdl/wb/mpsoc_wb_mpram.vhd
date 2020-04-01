@@ -48,17 +48,17 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-use work.mpsoc_pkg.all;
+use work.mpsoc_mpram_wb_pkg.all;
 
 entity mpsoc_wb_mpram is
   generic (
-    --Wishbone parameters
-    DW : integer := 32;
-
     --Memory parameters
     DEPTH   : integer := 256;
-    AW      : integer := integer(log2(real(256)));
     MEMFILE : string  := "";
+
+    --Wishbone parameters
+    AW : integer := integer(log2(real(DEPTH)));
+    DW : integer := 32;
 
     CORES_PER_TILE : integer := 8
     );
@@ -66,18 +66,18 @@ entity mpsoc_wb_mpram is
     wb_clk_i : in std_logic;
     wb_rst_i : in std_logic;
 
-    wb_adr_i : in M_CORES_PER_TILE_AW;
-    wb_dat_i : in M_CORES_PER_TILE_DW;
-    wb_sel_i : in M_CORES_PER_TILE_3;
+    wb_adr_i : in std_logic_matrix(CORES_PER_TILE-1 downto 0)(AW-1 downto 0);
+    wb_dat_i : in std_logic_matrix(CORES_PER_TILE-1 downto 0)(DW-1 downto 0);
+    wb_sel_i : in std_logic_matrix(CORES_PER_TILE-1 downto 0)(3 downto 0);
     wb_we_i  : in std_logic_vector(CORES_PER_TILE-1 downto 0);
-    wb_bte_i : in M_CORES_PER_TILE_1;
-    wb_cti_i : in M_CORES_PER_TILE_2;
+    wb_bte_i : in std_logic_matrix(CORES_PER_TILE-1 downto 0)(1 downto 0);
+    wb_cti_i : in std_logic_matrix(CORES_PER_TILE-1 downto 0)(2 downto 0);
     wb_cyc_i : in std_logic_vector(CORES_PER_TILE-1 downto 0);
     wb_stb_i : in std_logic_vector(CORES_PER_TILE-1 downto 0);
 
     wb_ack_o : out std_logic_vector(CORES_PER_TILE-1 downto 0);
     wb_err_o : out std_logic_vector(CORES_PER_TILE-1 downto 0);
-    wb_dat_o : out M_CORES_PER_TILE_DW
+    wb_dat_o : out std_logic_matrix(CORES_PER_TILE-1 downto 0)(DW-1 downto 0)
     );
 end mpsoc_wb_mpram;
 
@@ -85,15 +85,18 @@ architecture RTL of mpsoc_wb_mpram is
   component mpsoc_wb_ram_generic
     generic (
       DEPTH   : integer := 256;
-      MEMFILE : string  := ""
+      MEMFILE : string  := "";
+
+      AW : integer := integer(log2(real(DEPTH)));
+      DW : integer := 32
       );
     port (
       clk   : in  std_logic;
       we    : in  std_logic_vector(3 downto 0);
-      din   : in  std_logic_vector(31 downto 0);
-      waddr : in  std_logic_vector(integer(log2(real(256)))-1 downto 0);
-      raddr : in  std_logic_vector(integer(log2(real(256)))-1 downto 0);
-      dout  : out std_logic_vector(31 downto 0)
+      din   : in  std_logic_vector(DW-1 downto 0);
+      waddr : in  std_logic_vector(AW-1 downto 0);
+      raddr : in  std_logic_vector(AW-1 downto 0);
+      dout  : out std_logic_vector(DW-1 downto 0)
       );
   end component;
 
@@ -213,18 +216,18 @@ architecture RTL of mpsoc_wb_mpram is
 --
 -- Variables
 --
-  signal adr_r     : M_CORES_PER_TILE_AW;
-  signal next_adr  : M_CORES_PER_TILE_AW;
+  signal adr_r     : std_logic_matrix(CORES_PER_TILE-1 downto 0)(AW-1 downto 0);
+  signal next_adr  : std_logic_matrix(CORES_PER_TILE-1 downto 0)(AW-1 downto 0);
   signal valid     : std_logic_vector(CORES_PER_TILE-1 downto 0);
   signal valid_r   : std_logic_vector(CORES_PER_TILE-1 downto 0);
   signal is_last_r : std_logic_vector(CORES_PER_TILE-1 downto 0);
   signal new_cycle : std_logic_vector(CORES_PER_TILE-1 downto 0);
-  signal adr       : M_CORES_PER_TILE_AW;
+  signal adr       : std_logic_matrix(CORES_PER_TILE-1 downto 0)(AW-1 downto 0);
   signal ram_we    : std_logic_vector(CORES_PER_TILE-1 downto 0);
 
   signal wb_ack : std_logic_vector(CORES_PER_TILE-1 downto 0);
 
-  signal we_i : M_CORES_PER_TILE_3;
+  signal we_i : std_logic_matrix(CORES_PER_TILE-1 downto 0)(3 downto 0);
 
 begin
   --////////////////////////////////////////////////////////////////
@@ -272,7 +275,10 @@ begin
     ram0 : mpsoc_wb_ram_generic
       generic map (
         DEPTH   => DEPTH/4,
-        MEMFILE => MEMFILE
+        MEMFILE => MEMFILE,
+
+        AW => integer(log2(real(DEPTH/4))),
+        DW => DW
         )
       port map (
         clk   => wb_clk_i,

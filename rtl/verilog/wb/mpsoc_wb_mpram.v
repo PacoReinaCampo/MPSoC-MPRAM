@@ -41,13 +41,13 @@
  */
 
 module mpsoc_wb_mpram #(
-  //Wishbone parameters
-  parameter DW = 32,
-
   //Memory parameters
   parameter DEPTH   = 256,
-  parameter AW      = $clog2(DEPTH),
   parameter MEMFILE = "",
+
+  //Wishbone parameters
+  parameter DW = 32,
+  parameter AW = $clog2(DEPTH),
 
   parameter CORES_PER_TILE = 8
 )
@@ -191,7 +191,10 @@ module mpsoc_wb_mpram #(
 
       mpsoc_wb_ram_generic #(
         .DEPTH   (DEPTH/4),
-        .MEMFILE (MEMFILE)
+        .MEMFILE (MEMFILE),
+
+        .AW ($clog2(DEPTH/4)),
+        .DW (DW)
       )
       ram0 (
         .clk   (wb_clk_i),
