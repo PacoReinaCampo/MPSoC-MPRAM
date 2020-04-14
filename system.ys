@@ -1,5 +1,0 @@
-#read_verilog -I rtl/verilog/pkg -sv rtl/verilog/ram/mpsoc_spram.sv
-read_verilog -I rtl/verilog/pkg -sv rtl/verilog/ram/mpsoc_ram_1r1w.sv
-read_verilog -I rtl/verilog/pkg -sv rtl/verilog/ram/mpsoc_ram_1r1w_generic.sv
-
-#read_verilog -I rtl/verilog/pkg -sv bench/verilog/regression/mpsoc_msi_testbench.sv
