@@ -60,7 +60,7 @@ module mpsoc_wb_ram_generic #(
   //
   // Variables
   //
-  reg [DW-1:0] mem [0:DEPTH-1];
+  reg [DW-1:0] mem [0:DEPTH-1] /* verilator public */;
 
   //////////////////////////////////////////////////////////////////
   //
