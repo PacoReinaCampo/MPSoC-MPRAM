@@ -1,4 +1,0 @@
-../../../../../bench/verilog/regression/wb/mpsoc_mpram_testbench.sv
-
-../../../../../rtl/verilog/wb/core/mpsoc_wb_ram_generic.sv
-../../../../../rtl/verilog/wb/core/mpsoc_wb_mpram.sv
