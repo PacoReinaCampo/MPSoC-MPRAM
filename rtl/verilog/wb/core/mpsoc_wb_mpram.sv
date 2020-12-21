@@ -74,21 +74,21 @@ module mpsoc_wb_mpram #(
   //
   // Constants
   //
-  parameter CLASSIC_CYCLE = 1'b0;
-  parameter BURST_CYCLE   = 1'b1;
+  localparam CLASSIC_CYCLE = 1'b0;
+  localparam BURST_CYCLE   = 1'b1;
 
-  parameter READ  = 1'b0;
-  parameter WRITE = 1'b1;
+  localparam READ  = 1'b0;
+  localparam WRITE = 1'b1;
 
-  parameter [2:0] CTI_CLASSIC      = 3'b000;
-  parameter [2:0] CTI_CONST_BURST  = 3'b001;
-  parameter [2:0] CTI_INC_BURST    = 3'b010;
-  parameter [2:0] CTI_END_OF_BURST = 3'b111;
+  localparam [2:0] CTI_CLASSIC      = 3'b000;
+  localparam [2:0] CTI_CONST_BURST  = 3'b001;
+  localparam [2:0] CTI_INC_BURST    = 3'b010;
+  localparam [2:0] CTI_END_OF_BURST = 3'b111;
 
-  parameter [1:0] BTE_LINEAR  = 2'd0;
-  parameter [1:0] BTE_WRAP_4  = 2'd1;
-  parameter [1:0] BTE_WRAP_8  = 2'd2;
-  parameter [1:0] BTE_WRAP_16 = 2'd3;
+  localparam [1:0] BTE_LINEAR  = 2'd0;
+  localparam [1:0] BTE_WRAP_4  = 2'd1;
+  localparam [1:0] BTE_WRAP_8  = 2'd2;
+  localparam [1:0] BTE_WRAP_16 = 2'd3;
 
   //////////////////////////////////////////////////////////////////
   //
