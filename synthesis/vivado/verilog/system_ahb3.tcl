@@ -42,13 +42,13 @@
 ##                                                                               ##
 ###################################################################################
 
-read_verilog -I ../../../rtl/verilog/ahb3/pkg -sv ../../../rtl/verilog/ahb3/core/mpsoc_ahb3_spram.sv
+read_verilog -library ../../../rtl/verilog/ahb3/pkg -sv ../../../rtl/verilog/ahb3/core/mpsoc_ahb3_spram.sv
 read_verilog -sv ../../../rtl/verilog/ahb3/core/mpsoc_ram_1r1w.sv
 read_verilog -sv ../../../rtl/verilog/ahb3/core/mpsoc_ram_1r1w_generic.sv
 
-read_xdc system_wb.xdc
+read_xdc system_ahb3.xdc
 
-synth_design -part xc7z020-clg484-1 -top mpsoc_wb_spram
+synth_design -part xc7z020-clg484-1 -top mpsoc_ahb3_spram
 
 opt_design
 place_design
@@ -57,5 +57,5 @@ route_design
 report_utilization
 report_timing
 
-write_verilog -force system_wb.v
-write_bitstream -force system_wb.bit
+write_verilog -force system_ahb3.v
+write_bitstream -force system_ahb3.bit
