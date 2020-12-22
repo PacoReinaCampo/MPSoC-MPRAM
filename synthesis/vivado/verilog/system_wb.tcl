@@ -47,7 +47,7 @@ read_verilog -sv ../../../rtl/verilog/wb/core/mpsoc_wb_spram.sv
 
 read_xdc system_wb.xdc
 
-synth_design -part xc7z020-clg484-1 -top mpsoc_wb_spram
+synth_design -part xc7z020-clg484-1 -include_dirs ../../../rtl/verilog/wb/pkg -top mpsoc_wb_spram
 
 opt_design
 place_design
