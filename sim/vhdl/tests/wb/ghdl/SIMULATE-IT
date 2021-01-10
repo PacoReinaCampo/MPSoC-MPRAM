@@ -1,5 +1,2 @@
-ghdl -f system.vc
-
-ghdl -m mpsoc_mpram_testbench
-
-ghdl -r mpsoc_mpram_testbench --ieee-asserts=disable-at-0 --disp-tree=inst > mpsoc_mpram_testbench.tree
+make clean
+make
