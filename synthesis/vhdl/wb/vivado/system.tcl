@@ -9,7 +9,7 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              MPSoC-SPRAM CPU                                                  ##
+##              MPSoC-MPRAM CPU                                                  ##
 ##              Synthesis Test Makefile                                          ##
 ##                                                                               ##
 ###################################################################################
@@ -43,15 +43,15 @@
 ###################################################################################
 
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/wb/core/mpsoc_wb_ram_generic.vhd
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/wb/core/mpsoc_wb_spram.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/wb/core/mpsoc_wb_mpram.vhd
 
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/wb/pkg/mpsoc_spram_wb_pkg.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/wb/pkg/mpsoc_mpram_wb_pkg.vhd
 
-read_vhdl -vhdl2008 mpsoc_spram_synthesis.vhd
+read_vhdl -vhdl2008 mpsoc_mpram_synthesis.vhd
 
 read_xdc system.xdc
 
-synth_design -part xc7z020-clg484-1 -top mpsoc_spram_synthesis
+synth_design -part xc7z020-clg484-1 -top mpsoc_mpram_synthesis
 
 opt_design
 place_design
@@ -60,4 +60,5 @@ route_design
 report_utilization
 report_timing
 
+write_edif -force system.edif
 write_bitstream -force system.bit

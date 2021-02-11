@@ -9,7 +9,7 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              MPSoC-SPRAM CPU                                                  ##
+##              MPSoC-MPRAM CPU                                                  ##
 ##              Synthesis Test Makefile                                          ##
 ##                                                                               ##
 ###################################################################################
@@ -48,4 +48,4 @@ synthesize:
 	vivado -nojournal -log system.log -mode batch -source system.tcl
 
 clean:
-	rm -rf .Xil usage_statistics_webtalk.* *.log *.bit
+	rm -rf .Xil usage_statistics_webtalk.* *.log *.bit *.edif

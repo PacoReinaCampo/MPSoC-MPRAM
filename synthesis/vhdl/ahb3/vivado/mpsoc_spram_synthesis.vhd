@@ -1,4 +1,4 @@
--- Converted from bench/verilog/regression/mpsoc_spram_testbench.sv
+-- Converted from bench/verilog/regression/mpsoc_mpram_testbench.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -48,9 +48,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-use work.mpsoc_spram_ahb3_pkg.all;
+use work.mpsoc_mpram_ahb3_pkg.all;
 
-entity mpsoc_spram_synthesis is
+entity mpsoc_mpram_synthesis is
   generic (
     MEM_SIZE          : integer := 256;  --Memory in Bytes
     MEM_DEPTH         : integer := 256;  --Memory depth
@@ -79,15 +79,15 @@ entity mpsoc_spram_synthesis is
     HREADY    : in  std_logic;
     HRESP     : out std_logic
   );
-end mpsoc_spram_synthesis;
+end mpsoc_mpram_synthesis;
 
-architecture RTL of mpsoc_spram_synthesis is
+architecture RTL of mpsoc_mpram_synthesis is
 
   --////////////////////////////////////////////////////////////////
   --
   -- Components
   --
-  component mpsoc_ahb3_spram
+  component mpsoc_ahb3_mpram
     generic (
       MEM_SIZE          : integer := 256;  --Memory in Bytes
       MEM_DEPTH         : integer := 256;  --Memory depth
@@ -125,7 +125,7 @@ begin
   --
 
   --DUT AHB3
-  ahb3_spram : mpsoc_ahb3_spram
+  ahb3_mpram : mpsoc_ahb3_mpram
     generic map (
       MEM_SIZE          => MEM_SIZE,
       MEM_DEPTH         => MEM_DEPTH,

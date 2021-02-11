@@ -46,7 +46,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_spram_synthesis #(
+module mpsoc_mpram_synthesis #(
   parameter AW       =   6,  // Address bus
   parameter DW       =  16,  // Data bus
   parameter MEM_SIZE = 256   // Memory size in bytes
@@ -66,7 +66,7 @@ module mpsoc_spram_synthesis #(
   // Module Body
   //
 
-  //DUT AHB3
+  //DUT BB
   msp430_ram #(
     .AW       ( AW ),
     .DW       ( DW ),

@@ -1,5 +1,5 @@
-vhdl work ../../../../../../rtl/vhdl/ahb3/pkg/mpsoc_spram_ahb3_pkg.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/ahb3/pkg/mpsoc_spram_ahb3_pkg.vhd
 
-vhdl work ../../../../../../rtl/vhdl/ahb3/core/mpsoc_ahb3_spram.vhd
-vhdl work ../../../../../../rtl/vhdl/ahb3/core/mpsoc_ram_1r1w.vhd
-vhdl work ../../../../../../rtl/vhdl/ahb3/core/mpsoc_ram_1r1w_generic.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/ahb3/core/mpsoc_ahb3_spram.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/ahb3/core/mpsoc_ram_1r1w.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/ahb3/core/mpsoc_ram_1r1w_generic.vhd

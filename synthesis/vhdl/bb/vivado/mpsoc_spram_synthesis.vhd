@@ -1,4 +1,4 @@
--- Converted from mpsoc_spram_synthesis.sv
+-- Converted from mpsoc_mpram_synthesis.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -53,17 +53,14 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity mpsoc_spram_synthesis is
+entity mpsoc_mpram_synthesis is
   generic (
     AW       : integer := 6;   -- Address bus
     DW       : integer := 16;  -- Data bus
     MEM_SIZE : integer := 256  -- Memory size in bytes
   );
   port (
-    -- Address bus
-    -- Data bus
-    -- Memory size in bytes
-    ram_clk : in std_logic;             -- RAM clock
+    ram_clk : in std_logic;  -- RAM clock
 
     ram_addr : in  std_logic_vector(AW-1 downto 0);  -- RAM address
     ram_dout : out std_logic_vector(DW-1 downto 0);  -- RAM data output
@@ -71,9 +68,9 @@ entity mpsoc_spram_synthesis is
     ram_cen  : in  std_logic;                        -- RAM chip enable (low active)
     ram_wen  : in  std_logic_vector(1 downto 0)      -- RAM write enable (low active)
   );
-end mpsoc_spram_synthesis;
+end mpsoc_mpram_synthesis;
 
-architecture RTL of mpsoc_spram_synthesis is
+architecture RTL of mpsoc_mpram_synthesis is
   component msp430_ram
     generic (
       AW       : integer := 6;   -- Address bus
@@ -98,7 +95,7 @@ begin
   -- Module Body
   --
 
-  --DUT AHB3
+  --DUT BB
   ram : msp430_ram
     generic map (
       AW       => AW,

@@ -1,4 +1,4 @@
--- Converted from mpsoc_spram_synthesis.sv
+-- Converted from mpsoc_mpram_synthesis.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -48,9 +48,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-use work.mpsoc_spram_wb_pkg.all;
+use work.mpsoc_mpram_wb_pkg.all;
 
-entity mpsoc_spram_synthesis is
+entity mpsoc_mpram_synthesis is
   generic (
     --Memory parameters
     DEPTH   : integer := 256;
@@ -76,10 +76,10 @@ entity mpsoc_spram_synthesis is
     wb_err_o : out std_logic;
     wb_dat_o : out std_logic_vector(DW-1 downto 0)
     );
-end mpsoc_spram_synthesis;
+end mpsoc_mpram_synthesis;
 
-architecture RTL of mpsoc_spram_synthesis is
-  component mpsoc_wb_spram
+architecture RTL of mpsoc_mpram_synthesis is
+  component mpsoc_wb_mpram
     generic (
       --Memory parameters
       DEPTH   : integer := 256;
@@ -115,7 +115,7 @@ begin
   --
 
   --DUT WB
-  wb_spram : mpsoc_wb_spram
+  wb_mpram : mpsoc_wb_mpram
     generic map (
       DEPTH   => DEPTH,
       MEMFILE => MEMFILE,

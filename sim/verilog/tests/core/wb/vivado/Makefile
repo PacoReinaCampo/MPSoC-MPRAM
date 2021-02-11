@@ -9,7 +9,7 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              MPSoC-mpram CPU                                                  ##
+##              MPSoC-MPRAM CPU                                                  ##
 ##              Simulation Test Makefile                                         ##
 ##                                                                               ##
 ###################################################################################
@@ -49,6 +49,7 @@ build:
 
 simulate:
 	xelab wb_mpram_tb
+	xsim -R wb_mpram_tb
 
 clean:
-	rm -rf *.dir *.jou *.log *.pb
+	rm -rf *.dir *.jou *.log *.pb .Xil

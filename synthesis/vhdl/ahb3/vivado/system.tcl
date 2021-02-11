@@ -9,7 +9,7 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              MPSoC-SPRAM CPU                                                  ##
+##              MPSoC-MPRAM CPU                                                  ##
 ##              Synthesis Test Makefile                                          ##
 ##                                                                               ##
 ###################################################################################
@@ -42,17 +42,17 @@
 ##                                                                               ##
 ###################################################################################
 
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_ahb3_spram.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_ahb3_mpram.vhd
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_ram_1r1w.vhd
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_ram_1r1w_generic.vhd
 
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/pkg/mpsoc_spram_ahb3_pkg.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/pkg/mpsoc_mpram_ahb3_pkg.vhd
 
-read_vhdl -vhdl2008 mpsoc_spram_synthesis.vhd
+read_vhdl -vhdl2008 mpsoc_mpram_synthesis.vhd
 
 read_xdc system.xdc
 
-synth_design -part xc7z020-clg484-1 -top mpsoc_spram_synthesis
+synth_design -part xc7z020-clg484-1 -top mpsoc_mpram_synthesis
 
 opt_design
 place_design
@@ -61,4 +61,5 @@ route_design
 report_utilization
 report_timing
 
+write_edif -force system.edif
 write_bitstream -force system.bit

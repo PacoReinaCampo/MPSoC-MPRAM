@@ -50,6 +50,7 @@ build:
 
 simulate:
 	xelab mpsoc_mpram_testbench
+	xsim -R mpsoc_mpram_testbench
 
 clean:
-	rm -rf *.dir *.jou *.log *.pb
+	rm -rf *.dir *.jou *.log *.pb .Xil

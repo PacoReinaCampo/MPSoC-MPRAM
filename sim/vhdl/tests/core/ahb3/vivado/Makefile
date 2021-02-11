@@ -45,10 +45,11 @@
 all: build simulate
 
 build:
-	xvlog -i ../../../../../../rtl/verilog/ahb3/pkg -prj system.prj
+	xvhdl -prj system.prj
 
 simulate:
 	xelab mpsoc_mpram_testbench
+	xsim -R mpsoc_mpram_testbench
 
 clean:
-	rm -rf *.dir *.jou *.log *.pb
+	rm -rf *.dir *.jou *.log *.pb .Xil

@@ -9,7 +9,7 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              MPSoC-SPRAM CPU                                                  ##
+##              MPSoC-MPRAM CPU                                                  ##
 ##              Synthesis Test Makefile                                          ##
 ##                                                                               ##
 ###################################################################################
@@ -42,13 +42,13 @@
 ##                                                                               ##
 ###################################################################################
 
-read_verilog -sv ../../../../rtl/verilog/axi4/mpsoc_axi4_spram.sv
+read_verilog -sv ../../../../rtl/verilog/axi4/core/mpsoc_axi4_mpram.sv
 
-read_verilog -sv mpsoc_spram_synthesis.sv
+read_verilog -sv mpsoc_mpram_synthesis.sv
 
 read_xdc system.xdc
 
-synth_design -part xc7z020-clg484-1 -top mpsoc_spram_synthesis
+synth_design -part xc7z020-clg484-1 -top mpsoc_mpram_synthesis
 
 opt_design
 place_design
@@ -57,4 +57,5 @@ route_design
 report_utilization
 report_timing
 
+write_edif -force system.edif
 write_bitstream -force system.bit
