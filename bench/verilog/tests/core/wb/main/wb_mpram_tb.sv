@@ -41,7 +41,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module wb_spram_tb;
+module wb_mpram_tb;
   //////////////////////////////////////////////////////////////////
   //
   // Constants
