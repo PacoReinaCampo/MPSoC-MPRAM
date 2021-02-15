@@ -1,3 +1,5 @@
++incdir+../../../../../../rtl/verilog/ahb3/pkg
+
 ../../../../../../rtl/verilog/ahb3/core/mpsoc_ahb3_mpram.sv
 ../../../../../../rtl/verilog/ahb3/core/mpsoc_ram_1r1w.sv
 ../../../../../../rtl/verilog/ahb3/core/mpsoc_ram_1r1w_generic.sv

@@ -1,3 +1,5 @@
++incdir+../../../../../../rtl/verilog/wb/pkg
+
 ../../../../../../bench/verilog/tests/core/wb/main/mpsoc_mpram_testbench.sv
 
 ../../../../../../rtl/verilog/wb/core/mpsoc_wb_ram_generic.sv

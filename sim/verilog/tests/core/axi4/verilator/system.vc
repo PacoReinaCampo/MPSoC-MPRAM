@@ -1,3 +1,5 @@
++incdir+../../../../../../rtl/verilog/axi4/pkg
+
 ../../../../../../rtl/verilog/axi4/core/mpsoc_axi4_mpram.sv
 
 ../../../../../../bench/verilog/tests/core/axi4/mpsoc_mpram_testbench.sv
