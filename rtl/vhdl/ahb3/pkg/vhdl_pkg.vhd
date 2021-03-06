@@ -1,4 +1,4 @@
--- Converted from mpsoc_mpram_wb_pkg.v
+-- Converted from pkg/vhdl_pkg.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -12,13 +12,13 @@
 --                  |_|                                                       //
 --                                                                            //
 --                                                                            //
---              MPSoC-RISCV CPU                                               //
---              Master Slave Interface                                        //
---              Wishbone Bus Interface                                        //
+--              Package                                                       //
+--              Bus Functional Model                                          //
+--              AMBA3 AHB-Lite Bus Interface                                  //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 
--- Copyright (c) 2018-2019 by the author(s)
+-- Copyright (c) 2017-2018 by the author(s)
 -- *
 -- * Permission is hereby granted, free of charge, to any person obtaining a copy
 -- * of this software and associated documentation files (the "Software"), to deal
@@ -40,35 +40,20 @@
 -- *
 -- * =============================================================================
 -- * Author(s):
--- *   Olof Kindgren <olof.kindgren@gmail.com>
 -- *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 -- */
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.math_real.all;
 
-package mpsoc_mpram_wb_pkg is
+package vhdl_pkg is
+
   --////////////////////////////////////////////////////////////////
   --
-  -- Constants
+  -- Types
   --
-  constant CLASSIC_CYCLE : std_logic := '0';
-  constant BURST_CYCLE   : std_logic := '1';
-
-  constant READ  : std_logic := '0';
-  constant WRITE : std_logic := '1';
-
-  constant CTI_CLASSIC      : std_logic_vector(2 downto 0) := "000";
-  constant CTI_CONST_BURST  : std_logic_vector(2 downto 0) := "001";
-  constant CTI_INC_BURST    : std_logic_vector(2 downto 0) := "010";
-  constant CTI_END_OF_BURST : std_logic_vector(2 downto 0) := "111";
-
-  constant BTE_LINEAR  : std_logic_vector(1 downto 0) := "00";
-  constant BTE_WRAP_4  : std_logic_vector(1 downto 0) := "01";
-  constant BTE_WRAP_8  : std_logic_vector(1 downto 0) := "10";
-  constant BTE_WRAP_16 : std_logic_vector(1 downto 0) := "11";
-
   type std_logic_matrix is array (natural range <>) of std_logic_vector;
   type std_logic_3array is array (natural range <>) of std_logic_matrix;
   type std_logic_4array is array (natural range <>) of std_logic_3array;
@@ -101,22 +86,15 @@ package mpsoc_mpram_wb_pkg is
   type xyz_std_logic_9array is array (natural range <>, natural range <>, natural range <>) of std_logic_9array;
 
   function to_stdlogic (input : boolean) return std_logic;
-  function reduce_or (reduce_or_in : std_logic_vector) return std_logic;
+  function reduce_and (reduce_and_in : std_logic_vector) return std_logic;
+  function reduce_nand (reduce_nand_in : std_logic_vector) return std_logic;
   function reduce_nor (reduce_nor_in : std_logic_vector) return std_logic;
+  function reduce_or (reduce_or_in : std_logic_vector) return std_logic;
+  function reduce_xor (reduce_xor_in : std_logic_vector) return std_logic;
 
-  function get_cycle_type (cti : std_logic_vector(2 downto 0)) return std_logic;
-  function wb_is_last (cti : std_logic_vector(2 downto 0)) return std_logic;
+end vhdl_pkg;
 
-  function wb_next_adr (
-    adr_i : std_logic_vector(31 downto 0);
-    cti_i : std_logic_vector(2 downto 0);
-    bte_i : std_logic_vector(1 downto 0);
-
-    dw : integer
-    ) return std_logic_vector;
-end mpsoc_mpram_wb_pkg;
-
-package body mpsoc_mpram_wb_pkg is
+package body vhdl_pkg is
   --////////////////////////////////////////////////////////////////
   --
   -- Functions
@@ -132,16 +110,27 @@ package body mpsoc_mpram_wb_pkg is
     end if;
   end function to_stdlogic;
 
-  function reduce_or (
-    reduce_or_in : std_logic_vector
+  function reduce_and (
+    reduce_and_in : std_logic_vector
     ) return std_logic is
-    variable reduce_or_out : std_logic := '0';
+    variable reduce_and_out : std_logic := '0';
   begin
-    for i in reduce_or_in'range loop
-      reduce_or_out := reduce_or_out or reduce_or_in(i);
+    for i in reduce_and_in'range loop
+      reduce_and_out := reduce_and_out and reduce_and_in(i);
     end loop;
-    return reduce_or_out;
-  end reduce_or;
+    return reduce_and_out;
+  end reduce_and;
+
+  function reduce_nand (
+    reduce_nand_in : std_logic_vector
+  ) return std_logic is
+    variable reduce_nand_out : std_logic := '0';
+  begin
+    for i in reduce_nand_in'range loop
+      reduce_nand_out := reduce_nand_out nand reduce_nand_in(i);
+    end loop;
+    return reduce_nand_out;
+  end reduce_nand;
 
   function reduce_nor (
     reduce_nor_in : std_logic_vector
@@ -154,81 +143,26 @@ package body mpsoc_mpram_wb_pkg is
     return reduce_nor_out;
   end reduce_nor;
 
-
-  function get_cycle_type (
-    cti : std_logic_vector(2 downto 0)
+  function reduce_or (
+    reduce_or_in : std_logic_vector
     ) return std_logic is
-    variable get_cycle_type_return : std_logic;
+    variable reduce_or_out : std_logic := '0';
   begin
-    if (cti = CTI_CLASSIC) then
-      get_cycle_type_return := CLASSIC_CYCLE;
-    else
-      get_cycle_type_return := BURST_CYCLE;
-    end if;
+    for i in reduce_or_in'range loop
+      reduce_or_out := reduce_or_out or reduce_or_in(i);
+    end loop;
+    return reduce_or_out;
+  end reduce_or;
 
-    return get_cycle_type_return;
-  end get_cycle_type;
-
-  function wb_is_last (
-    cti : std_logic_vector(2 downto 0)
+  function reduce_xor (
+    reduce_xor_in : std_logic_vector
     ) return std_logic is
-    variable wb_is_last_return : std_logic;
+    variable reduce_xor_out : std_logic := '0';
   begin
-    case (cti) is
-      when CTI_CLASSIC =>
-        wb_is_last_return := '1';
-      when CTI_CONST_BURST =>
-        wb_is_last_return := '0';
-      when CTI_INC_BURST =>
-        wb_is_last_return := '0';
-      when CTI_END_OF_BURST =>
-        wb_is_last_return := '1';
-      when others =>
-        null;
-    end case;
+    for i in reduce_xor_in'range loop
+      reduce_xor_out := reduce_xor_out xor reduce_xor_in(i);
+    end loop;
+    return reduce_xor_out;
+  end reduce_xor;
 
-    return wb_is_last_return;
-  end wb_is_last;
-
-  function wb_next_adr (
-    adr_i : std_logic_vector(31 downto 0);
-    cti_i : std_logic_vector(2 downto 0);
-    bte_i : std_logic_vector(1 downto 0);
-
-    dw : integer
-    ) return std_logic_vector is
-    variable wb_next_adr_return : std_logic_vector (31 downto 0);
-
-    variable adr : std_logic_vector(31 downto 0);
-
-    variable shift : integer;
-  begin
-    if (dw = 64) then
-      shift := 3;
-    elsif (dw = 32) then
-      shift := 2;
-    elsif (dw = 16) then
-      shift := 1;
-    else
-      shift := 0;
-    end if;
-    adr := std_logic_vector(unsigned(adr_i) srl shift);
-    if (cti_i = CTI_INC_BURST) then
-      case (bte_i) is
-        when BTE_LINEAR =>
-          adr := std_logic_vector(unsigned(adr)+X"00000001");
-        when BTE_WRAP_4 =>
-          adr := (adr(31 downto 2) & std_logic_vector(unsigned(adr(1 downto 0))+"01"));
-        when BTE_WRAP_8 =>
-          adr := (adr(31 downto 3) & std_logic_vector(unsigned(adr(2 downto 0))+"001"));
-        when BTE_WRAP_16 =>
-          adr := (adr(31 downto 4) & std_logic_vector(unsigned(adr(3 downto 0))+"0001"));
-        when others =>
-          null;
-      end case;
-    end if;
-    -- case (burst_type_i)
-    wb_next_adr_return := std_logic_vector(unsigned(adr) sll shift);
-    return wb_next_adr_return;
-  end wb_next_adr;
-end mpsoc_mpram_wb_pkg;
+end vhdl_pkg;
