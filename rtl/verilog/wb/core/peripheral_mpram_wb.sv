@@ -41,7 +41,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_wb_spram #(
+module peripheral_spram_wb #(
   //Memory parameters
   parameter DEPTH   = 256,
   parameter MEMFILE = "",
@@ -184,7 +184,7 @@ module mpsoc_wb_spram #(
   //TODO:ck for burst address errors
   assign wb_err_o =  1'b0;
 
-  mpsoc_wb_ram_generic #(
+  peripheral_mpram_generic_wb #(
     .DEPTH   (DEPTH/4),
     .MEMFILE (MEMFILE),
 

@@ -1,4 +1,4 @@
--- Converted from bench/verilog/regression/mpsoc_mpram_testbench.sv
+-- Converted from bench/verilog/regression/peripheral_mpram_testbench.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -48,12 +48,12 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-use work.mpsoc_mpram_wb_pkg.all;
+use work.peripheral_wb_pkg.all;
 
-entity mpsoc_mpram_testbench is
-end mpsoc_mpram_testbench;
+entity peripheral_mpram_testbench is
+end peripheral_mpram_testbench;
 
-architecture RTL of mpsoc_mpram_testbench is
+architecture RTL of peripheral_mpram_testbench is
 
   --////////////////////////////////////////////////////////////////
   --
@@ -93,7 +93,7 @@ architecture RTL of mpsoc_mpram_testbench is
   --
   -- Components
   --
-  component mpsoc_wb_mpram
+  component peripheral_mpram_wb
     generic (
       --Memory parameters
       DEPTH   : integer := 256;
@@ -131,7 +131,7 @@ begin
   --
 
   --DUT WB
-  wb_mpram : mpsoc_wb_mpram
+  wb_mpram : peripheral_mpram_wb
     generic map (
       --Memory parameters
       DEPTH   => DEPTH,

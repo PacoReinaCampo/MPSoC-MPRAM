@@ -41,7 +41,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module wb_mpram_tb;
+module peripheral_mpram_testbench;
   //////////////////////////////////////////////////////////////////
   //
   // Constants
@@ -73,14 +73,14 @@ module wb_mpram_tb;
   //
   // Module Body
   //
-  vlog_tb_utils vlog_tb_utils0();
+  peripheral_testbench_utils peripheral_testbench_utils0();
 
   initial #1800 wbm_rst <= 1'b0;
 
   initial #200 wb_rst <= 1'b0;
   always #100 wb_clk <= !wb_clk;
 
-  mpsoc_msi_wb_bfm_transactor #(
+  peripheral_bfm_transactor_wb #(
     .MEM_HIGH (MEMORY_SIZE-1),
     .VERBOSE  (0)
   )
@@ -110,7 +110,7 @@ module wb_mpram_tb;
     end
   end
 
-  mpsoc_wb_spram #(
+  peripheral_spram_wb #(
     .DEPTH (MEMORY_SIZE)
   )
   dut (

@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_ram_1r1w_generic #(
+module peripheral_mpram_1r1w_generic #(
   parameter ABITS = 10,
   parameter DBITS = 32
 )

@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_spram_testbench;
+module peripheral_spram_testbench;
 
   //////////////////////////////////////////////////////////////////
   //
@@ -125,7 +125,7 @@ module mpsoc_spram_testbench;
   //
 
   //DUT AXI4
-  mpsoc_axi4_spram #(
+  peripheral_spram_axi4 #(
     .AXI_ID_WIDTH   ( AXI_ID_WIDTH   ),
     .AXI_ADDR_WIDTH ( AXI_ADDR_WIDTH ),
     .AXI_DATA_WIDTH ( AXI_DATA_WIDTH ),

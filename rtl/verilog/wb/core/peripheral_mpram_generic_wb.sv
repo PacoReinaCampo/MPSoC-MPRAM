@@ -41,7 +41,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_wb_ram_generic #(
+module peripheral_mpram_generic_wb #(
   parameter DEPTH   = 256,
   parameter MEMFILE = "",
 

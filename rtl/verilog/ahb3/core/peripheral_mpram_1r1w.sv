@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_ram_1r1w #(
+module peripheral_mpram_1r1w #(
   parameter ABITS      = 10,
   parameter DBITS      = 32,
   parameter TECHNOLOGY = "GENERIC"
@@ -77,7 +77,7 @@ module mpsoc_ram_1r1w #(
   generate
     if (TECHNOLOGY == "N3XS" || TECHNOLOGY == "n3xs") begin
       //eASIC N3XS
-      mpsoc_ram_1r1w_easic_n3xs #(
+      peripheral_mpram_1r1w_easic_n3xs #(
         .ABITS ( ABITS ),
         .DBITS ( DBITS )
       )
@@ -97,7 +97,7 @@ module mpsoc_ram_1r1w #(
     end
     else if (TECHNOLOGY == "N3X" || TECHNOLOGY == "n3x") begin
       //eASIC N3X
-      mpsoc_ram_1r1w_easic_n3x #(
+      peripheral_mpram_1r1w_easic_n3x #(
         .ABITS ( ABITS ),
         .DBITS ( DBITS )
       )
@@ -119,7 +119,7 @@ module mpsoc_ram_1r1w #(
       //GENERIC  -- inferrable memory
 
       //initial $display ("INFO   : No memory technology specified. Using generic inferred memory (%m)");
-      mpsoc_ram_1r1w_generic #(
+      peripheral_mpram_1r1w_generic #(
         .ABITS ( ABITS ),
         .DBITS ( DBITS )
       )

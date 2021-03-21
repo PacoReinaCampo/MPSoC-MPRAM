@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_mpram_testbench;
+module peripheral_mpram_testbench;
 
   //////////////////////////////////////////////////////////////////
   //
@@ -86,7 +86,7 @@ module mpsoc_mpram_testbench;
   //DUT AHB3
 
   //Instantiate RISC-V RAM
-  mpsoc_ahb3_mpram #(
+  peripheral_mpram_ahb3 #(
     .MEM_SIZE          ( 256 ),
     .MEM_DEPTH         ( 256 ),
     .PLEN              ( PLEN ),

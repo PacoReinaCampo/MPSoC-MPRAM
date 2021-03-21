@@ -40,9 +40,9 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-`include "mpsoc_mpram_ahb3_pkg.sv"
+`include "peripheral_ahb3_pkg.sv"
 
-module mpsoc_ahb3_mpram #(
+module peripheral_mpram_ahb3 #(
   parameter MEM_SIZE          = 256,  //Memory in Bytes
   parameter MEM_DEPTH         = 256,  //Memory depth
   parameter PLEN              = 64,
@@ -182,7 +182,7 @@ module mpsoc_ahb3_mpram #(
        * This assumes there are input registers on the memory
        */
 
-      mpsoc_ram_1r1w #(
+      peripheral_mpram_1r1w #(
         .ABITS      ( MEM_ABITS  ),
         .DBITS      ( XLEN       ),
         .TECHNOLOGY ( TECHNOLOGY ) 
