@@ -5,7 +5,7 @@ build:
 	vlog -sv -f system.vc
 
 simulate:
-	vsim -c -do run.do work.wb_mpram_tb
+	vsim -c -do run.do work.peripheral_mpram_testbench
 
 clean:
 	rm -rf work transcript

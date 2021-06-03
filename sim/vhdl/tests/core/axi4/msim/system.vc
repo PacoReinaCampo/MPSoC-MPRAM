@@ -1,3 +1,3 @@
-../../../../../../rtl/vhdl/axi4/core/mpsoc_axi4_mpram.vhd
+../../../../../../rtl/vhdl/axi4/core/peripheral_mpram_axi4.vhd
 
-../../../../../../bench/vhdl/tests/core/axi4/mpsoc_mpram_testbench.vhd
+../../../../../../bench/vhdl/tests/core/axi4/peripheral_mpram_testbench.vhd

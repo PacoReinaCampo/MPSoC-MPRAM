@@ -2,5 +2,5 @@
 call ../../../../../../settings64_vivado.bat
 
 xvhdl -prj system.prj
-xelab mpsoc_mpram_testbench
-xsim -R mpsoc_mpram_testbench
+xelab peripheral_mpram_testbench
+xsim -R peripheral_mpram_testbench

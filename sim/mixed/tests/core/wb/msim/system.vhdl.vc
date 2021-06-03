@@ -1,4 +1,4 @@
-../../../../../../rtl/vhdl/wb/pkg/mpsoc_mpram_wb_pkg.vhd
+../../../../../../rtl/vhdl/wb/pkg/peripheral_mpram_wb_pkg.vhd
 
-../../../../../../rtl/vhdl/wb/core/mpsoc_wb_ram_generic.vhd
-../../../../../../rtl/vhdl/wb/core/mpsoc_wb_mpram.vhd
+../../../../../../rtl/vhdl/wb/core/peripheral_ram_generic_wb.vhd
+../../../../../../rtl/vhdl/wb/core/peripheral_mpram_wb.vhd
