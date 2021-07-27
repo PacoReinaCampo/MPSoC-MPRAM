@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-`include "peripheral_ahb3_pkg.sv"
+import peripheral_ahb3_pkg::*;
 
 module peripheral_mpram_ahb3 #(
   parameter MEM_SIZE          = 256,  //Memory in Bytes
