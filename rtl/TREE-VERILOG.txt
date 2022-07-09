@@ -1,0 +1,17 @@
+├── ahb3
+│   ├── core
+│   │   ├── peripheral_mpram_1r1w_generic.sv
+│   │   ├── peripheral_mpram_1r1w.sv
+│   │   └── peripheral_mpram_ahb3.sv
+│   └── pkg
+│       └── peripheral_ahb3_pkg.sv
+├── bb
+│   └── core
+│       └── peripheral_mpram_bb.sv
+└── wb
+    ├── core
+    │   ├── peripheral_mpram_generic_wb.sv
+    │   ├── peripheral_mpram_wb.sv
+    │   └── peripheral_spram_wb.sv
+    └── pkg
+        └── peripheral_wb_pkg.sv

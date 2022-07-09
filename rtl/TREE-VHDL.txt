@@ -1,0 +1,16 @@
+├── ahb3
+│   ├── core
+│   │   ├── peripheral_mpram_1r1w_generic.vhd
+│   │   ├── peripheral_mpram_1r1w.vhd
+│   │   └── peripheral_mpram_ahb3.vhd
+│   └── pkg
+│       └── vhdl_pkg.vhd
+├── bb
+│   └── core
+│       └── peripheral_mpram_bb.vhd
+└── wb
+    ├── core
+    │   ├── peripheral_mpram_generic_wb.vhd
+    │   └── peripheral_mpram_wb.vhd
+    └── pkg
+        └── vhdl_pkg.vhd
