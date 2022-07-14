@@ -2,5 +2,9 @@
     └── core
         ├── ahb3
         │   └── peripheral_mpram_testbench.vhd
+        ├── axi4
+        │   └── peripheral_mpram_testbench.vhd
+        ├── bb
+        │   └── peripheral_mpram_testbench.vhd
         └── wb
             └── peripheral_mpram_testbench.vhd

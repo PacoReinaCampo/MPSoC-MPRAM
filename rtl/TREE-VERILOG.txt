@@ -6,8 +6,10 @@
 │   └── pkg
 │       └── peripheral_ahb3_pkg.sv
 ├── bb
-│   └── core
-│       └── peripheral_mpram_bb.sv
+│   ├── core
+│   │   └── peripheral_mpram_bb.sv
+│   └── pkg
+│       └── peripheral_bb_pkg.sv
 └── wb
     ├── core
     │   ├── peripheral_mpram_generic_wb.sv
