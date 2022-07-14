@@ -1,1 +1,1 @@
-sv work ../../../../../../bench/verilog/tests/core/ahb3/mpsoc_spram_testbench.sv
+sv work ../../../../../../bench/verilog/tests/core/ahb3/mpsoc_mpram_testbench.sv

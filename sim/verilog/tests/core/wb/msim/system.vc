@@ -1,4 +1,4 @@
-+incdir+../../../../../../rtl/verilog/wb/pkg
+../../../../../../rtl/verilog/wb/pkg/peripheral_wb_pkg.sv
 
 ../../../../../../bench/verilog/tests/core/wb/bus/peripheral_bfm_master_wb.sv
 ../../../../../../bench/verilog/tests/core/wb/bus/peripheral_bfm_memory_wb.sv
@@ -8,5 +8,5 @@
 ../../../../../../bench/verilog/tests/core/wb/main/peripheral_utils_testbench.sv
 ../../../../../../bench/verilog/tests/core/wb/main/peripheral_mpram_testbench.sv
 
-../../../../../../rtl/verilog/wb/core/peripheral_ram_generic_wb.sv
+../../../../../../rtl/verilog/wb/core/peripheral_mpram_generic_wb.sv
 ../../../../../../rtl/verilog/wb/core/peripheral_mpram_wb.sv

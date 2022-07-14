@@ -9,7 +9,7 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              MPSoC-MPRAM CPU                                                  ##
+##              MPSoC-SPRAM CPU                                                  ##
 ##              Simulation Test Makefile                                         ##
 ##                                                                               ##
 ###################################################################################
@@ -48,8 +48,8 @@ build:
 	xvlog -i ../../../../../../rtl/verilog/ahb3/pkg -prj system.prj
 
 simulate:
-	xelab mpsoc_mpram_testbench
-	xsim -R mpsoc_mpram_testbench
+	xelab peripheral_mpram_testbench
+	xsim -R peripheral_mpram_testbench
 
 clean:
 	rm -rf *.dir *.jou *.log *.pb .Xil

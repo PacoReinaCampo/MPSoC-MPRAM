@@ -114,13 +114,13 @@ module peripheral_mpram_ahb3 #(
 
     //get number of active lanes for a 1024bit databus (max width) for this HSIZE
     case (hsize)
-      `HSIZE_B1024 : full_be = 128'hffff_ffff_ffff_ffff_ffff_ffff_ffff_ffff; 
-      `HSIZE_B512  : full_be = 128'h0000_0000_0000_0000_ffff_ffff_ffff_ffff;
-      `HSIZE_B256  : full_be = 128'h0000_0000_0000_0000_0000_0000_ffff_ffff;
-      `HSIZE_B128  : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_ffff;
-      `HSIZE_DWORD : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_00ff;
-      `HSIZE_WORD  : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_000f;
-      `HSIZE_HWORD : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_0003;
+      HSIZE_B1024 : full_be = 128'hffff_ffff_ffff_ffff_ffff_ffff_ffff_ffff; 
+      HSIZE_B512  : full_be = 128'h0000_0000_0000_0000_ffff_ffff_ffff_ffff;
+      HSIZE_B256  : full_be = 128'h0000_0000_0000_0000_0000_0000_ffff_ffff;
+      HSIZE_B128  : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_ffff;
+      HSIZE_DWORD : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_00ff;
+      HSIZE_WORD  : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_000f;
+      HSIZE_HWORD : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_0003;
       default      : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_0001;
     endcase
 
@@ -153,7 +153,7 @@ module peripheral_mpram_ahb3 #(
       //generate internal write signal
       //This causes read/write contention[t], which is handled by memory
       always @(posedge HCLK) begin
-        if (HREADY[t]) we[t] <= HSEL[t] & HWRITE[t] & (HTRANS[t] != `HTRANS_BUSY) & (HTRANS[t] != `HTRANS_IDLE);
+        if (HREADY[t]) we[t] <= HSEL[t] & HWRITE[t] & (HTRANS[t] != HTRANS_BUSY) & (HTRANS[t] != HTRANS_IDLE);
         else           we[t] <= 1'b0;
       end
       //decode Byte-Enables
@@ -168,7 +168,7 @@ module peripheral_mpram_ahb3 #(
 
       //Is there read/write contention[t] on the memory?
       assign contention[t] = (waddr[t][MEM_ABITS_LSB +: MEM_ABITS] == HADDR[t][MEM_ABITS_LSB +: MEM_ABITS]) & we[t] &
-        HSEL[t] & HREADY[t] & ~HWRITE[t] & (HTRANS[t] != `HTRANS_BUSY) & (HTRANS[t] != `HTRANS_IDLE);
+        HSEL[t] & HREADY[t] & ~HWRITE[t] & (HTRANS[t] != HTRANS_BUSY) & (HTRANS[t] != HTRANS_IDLE);
 
       //if all bytes were written contention[t] is/can be handled by memory
       //otherwise stall a cycle (forced by N3S)
@@ -202,7 +202,7 @@ module peripheral_mpram_ahb3 #(
       );
 
       //AHB bus response
-      assign HRESP[t] = `HRESP_OKAY; //always OK
+      assign HRESP[t] = HRESP_OKAY; //always OK
 
       if (REGISTERED_OUTPUT == "NO") begin
         always @(posedge HCLK,negedge HRESETn) begin
@@ -214,7 +214,7 @@ module peripheral_mpram_ahb3 #(
       else begin
         always @(posedge HCLK,negedge HRESETn) begin
           if (!HRESETn)                                       HREADYOUT[t] <= 1'b1;
-          else if (HTRANS[t] == `HTRANS_NONSEQ && !HWRITE[t]) HREADYOUT[t] <= 1'b0;
+          else if (HTRANS[t] == HTRANS_NONSEQ && !HWRITE[t]) HREADYOUT[t] <= 1'b0;
           else                                                HREADYOUT[t] <= 1'b1;
         end
         always @(posedge HCLK) begin

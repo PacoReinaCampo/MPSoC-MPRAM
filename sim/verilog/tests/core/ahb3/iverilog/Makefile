@@ -1,7 +1,7 @@
 all: build simulate
 
 build:
-	iverilog -g2012 -o system.vvp -c system.vc -s peripheral_mpram_testbench
+	iverilog -g2012 -o system.vvp -c system.vc -s mpsoc_mpram_testbench -I ../../../../../../rtl/verilog/ahb3/pkg
 
 simulate:
 	vvp system.vvp

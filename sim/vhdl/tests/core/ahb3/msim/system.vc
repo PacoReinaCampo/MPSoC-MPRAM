@@ -1,7 +1,8 @@
-../../../../../../rtl/vhdl/ahb3/pkg/peripheral_mpram_ahb3_pkg.vhd
+../../../../../../rtl/vhdl/ahb3/pkg/vhdl_pkg.vhd
+../../../../../../rtl/vhdl/ahb3/pkg/peripheral_ahb3_pkg.vhd
 
 ../../../../../../rtl/vhdl/ahb3/core/peripheral_mpram_ahb3.vhd
-../../../../../../rtl/vhdl/ahb3/core/peripheral_ram_1r1w.vhd
-../../../../../../rtl/vhdl/ahb3/core/peripheral_ram_1r1w_generic.vhd
+../../../../../../rtl/vhdl/ahb3/core/peripheral_mpram_1r1w.vhd
+../../../../../../rtl/vhdl/ahb3/core/peripheral_mpram_1r1w_generic.vhd
 
 ../../../../../../bench/vhdl/tests/core/ahb3/peripheral_mpram_testbench.vhd

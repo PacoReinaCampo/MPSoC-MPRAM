@@ -2,7 +2,7 @@ all: build simulate
 
 build:
 	if [ ! -e work ]; then vlib work; fi
-	vlog -sv -f system.vc
+	vlog -sv +incdir+../../../../../../rtl/verilog/ahb3/pkg -f system.vc
 
 simulate:
 	vsim -c -do run.do work.peripheral_mpram_testbench

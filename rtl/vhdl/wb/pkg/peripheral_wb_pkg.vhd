@@ -1,4 +1,4 @@
--- Converted from peripheral_wb_mpram_generic.v
+-- Converted from pkg/peripheral_ahb3_pkg.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -13,12 +13,12 @@
 --                                                                            //
 --                                                                            //
 --              MPSoC-RISCV CPU                                               //
---              Multi Port RAM                                                //
---              Wishbone Bus Interface                                        //
+--              RISC-V Package                                                //
+--              AMBA3 AHB-Lite Bus Interface                                  //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 
--- Copyright (c) 2018-2019 by the author(s)
+-- Copyright (c) 2017-2018 by the author(s)
 -- *
 -- * Permission is hereby granted, free of charge, to any person obtaining a copy
 -- * of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,6 @@
 -- *
 -- * =============================================================================
 -- * Author(s):
--- *   Olof Kindgren <olof.kindgren@gmail.com>
 -- *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 -- */
 
@@ -49,58 +48,22 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-use work.vhdl_pkg.all;
-use work.peripheral_wb_pkg.all;
+package peripheral_wb_pkg is
 
-entity peripheral_mpram_generic_wb is
-  generic (
-    DEPTH   : integer := 256;
-    MEMFILE : string  := "";
+  constant CLASSIC_CYCLE : std_logic := '0';
+  constant BURST_CYCLE   : std_logic := '1';
 
-    AW : integer := integer(log2(real(DEPTH)));
-    DW : integer := 32
-    );
-  port (
-    clk   : in  std_logic;
-    we    : in  std_logic_vector(3 downto 0);
-    din   : in  std_logic_vector(DW-1 downto 0);
-    waddr : in  std_logic_vector(AW-1 downto 0);
-    raddr : in  std_logic_vector(AW-1 downto 0);
-    dout  : out std_logic_vector(DW-1 downto 0)
-    );
-end peripheral_mpram_generic_wb;
+  constant READING : std_logic := '0';
+  constant WRITING : std_logic := '1';
 
-architecture RTL of peripheral_mpram_generic_wb is
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Variables
-  --
-  signal mem : std_logic_matrix(DEPTH-1 downto 0)(DW-1 downto 0);
+  constant CTI_CLASSIC      : std_logic_vector(2 downto 0) := "000";
+  constant CTI_CONST_BURST  : std_logic_vector(2 downto 0) := "001";
+  constant CTI_INC_BURST    : std_logic_vector(2 downto 0) := "010";
+  constant CTI_END_OF_BURST : std_logic_vector(2 downto 0) := "111";
 
-begin
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Module Body
-  --
-  processing_0 : process (clk)
-  begin
-    if (rising_edge(clk)) then
-      if (we(0) = '1') then
-        mem(to_integer(unsigned(raddr)))(7 downto 0) <= din(7 downto 0);
-      end if;
-      if (we(1) = '1') then
-        mem(to_integer(unsigned(raddr)))(15 downto 8) <= din(15 downto 8);
-      end if;
-      if (we(2) = '1') then
-        mem(to_integer(unsigned(raddr)))(23 downto 16) <= din(23 downto 16);
-      end if;
-      if (we(3) = '1') then
-        mem(to_integer(unsigned(raddr)))(31 downto 24) <= din(31 downto 24);
-      end if;
-      dout <= mem(to_integer(unsigned(raddr)));
-    end if;
-  end process;
+  constant BTE_LINEAR  : std_logic_vector(1 downto 0) := "00";
+  constant BTE_WRAP_4  : std_logic_vector(1 downto 0) := "01";
+  constant BTE_WRAP_8  : std_logic_vector(1 downto 0) := "10";
+  constant BTE_WRAP_16 : std_logic_vector(1 downto 0) := "11";
 
-  generating_0 : if (MEMFILE /= "") generate
-  end generate;
-end RTL;
+end peripheral_wb_pkg;

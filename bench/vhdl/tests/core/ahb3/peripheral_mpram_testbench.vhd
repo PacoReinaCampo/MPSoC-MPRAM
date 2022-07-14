@@ -48,6 +48,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
+use work.vhdl_pkg.all;
 use work.peripheral_ahb3_pkg.all;
 
 entity peripheral_mpram_testbench is
@@ -59,6 +60,11 @@ architecture RTL of peripheral_mpram_testbench is
   --
   -- Constants
   --
+
+  constant PLEN       : integer := 64;
+  constant XLEN       : integer := 64;
+  constant TECHNOLOGY : string  := "GENERIC";
+
   constant CORES_PER_TILE : integer := 8;
 
   --////////////////////////////////////////////////////////////////
