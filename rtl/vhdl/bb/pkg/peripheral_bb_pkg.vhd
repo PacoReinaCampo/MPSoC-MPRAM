@@ -48,7 +48,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-package peripheral_wb_pkg is
+package peripheral_bb_pkg is
 
   constant CLASSIC_CYCLE : std_logic := '0';
   constant BURST_CYCLE   : std_logic := '1';
@@ -66,4 +66,4 @@ package peripheral_wb_pkg is
   constant BTE_WRAP_8  : std_logic_vector(1 downto 0) := "10";
   constant BTE_WRAP_16 : std_logic_vector(1 downto 0) := "11";
 
-end peripheral_wb_pkg;
+end peripheral_bb_pkg;

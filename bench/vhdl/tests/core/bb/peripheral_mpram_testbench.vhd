@@ -49,7 +49,7 @@ use ieee.numeric_std.all;
 use ieee.math_real.all;
 
 use work.vhdl_pkg.all;
-use work.peripheral_wb_pkg.all;
+use work.peripheral_bb_pkg.all;
 
 entity peripheral_mpram_testbench is
 end peripheral_mpram_testbench;
@@ -94,7 +94,7 @@ architecture RTL of peripheral_mpram_testbench is
   --
   -- Components
   --
-  component peripheral_mpram_wb
+  component peripheral_mpram_bb
     generic (
       --Memory parameters
       DEPTH   : integer := 256;
@@ -132,7 +132,7 @@ begin
   --
 
   --DUT WB
-  wb_mpram : peripheral_mpram_wb
+  wb_mpram : peripheral_mpram_bb
     generic map (
       --Memory parameters
       DEPTH   => DEPTH,

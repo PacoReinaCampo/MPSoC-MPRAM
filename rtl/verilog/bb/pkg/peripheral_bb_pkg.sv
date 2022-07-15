@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-package peripheral_wb_pkg;
+package peripheral_bb_pkg;
 
   //////////////////////////////////////////////////////////////////
   //
