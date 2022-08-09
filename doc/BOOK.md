@@ -8,67 +8,6 @@ geometry: "left=3cm,right=2cm,top=3cm,bottom=2cm"
 
 # 0. INTRODUCTION
 
-## 0.0. DO-254
-
-### 0.0.1. PLANNING PROCESS
-#### 0.0.1.1. Planning Process Objectives
-#### 0.0.1.2. Planning Process Activities
-### 0.0.2. HARDWARE DESIGN PROCESS
-#### 0.0.2.1. Requirements Capture Process
-#### 0.0.2.2. Conceptual Design Process
-#### 0.0.2.3. Detailed Design Process
-#### 0.0.2.4. Implementation Process
-#### 0.0.2.5. Production Transition
-#### 0.0.2.6. Acceptance Test
-#### 0.0.2.7. Series Production
-### 0.0.3. VALIDATION AND VERIFICATION PROCESS
-#### 0.0.3.1. Validation Process
-#### 0.0.3.2. Verification Process
-#### 0.0.3.3. Validation and Verification Methods
-### 0.0.4. CONFIGURATION MANAGEMENT PROCESS
-#### 0.0.4.1. Configuration Management Objectives
-#### 0.0.4.2. Configuration Management Activities
-#### 0.0.4.3. Data Control Categories
-### 0.0.5. PROCESS ASSURANCE
-#### 0.0.5.1. Process Assurance Objectives
-#### 0.0.5.2. Process Assurance Activities
-### 0.0.6. CERTIFICATION LIAISON PROCESS
-#### 0.0.6.1. Means of Compliance and Planning
-#### 0.0.6.2. Compliance Substantiation
-### 0.0.7. HARDWARE DESIGN LIFECYCLE DATA
-#### 0.0.7.1. Hardware Plans
-##### 0.0.7.1.1. Plan for Hardware Aspects of Certification
-##### 0.0.7.1.2. Hardware Design Plan
-##### 0.0.7.1.3. Hardware Validation Plan
-##### 0.0.7.1.4. Hardware Verification Plan
-##### 0.0.7.1.5. Hardware Configuration Management Plan
-##### 0.0.7.1.6. Hardware Process Assurance Plan
-#### 0.0.7.2. Hardware Design Standards and Guidance
-##### 0.0.7.2.1. Requirements Standards
-##### 0.0.7.2.2. Hardware Design Standards
-##### 0.0.7.2.3. Validation and Verification Standards
-##### 0.0.7.2.4. Hardware Archive Standards
-#### 0.0.7.3. Hardware Design Data 
-##### 0.0.7.3.1. Hardware Requirements 
-##### 0.0.7.3.2. Hardware Design Representation Data
-###### 0.0.7.3.2.1. Conceptual Design Data 
-###### 0.0.7.3.2.2. Detailed Design Data 
-####### 0.0.7.3.2.2.1. Top-Level Drawing 
-####### 0.0.7.3.2.2.2. Assembly Drawings
-####### 0.0.7.3.2.2.3. Installation Control Drawings 
-####### 0.0.7.3.2.2.4. Hardware/Software Interface Data
-#### 0.0.7.4. Validation and Verification Data
-##### 0.0.7.4.1. Traceability Data
-##### 0.0.7.4.2. Review and Analysis Procedures
-##### 0.0.7.4.3. Review and Analysis Results
-##### 0.0.7.4.4. Test Procedures 
-##### 0.0.7.4.5. Test Results
-### 0.0.8. ADDITIONAL CONSIDERATIONS
-#### 0.0.8.1. Use of Previously Developed Hardware
-#### 0.0.8.2. Commercial Components Usage
-#### 0.0.8.3. Product Service Experience
-#### 0.0.8.4. Tool Assessment and Qualification
-
 ## 0.1. BEST PRACTICES
 
 ### 0.1.1. HARDWARE
@@ -718,49 +657,54 @@ sudo apt upgrade
 #### 1.1.2.6. Timing diagram
 #### 1.1.2.7. Use diagram
 
-## 1.2. Source
+## 1.2. Softmware
 
-### 1.2.1. Ada Language
-### 1.2.2. C Language
+### 1.2.1. Matlab Language
+### 1.2.2. Rust Language
 
-## 1.3. Model
+## 1.3. Source
 
-### 1.3.1. VHDL
-### 1.3.2. Verilog
+### 1.3.1. Ada Language
+### 1.3.2. C Language
 
-## 1.5. Validation
+## 1.4. Model
 
-### 1.5.1. VHDL
-### 1.5.2. Verilog
+### 1.4.1. VHDL
+### 1.4.2. Verilog
 
-## 1.5. Design
+## 1.6. Validation
 
-### 1.5.1. VHDL
-### 1.5.2. Verilog
+### 1.6.1. VHDL
+### 1.6.2. Verilog
 
-## 1.6. Verification
+## 1.6. Design
 
-### 1.6.1. OSVVM-VHDL
+### 1.6.1. VHDL
+### 1.6.2. Verilog
 
-#### 1.6.1.1. OSVVM Checker
-#### 1.6.1.2. OSVVM Stimulus
-#### 1.6.1.3. OSVVM Testbench
+## 1.7. Verification
 
-### 1.6.2. UVM-Verilog
+### 1.7.1. OSVVM-VHDL
+
+#### 1.7.1.1. OSVVM Checker
+#### 1.7.1.2. OSVVM Stimulus
+#### 1.7.1.3. OSVVM Testbench
+
+### 1.7.2. UVM-Verilog
 
 ![UVM Diagram Overview](../bench/uvm-testbench.png)
 
-#### 1.6.2.1. UVM Agent
-#### 1.6.2.2. UVM Driver
-#### 1.6.2.3. UVM Enviroment
-#### 1.6.2.4. UVM Monitor
-#### 1.6.2.5. UVM Scoreboard
-#### 1.6.2.6. UVM Sequence
-#### 1.6.2.7. UVM Sequencer
-#### 1.6.2.8. UVM Subscriber
-#### 1.6.2.9. UVM Test
-#### 1.6.2.10. UVM Testbench
-#### 1.6.2.11. UVM Transaction
+#### 1.7.2.1. UVM Agent
+#### 1.7.2.2. UVM Driver
+#### 1.7.2.3. UVM Enviroment
+#### 1.7.2.4. UVM Monitor
+#### 1.7.2.5. UVM Scoreboard
+#### 1.7.2.6. UVM Sequence
+#### 1.7.2.7. UVM Sequencer
+#### 1.7.2.8. UVM Subscriber
+#### 1.7.2.9. UVM Test
+#### 1.7.2.10. UVM Testbench
+#### 1.7.2.11. UVM Transaction
 
 # 2. PROJECTS
 
