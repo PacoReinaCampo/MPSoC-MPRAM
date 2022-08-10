@@ -1,3 +1,4 @@
+verilog
 └── tests
     ├── bfm
     │   ├── ahb3
@@ -40,3 +41,5 @@
             │   ├── peripheral_tap_generator.sv
             │   └── peripheral_utils_testbench.sv
             └── peripheral_mpram_testbench.sv
+
+13 directories, 29 files

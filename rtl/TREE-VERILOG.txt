@@ -1,3 +1,4 @@
+verilog
 ├── ahb3
 │   ├── core
 │   │   ├── peripheral_mpram_1r1w_generic.sv
@@ -17,3 +18,5 @@
     │   └── peripheral_spram_wb.sv
     └── pkg
         └── peripheral_wb_pkg.sv
+
+9 directories, 10 files
