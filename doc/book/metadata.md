@@ -1,8 +1,8 @@
 ---
-title: 'SoC-NTM (T-DNC/NTM-SoC)'
+title: 'MPSoC-MPRAM'
 subtitle: 'QueenField ![](../../icon.jpg)'
 
 author: Paco Reina Campo
 
-abstract: Neural Turing Machine for a MPSoC verified with UVM/OSVVM/FV.
+abstract: Multi-Port RAM for Instruction & Data for a Multi-Processor System on Chip.
 ---
