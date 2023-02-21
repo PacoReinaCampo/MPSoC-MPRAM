@@ -1,47 +1,46 @@
 -- Converted from bench/verilog/regression/peripheral_mpram_testbench.sv
 -- by verilog2vhdl - QueenField
 
---//////////////////////////////////////////////////////////////////////////////
---                                            __ _      _     _               //
---                                           / _(_)    | |   | |              //
---                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |              //
---               / _` | | | |/ _ \/ _ \ '_ \|  _| |/ _ \ |/ _` |              //
---              | (_| | |_| |  __/  __/ | | | | | |  __/ | (_| |              //
---               \__, |\__,_|\___|\___|_| |_|_| |_|\___|_|\__,_|              //
---                  | |                                                       //
---                  |_|                                                       //
---                                                                            //
---                                                                            //
---              MPSoC-RISCV CPU                                               //
---              Master Slave Interface Tesbench                               //
---              AMBA3 AHB-Lite Bus Interface                                  //
---                                                                            //
---//////////////////////////////////////////////////////////////////////////////
+--------------------------------------------------------------------------------
+--                                            __ _      _     _               --
+--                                           / _(_)    | |   | |              --
+--                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |              --
+--               / _` | | | |/ _ \/ _ \ '_ \|  _| |/ _ \ |/ _` |              --
+--              | (_| | |_| |  __/  __/ | | | | | |  __/ | (_| |              --
+--               \__, |\__,_|\___|\___|_| |_|_| |_|\___|_|\__,_|              --
+--                  | |                                                       --
+--                  |_|                                                       --
+--                                                                            --
+--                                                                            --
+--              MPSoC-RISCV CPU                                               --
+--              Master Slave Interface Tesbench                               --
+--              AMBA3 AHB-Lite Bus Interface                                  --
+--                                                                            --
+--------------------------------------------------------------------------------
 
 -- Copyright (c) 2018-2019 by the author(s)
--- *
--- * Permission is hereby granted, free of charge, to any person obtaining a copy
--- * of this software and associated documentation files (the "Software"), to deal
--- * in the Software without restriction, including without limitation the rights
--- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
--- * copies of the Software, and to permit persons to whom the Software is
--- * furnished to do so, subject to the following conditions:
--- *
--- * The above copyright notice and this permission notice shall be included in
--- * all copies or substantial portions of the Software.
--- *
--- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
--- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
--- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
--- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
--- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
--- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
--- * THE SOFTWARE.
--- *
--- * =============================================================================
--- * Author(s):
--- *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
--- */
+--
+-- Permission is hereby granted, free of charge, to any person obtaining a copy
+-- of this software and associated documentation files (the "Software"), to deal
+-- in the Software without restriction, including without limitation the rights
+-- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+-- copies of the Software, and to permit persons to whom the Software is
+-- furnished to do so, subject to the following conditions:
+--
+-- The above copyright notice and this permission notice shall be included in
+-- all copies or substantial portions of the Software.
+--
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+-- THE SOFTWARE.
+--
+--------------------------------------------------------------------------------
+-- Author(s):
+--   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -54,12 +53,11 @@ use work.peripheral_ahb3_pkg.all;
 entity peripheral_mpram_testbench is
 end peripheral_mpram_testbench;
 
-architecture RTL of peripheral_mpram_testbench is
+architecture rtl of peripheral_mpram_testbench is
 
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Constants
-  --
+  ------------------------------------------------------------------------------
+  --  Constants
+  ------------------------------------------------------------------------------
 
   constant PLEN       : integer := 64;
   constant XLEN       : integer := 64;
@@ -67,10 +65,9 @@ architecture RTL of peripheral_mpram_testbench is
 
   constant CORES_PER_TILE : integer := 8;
 
-  --////////////////////////////////////////////////////////////////
-  --
+  ------------------------------------------------------------------------------
   -- Variables
-  --
+  ------------------------------------------------------------------------------
 
   --Common signals
   signal HRESETn : std_logic;
@@ -91,10 +88,9 @@ architecture RTL of peripheral_mpram_testbench is
   signal mst_mpram_HREADYOUT : std_logic_vector(CORES_PER_TILE-1 downto 0);
   signal mst_mpram_HRESP     : std_logic_vector(CORES_PER_TILE-1 downto 0);
 
-  --////////////////////////////////////////////////////////////////
-  --
+  ------------------------------------------------------------------------------
   -- Components
-  --
+  ------------------------------------------------------------------------------
   component peripheral_mpram_ahb3
     generic (
       MEM_SIZE          : integer := 256;  --Memory in Bytes
@@ -129,10 +125,9 @@ architecture RTL of peripheral_mpram_testbench is
   end component;
 
 begin
-  --////////////////////////////////////////////////////////////////
-  --
+  ------------------------------------------------------------------------------
   -- Module Body
-  --
+  ------------------------------------------------------------------------------
 
   --DUT AHB3
   ahb3_mpram : peripheral_mpram_ahb3
@@ -164,4 +159,4 @@ begin
       HREADY    => mst_mpram_HREADY,
       HRESP     => mst_mpram_HRESP
       );
-end RTL;
+end rtl;

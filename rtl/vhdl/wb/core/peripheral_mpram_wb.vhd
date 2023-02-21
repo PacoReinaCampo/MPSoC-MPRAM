@@ -1,48 +1,47 @@
 -- Converted from peripheral_mpram_wb.v
 -- by verilog2vhdl - QueenField
 
---//////////////////////////////////////////////////////////////////////////////
---                                            __ _      _     _               //
---                                           / _(_)    | |   | |              //
---                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |              //
---               / _` | | | |/ _ \/ _ \ '_ \|  _| |/ _ \ |/ _` |              //
---              | (_| | |_| |  __/  __/ | | | | | |  __/ | (_| |              //
---               \__, |\__,_|\___|\___|_| |_|_| |_|\___|_|\__,_|              //
---                  | |                                                       //
---                  |_|                                                       //
---                                                                            //
---                                                                            //
---              MPSoC-RISCV CPU                                               //
---              Single Port RAM                                               //
---              Wishbone Bus Interface                                        //
---                                                                            //
---//////////////////////////////////////////////////////////////////////////////
+--------------------------------------------------------------------------------
+--                                            __ _      _     _               --
+--                                           / _(_)    | |   | |              --
+--                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |              --
+--               / _` | | | |/ _ \/ _ \ '_ \|  _| |/ _ \ |/ _` |              --
+--              | (_| | |_| |  __/  __/ | | | | | |  __/ | (_| |              --
+--               \__, |\__,_|\___|\___|_| |_|_| |_|\___|_|\__,_|              --
+--                  | |                                                       --
+--                  |_|                                                       --
+--                                                                            --
+--                                                                            --
+--              MPSoC-RISCV CPU                                               --
+--              Single Port RAM                                               --
+--              Wishbone Bus Interface                                        --
+--                                                                            --
+--------------------------------------------------------------------------------
 
 -- Copyright (c) 2018-2019 by the author(s)
--- *
--- * Permission is hereby granted, free of charge, to any person obtaining a copy
--- * of this software and associated documentation files (the "Software"), to deal
--- * in the Software without restriction, including without limitation the rights
--- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
--- * copies of the Software, and to permit persons to whom the Software is
--- * furnished to do so, subject to the following conditions:
--- *
--- * The above copyright notice and this permission notice shall be included in
--- * all copies or substantial portions of the Software.
--- *
--- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
--- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
--- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
--- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
--- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
--- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
--- * THE SOFTWARE.
--- *
--- * =============================================================================
--- * Author(s):
--- *   Olof Kindgren <olof.kindgren@gmail.com>
--- *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
--- */
+--
+-- Permission is hereby granted, free of charge, to any person obtaining a copy
+-- of this software and associated documentation files (the "Software"), to deal
+-- in the Software without restriction, including without limitation the rights
+-- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+-- copies of the Software, and to permit persons to whom the Software is
+-- furnished to do so, subject to the following conditions:
+--
+-- The above copyright notice and this permission notice shall be included in
+-- all copies or substantial portions of the Software.
+--
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+-- THE SOFTWARE.
+--
+--------------------------------------------------------------------------------
+-- Author(s):
+--   Olof Kindgren <olof.kindgren@gmail.com>
+--   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -83,7 +82,7 @@ entity peripheral_mpram_wb is
     );
 end peripheral_mpram_wb;
 
-architecture RTL of peripheral_mpram_wb is
+architecture rtl of peripheral_mpram_wb is
   component peripheral_mpram_generic_wb
     generic (
       DEPTH   : integer := 256;
@@ -102,10 +101,9 @@ architecture RTL of peripheral_mpram_wb is
       );
   end component;
 
-  --////////////////////////////////////////////////////////////////
-  --
+  ------------------------------------------------------------------------------
   -- Constants
-  --
+  ------------------------------------------------------------------------------
   constant CLASSIC_CYCLE : std_logic := '0';
   constant BURST_CYCLE   : std_logic := '1';
 
@@ -122,10 +120,9 @@ architecture RTL of peripheral_mpram_wb is
   constant BTE_WRAP_8  : std_logic_vector(1 downto 0) := "10";
   constant BTE_WRAP_16 : std_logic_vector(1 downto 0) := "11";
 
-  --////////////////////////////////////////////////////////////////
-  --
+  ------------------------------------------------------------------------------
   -- Functions
-  --
+  ------------------------------------------------------------------------------
   function get_cycle_type (
     cti : std_logic_vector(2 downto 0)
     ) return std_logic is
@@ -221,10 +218,9 @@ architecture RTL of peripheral_mpram_wb is
   signal we_i : std_logic_matrix(CORES_PER_TILE-1 downto 0)(3 downto 0);
 
 begin
-  --////////////////////////////////////////////////////////////////
-  --
+  ------------------------------------------------------------------------------
   -- Module Body
-  --
+  ------------------------------------------------------------------------------
   generating_0 : for t in 0 to CORES_PER_TILE - 1 generate
     valid(t) <= wb_cyc_i(t) and wb_stb_i(t);
 
@@ -282,4 +278,4 @@ begin
 
     we_i(t) <= (ram_we(t) & ram_we(t) & ram_we(t) & ram_we(t)) and wb_sel_i(t);
   end generate;
-end RTL;
+end rtl;
