@@ -1,22 +1,23 @@
 verilog
-├── ahb3
-│   ├── core
+├── peripheral
+│   ├── ahb3
 │   │   ├── peripheral_mpram_1r1w_generic.sv
 │   │   ├── peripheral_mpram_1r1w.sv
 │   │   └── peripheral_mpram_ahb3.sv
-│   └── pkg
-│       └── peripheral_ahb3_pkg.sv
-├── bb
-│   ├── core
+│   ├── bb
+│   │   ├── core
 │   │   └── peripheral_mpram_bb.sv
-│   └── pkg
-│       └── peripheral_bb_pkg.sv
-└── wb
-    ├── core
-    │   ├── peripheral_mpram_generic_wb.sv
-    │   ├── peripheral_mpram_wb.sv
-    │   └── peripheral_spram_wb.sv
-    └── pkg
+│   └── wb
+│       ├── core
+│       ├── peripheral_mpram_generic_wb.sv
+│       ├── peripheral_mpram_wb.sv
+│       └── peripheral_spram_wb.sv
+└── pkg
+    ├── ahb3
+    │   └── peripheral_ahb3_pkg.sv
+    ├── bb
+    │   └── peripheral_bb_pkg.sv
+    └── wb
         └── peripheral_wb_pkg.sv
 
-9 directories, 10 files
+10 directories, 10 files

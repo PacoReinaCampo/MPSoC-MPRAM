@@ -10,8 +10,8 @@
 //                                                                            //
 //                                                                            //
 //              MPSoC-RISCV CPU                                               //
-//              Multi Port RAM                                                //
-//              Wishbone Bus Interface                                        //
+//              Master Slave Interface Tesbench                               //
+//              AMBA3 AHB-Lite Bus Interface                                  //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -37,49 +37,78 @@
  *
  * =============================================================================
  * Author(s):
- *   Olof Kindgren <olof.kindgren@gmail.com>
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module peripheral_mpram_generic_wb #(
-  parameter DEPTH   = 256,
-  parameter MEMFILE = "",
+module peripheral_mpram_testbench;
 
-  parameter AW = $clog2(DEPTH),
-  parameter DW = 32
-)
-  (
-    input               clk,
-    input      [   3:0] we,
-    input      [DW-1:0] din,
-    input      [AW-1:0] waddr,
-    input      [AW-1:0] raddr,
-    output reg [DW-1:0] dout
-  );
+  //////////////////////////////////////////////////////////////////////////////
+  //
+  // Constants
+  //
 
-  //////////////////////////////////////////////////////////////////
+  //Memory parameters
+  parameter DEPTH   = 256;
+  parameter MEMFILE = "";
+
+  //Wishbone parameters
+  parameter DW = 32;
+  parameter AW = $clog2(DEPTH);
+
+  localparam CORES_PER_TILE = 8;
+
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Variables
   //
-  reg [DW-1:0] mem [0:DEPTH-1] /* verilator public */;
 
-  //////////////////////////////////////////////////////////////////
+  //Common signals
+  wire                                            clk;
+  wire                                            rst;
+
+  //WB signals
+  wire  [CORES_PER_TILE-1:0][AW             -1:0] mst_mpram_adr_i;
+  wire  [CORES_PER_TILE-1:0][DW             -1:0] mst_mpram_dat_i;
+  wire  [CORES_PER_TILE-1:0][                3:0] mst_mpram_sel_i;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_we_i;
+  wire  [CORES_PER_TILE-1:0][                1:0] mst_mpram_bte_i;
+  wire  [CORES_PER_TILE-1:0][                2:0] mst_mpram_cti_i;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_cyc_i;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_stb_i;
+  reg   [CORES_PER_TILE-1:0]                      mst_mpram_ack_o;
+  wire  [CORES_PER_TILE-1:0]                      mst_mpram_err_o;
+  wire  [CORES_PER_TILE-1:0][DW             -1:0] mst_mpram_dat_o;
+
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
-  always @(posedge clk) begin
-    if (we[0]) mem[waddr][7:0]   <= din[7:0];
-    if (we[1]) mem[waddr][15:8]  <= din[15:8];
-    if (we[2]) mem[waddr][23:16] <= din[23:16];
-    if (we[3]) mem[waddr][31:24] <= din[31:24];
-    dout <= mem[raddr];
-  end
 
-  generate
-    initial
-      if(MEMFILE != "") begin
-        $display("Preloading %m from %s", MEMFILE);
-        $readmemh(MEMFILE, mem);
-      end
-  endgenerate
+  //DUT WB
+  peripheral_mpram_wb #(
+    .DEPTH   ( DEPTH   ),
+    .MEMFILE ( MEMFILE ),
+
+    .DW      ( DW ),
+    .AW      ( AW ),
+
+    .CORES_PER_TILE ( CORES_PER_TILE )
+  )
+  wb_mpram (
+    //Wishbone Master interface
+    .wb_clk_i ( HRESETn ),
+    .wb_rst_i ( HCLK    ),
+
+    .wb_adr_i ( mst_mpram_adr_i ),
+    .wb_dat_i ( mst_mpram_dat_i ),
+    .wb_sel_i ( mst_mpram_sel_i ),
+    .wb_we_i  ( mst_mpram_we_i  ),
+    .wb_bte_i ( mst_mpram_bte_i ),
+    .wb_cti_i ( mst_mpram_cti_i ),
+    .wb_cyc_i ( mst_mpram_cyc_i ),
+    .wb_stb_i ( mst_mpram_stb_i ),
+    .wb_ack_o ( mst_mpram_ack_o ),
+    .wb_err_o ( mst_mpram_err_o ),
+    .wb_dat_o ( mst_mpram_dat_o )
+  );
 endmodule

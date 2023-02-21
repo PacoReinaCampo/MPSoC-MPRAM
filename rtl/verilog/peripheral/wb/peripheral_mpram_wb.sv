@@ -10,7 +10,7 @@
 //                                                                            //
 //                                                                            //
 //              MPSoC-RISCV CPU                                               //
-//              Multi Port RAM                                                //
+//              Single Port RAM                                               //
 //              Wishbone Bus Interface                                        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
@@ -48,49 +48,47 @@ module peripheral_spram_wb #(
 
   //Wishbone parameters
   parameter DW = 32,
-  parameter AW = $clog2(DEPTH),
-
-  parameter CORES_PER_TILE = 8
+  parameter AW = $clog2(DEPTH)
 )
   (
-    input                                   wb_clk_i,
-    input                                   wb_rst_i,
+    input           wb_clk_i,
+    input           wb_rst_i,
 
-    input      [CORES_PER_TILE-1:0][AW-1:0] wb_adr_i,
-    input      [CORES_PER_TILE-1:0][DW-1:0] wb_dat_i,
-    input      [CORES_PER_TILE-1:0][   3:0] wb_sel_i,
-    input      [CORES_PER_TILE-1:0]         wb_we_i,
-    input      [CORES_PER_TILE-1:0][   1:0] wb_bte_i,
-    input      [CORES_PER_TILE-1:0][   2:0] wb_cti_i,
-    input      [CORES_PER_TILE-1:0]         wb_cyc_i,
-    input      [CORES_PER_TILE-1:0]         wb_stb_i,
+    input  [AW-1:0] wb_adr_i,
+    input  [DW-1:0] wb_dat_i,
+    input  [   3:0] wb_sel_i,
+    input           wb_we_i,
+    input  [   1:0] wb_bte_i,
+    input  [   2:0] wb_cti_i,
+    input           wb_cyc_i,
+    input           wb_stb_i,
 
-    output reg [CORES_PER_TILE-1:0]         wb_ack_o,
-    output     [CORES_PER_TILE-1:0]         wb_err_o,
-    output     [CORES_PER_TILE-1:0][DW-1:0] wb_dat_o
+    output reg      wb_ack_o,
+    output          wb_err_o,
+    output [DW-1:0] wb_dat_o
   );
 
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Constants
   //
-  localparam CLASSIC_CYCLE = 1'b0;
-  localparam BURST_CYCLE   = 1'b1;
+  parameter CLASSIC_CYCLE = 1'b0;
+  parameter BURST_CYCLE   = 1'b1;
 
-  localparam READ  = 1'b0;
-  localparam WRITE = 1'b1;
+  parameter READ  = 1'b0;
+  parameter WRITE = 1'b1;
 
-  localparam [2:0] CTI_CLASSIC      = 3'b000;
-  localparam [2:0] CTI_CONST_BURST  = 3'b001;
-  localparam [2:0] CTI_INC_BURST    = 3'b010;
-  localparam [2:0] CTI_END_OF_BURST = 3'b111;
+  parameter [2:0] CTI_CLASSIC      = 3'b000;
+  parameter [2:0] CTI_CONST_BURST  = 3'b001;
+  parameter [2:0] CTI_INC_BURST    = 3'b010;
+  parameter [2:0] CTI_END_OF_BURST = 3'b111;
 
-  localparam [1:0] BTE_LINEAR  = 2'd0;
-  localparam [1:0] BTE_WRAP_4  = 2'd1;
-  localparam [1:0] BTE_WRAP_8  = 2'd2;
-  localparam [1:0] BTE_WRAP_16 = 2'd3;
+  parameter [1:0] BTE_LINEAR  = 2'd0;
+  parameter [1:0] BTE_WRAP_4  = 2'd1;
+  parameter [1:0] BTE_WRAP_8  = 2'd2;
+  parameter [1:0] BTE_WRAP_16 = 2'd3;
 
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Functions
   //
@@ -116,7 +114,7 @@ module peripheral_spram_wb #(
   function [31:0] wb_next_adr;
     input [31:0] adr_i;
     input [2:0]  cti_i;
-    input [2:0]  bte_i;
+    input [1:0]  bte_i;
 
     input integer dw;
 
@@ -140,71 +138,65 @@ module peripheral_spram_wb #(
     end
   endfunction
 
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Variables
   //
-  reg  [CORES_PER_TILE-1:0][AW-1:0] adr_r;
-  wire [CORES_PER_TILE-1:0][AW-1:0] next_adr;
-  wire [CORES_PER_TILE-1:0]         valid;
-  reg  [CORES_PER_TILE-1:0]         valid_r;
-  reg  [CORES_PER_TILE-1:0]         is_last_r;
-  wire [CORES_PER_TILE-1:0]         new_cycle;
-  wire [CORES_PER_TILE-1:0][AW-1:0] adr;
-  wire [CORES_PER_TILE-1:0]         ram_we;
+  reg  [AW-1:0] adr_r;
+  wire [AW-1:0] next_adr;
+  wire          valid;
+  reg           valid_r;
+  reg           is_last_r;
+  wire          new_cycle;
+  wire [AW-1:0] adr;
+  wire          ram_we;
 
-  genvar t;
-
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
-  generate
-    for (t=0; t < CORES_PER_TILE; t=t+1) begin
-      assign valid[t] = wb_cyc_i[t] & wb_stb_i[t];
+  assign valid = wb_cyc_i & wb_stb_i;
 
-      always @(posedge wb_clk_i) begin
-        is_last_r[t] <= wb_is_last(wb_cti_i[t]);
-      end
+  always @(posedge wb_clk_i) begin
+    is_last_r <= wb_is_last(wb_cti_i);
+  end
 
-      assign new_cycle[t] = (valid[t] & !valid_r[t]) | is_last_r[t];
+  assign new_cycle = (valid & !valid_r) | is_last_r;
 
-      assign next_adr[t] = wb_next_adr(adr_r[t], wb_cti_i[t], wb_bte_i[t], DW);
+  assign next_adr = wb_next_adr(adr_r, wb_cti_i, wb_bte_i, DW);
 
-      assign adr[t] = new_cycle[t] ? wb_adr_i[t] : next_adr[t];
+  assign adr = new_cycle ? wb_adr_i : next_adr;
 
-      always@(posedge wb_clk_i) begin
-        adr_r   [t] <= adr[t];
-        valid_r [t] <= valid[t];
-        //Ack generation
-        wb_ack_o[t] <= valid[t] & (!((wb_cti_i[t] == 3'b000) | (wb_cti_i[t] == 3'b111)) | !wb_ack_o[t]);
-        if(wb_rst_i) begin
-          adr_r    [t] <= {AW{1'b0}};
-          valid_r  [t] <= 1'b0;
-          wb_ack_o [t] <= 1'b0;
-        end
-      end
-
-      assign ram_we[t] = wb_we_i[t] & valid[t] & wb_ack_o[t];
-
-      //TODO:ck for burst address errors
-      assign wb_err_o[t] =  1'b0;
-
-      peripheral_spram_generic_wb #(
-        .DEPTH   (DEPTH/4),
-        .MEMFILE (MEMFILE),
-
-        .AW ($clog2(DEPTH/4)),
-        .DW (DW)
-      )
-      ram0 (
-        .clk   (wb_clk_i),
-        .we    ({4{ram_we[t]}} & wb_sel_i[t]),
-        .din   (wb_dat_i[t]),
-        .waddr (adr_r[t][AW-1:2]),
-        .raddr (adr[t][AW-1:2]),
-        .dout  (wb_dat_o[t])
-      );
+  always@(posedge wb_clk_i) begin
+    adr_r   <= adr;
+    valid_r <= valid;
+    //Ack generation
+    wb_ack_o <= valid & (!((wb_cti_i == 3'b000) | (wb_cti_i == 3'b111)) | !wb_ack_o);
+    if(wb_rst_i) begin
+      adr_r    <= {AW{1'b0}};
+      valid_r  <= 1'b0;
+      wb_ack_o <= 1'b0;
     end
-  endgenerate
+  end
+
+  assign ram_we = wb_we_i & valid & wb_ack_o;
+
+  //TODO:ck for burst address errors
+  assign wb_err_o =  1'b0;
+
+  peripheral_mpram_generic_wb #(
+    .DEPTH   (DEPTH/4),
+    .MEMFILE (MEMFILE),
+
+    .AW ($clog2(DEPTH/4)),
+    .DW (DW)
+  )
+  ram0 (
+    .clk   (wb_clk_i),
+    .we    ({4{ram_we}} & wb_sel_i),
+    .din   (wb_dat_i),
+    .waddr (adr_r[AW-1:2]),
+    .raddr (adr[AW-1:2]),
+    .dout  (wb_dat_o)
+  );
 endmodule

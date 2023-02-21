@@ -9,9 +9,9 @@
 //                  |_|                                                       //
 //                                                                            //
 //                                                                            //
-//              MPSoC-RISCV CPU                                               //
-//              Memory - Technology Independent (Inferrable) Memory Wrapper   //
-//              AMBA3 AHB-Lite Bus Interface                                  //
+//              Package                                                       //
+//              Bus Functional Model                                          //
+//              WishBone Bus Interface                                        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -40,60 +40,81 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module peripheral_mpram_1r1w_generic #(
-  parameter ABITS = 10,
-  parameter DBITS = 32
-)
-  (
-    input                        rst_ni,
-    input                        clk_i,
+package peripheral_bb_pkg;
 
-    //Write side
-    input      [ ABITS     -1:0] waddr_i,
-    input      [ DBITS     -1:0] din_i,
-    input                        we_i,
-    input      [(DBITS+7)/8-1:0] be_i,
-
-    //Read side
-    input      [ ABITS     -1:0] raddr_i,
-    output reg [ DBITS     -1:0] dout_o
-  );
-
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
-  // Variables
-  //
-  genvar i;
-
-  logic [DBITS-1:0] mem_array [2**ABITS -1:0];  //memory array
-
-  //////////////////////////////////////////////////////////////////
-  //
-  // Module Body
+  // Constants
   //
 
-  //write side
-  generate
-    for (i=0; i<(DBITS+7)/8; i=i+1) begin: write
-      if (i*8 +8 > DBITS) begin
-        always @(posedge clk_i) begin
-          if (we_i && be_i[i])
-            mem_array[ waddr_i ] [DBITS-1:i*8] <= din_i[DBITS-1:i*8];
-        end
-      end
-      else begin
-        always @(posedge clk_i) begin
-          if (we_i && be_i[i])
-            mem_array[ waddr_i ][i*8+:8] <= din_i[i*8+:8];
-        end
-      end
+  localparam CLASSIC_CYCLE = 1'b0;
+  localparam BURST_CYCLE   = 1'b1;
+
+  localparam READ  = 1'b0;
+  localparam WRITE = 1'b1;
+
+  localparam [2:0] CTI_CLASSIC      = 3'b000;
+  localparam [2:0] CTI_CONST_BURST  = 3'b001;
+  localparam [2:0] CTI_INC_BURST    = 3'b010;
+  localparam [2:0] CTI_END_OF_BURST = 3'b111;
+
+
+  localparam [1:0] BTE_LINEAR  = 2'd0;
+  localparam [1:0] BTE_WRAP_4  = 2'd1;
+  localparam [1:0] BTE_WRAP_8  = 2'd2;
+  localparam [1:0] BTE_WRAP_16 = 2'd3;
+
+  //////////////////////////////////////////////////////////////////////////////
+  //
+  // Functions
+  //
+
+  function get_cycle_type;
+    input [2:0] cti;
+    begin
+      get_cycle_type = (cti === CTI_CLASSIC) ? CLASSIC_CYCLE : BURST_CYCLE;
     end
-  endgenerate
+  endfunction
 
-  //read side
+  function wb_is_last;
+    input [2:0] cti;
+    begin
+      case (cti)
+        CTI_CLASSIC      : wb_is_last = 1'b1;
+        CTI_CONST_BURST  : wb_is_last = 1'b0;
+        CTI_INC_BURST    : wb_is_last = 1'b0;
+        CTI_END_OF_BURST : wb_is_last = 1'b1;
+        default          : $display("%d : Illegal Wishbone B3 cycle type (%b)", $time, cti);
+      endcase
+    end
+  endfunction
 
-  //per Altera's recommendations. Prevents bypass logic
-  always @(posedge clk_i) begin
-    dout_o <= mem_array[ raddr_i ];
-  end
-endmodule
+  function [31:0] wb_next_adr;
+    input [31:0] adr_i;
+    input [ 2:0] cti_i;
+    input [ 2:0] bte_i;
+
+    input integer dw;
+
+    reg [31:0] adr;
+
+    integer shift;
+
+    begin
+      if (dw == 64) shift = 3;
+      else if (dw == 32) shift = 2;
+      else if (dw == 16) shift = 1;
+      else shift = 0;
+      adr = adr_i >> shift;
+      if (cti_i == CTI_INC_BURST)
+        case (bte_i)
+          BTE_LINEAR   : adr = adr + 1;
+          BTE_WRAP_4   : adr = {adr[31:2], adr[1:0]+2'd1};
+          BTE_WRAP_8   : adr = {adr[31:3], adr[2:0]+3'd1};
+          BTE_WRAP_16  : adr = {adr[31:4], adr[3:0]+4'd1};
+        endcase
+      wb_next_adr = adr << shift;
+    end
+  endfunction
+
+endpackage
