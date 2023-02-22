@@ -73,7 +73,7 @@ module peripheral_mpram_testbench;
   //
   // Module Body
   //
-  peripheral_testbench_utils peripheral_testbench_utils0();
+  peripheral_utils_testbench peripheral_utils_testbench0();
 
   initial #1800 wbm_rst <= 1'b0;
 
