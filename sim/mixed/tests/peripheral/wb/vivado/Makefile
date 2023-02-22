@@ -9,7 +9,7 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              MPSoC-UART CPU                                                   ##
+##              MPSoC-SPRAM CPU                                                  ##
 ##              Simulation Test Makefile                                         ##
 ##                                                                               ##
 ###################################################################################
@@ -45,11 +45,12 @@
 all: build simulate
 
 build:
-	xvlog -i ../../../../../../rtl/verilog/pkg/wb -prj system.prj
+	xvlog -i ../../../../../../rtl/verilog/pkg/ahb3 -prj system.verilog.prj
+	xvhdl -prj system.vhdl.prj
 
 simulate:
-	xelab peripheral_bfm_testbench
-	xsim -R peripheral_bfm_testbench
+	xelab peripheral_mpram_testbench
+	xsim -R peripheral_mpram_testbench
 
 clean:
-	rm -rf *.dir *.jou *.log *.pb .Xil *.vcd
+	rm -rf *.dir *.jou *.log *.pb .Xil

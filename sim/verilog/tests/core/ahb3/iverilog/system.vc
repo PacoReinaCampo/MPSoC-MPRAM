@@ -1,5 +1,0 @@
-../../../../../../rtl/verilog/ahb3/core/peripheral_mpram_ahb3.sv
-../../../../../../rtl/verilog/ahb3/core/peripheral_ram_1r1w.sv
-../../../../../../rtl/verilog/ahb3/core/peripheral_ram_1r1w_generic.sv
-
-../../../../../../bench/verilog/tests/core/ahb3/peripheral_mpram_testbench.sv

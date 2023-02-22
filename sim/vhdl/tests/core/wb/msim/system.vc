@@ -1,7 +1,0 @@
-../../../../../../rtl/vhdl/wb/pkg/vhdl_pkg.vhd
-../../../../../../rtl/vhdl/wb/pkg/peripheral_wb_pkg.vhd
-
-../../../../../../rtl/vhdl/wb/core/peripheral_mpram_generic_wb.vhd
-../../../../../../rtl/vhdl/wb/core/peripheral_mpram_wb.vhd
-
-../../../../../../bench/vhdl/tests/core/wb/peripheral_mpram_testbench.vhd

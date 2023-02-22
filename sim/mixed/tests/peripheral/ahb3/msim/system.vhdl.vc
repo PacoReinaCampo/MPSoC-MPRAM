@@ -1,0 +1,5 @@
+../../../../../../rtl/vhdl/pkg/peripheral/ahb3/peripheral_mpram_ahb3_pkg.vhd
+
+../../../../../../rtl/vhdl/peripheral/ahb3/peripheral_mpram_ahb3.vhd
+../../../../../../rtl/vhdl/peripheral/ahb3/peripheral_ram_1r1w.vhd
+../../../../../../rtl/vhdl/peripheral/ahb3/peripheral_ram_1r1w_generic.vhd

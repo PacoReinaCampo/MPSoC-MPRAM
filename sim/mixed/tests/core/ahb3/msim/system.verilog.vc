@@ -1,3 +1,0 @@
-+incdir+../../../../../../rtl/verilog/ahb3/pkg
-
-../../../../../../bench/verilog/tests/core/ahb3/peripheral_mpram_testbench.sv

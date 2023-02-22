@@ -1,0 +1,3 @@
+../../../../../../rtl/vhdl/peripheral/axi4/peripheral_mpram_axi4.vhd
+
+../../../../../../bench/vhdl/tests/peripheral/axi4/peripheral_mpram_testbench.vhd

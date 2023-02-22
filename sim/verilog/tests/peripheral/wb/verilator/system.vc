@@ -1,0 +1,6 @@
++incdir+../../../../../../rtl/verilog/pkg/wb
+
+../../../../../../bench/verilog/tests/peripheral/wb/main/peripheral_mpram_testbench.sv
+
+../../../../../../rtl/verilog/peripheral/wb/peripheral_ram_generic_wb.sv
+../../../../../../rtl/verilog/peripheral/wb/peripheral_mpram_wb.sv

@@ -1,0 +1,3 @@
++incdir+../../../../../../rtl/verilog/pkg/wb
+
+../../../../../../bench/verilog/tests/peripheral/wb/main/peripheral_mpram_testbench.sv

@@ -1,0 +1,3 @@
+../../../../../../rtl/verilog/peripheral/axi4/peripheral_mpram_axi4.sv
+
+../../../../../../bench/verilog/tests/peripheral/axi4/peripheral_mpram_testbench.sv
