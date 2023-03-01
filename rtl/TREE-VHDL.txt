@@ -4,6 +4,8 @@ vhdl
 │   │   ├── peripheral_mpram_1r1w_generic.vhd
 │   │   ├── peripheral_mpram_1r1w.vhd
 │   │   └── peripheral_mpram_ahb3.vhd
+│   ├── axi4
+│   │   └── peripheral_mpram_axi4.vhd
 │   ├── bb
 │   │   └── peripheral_mpram_bb.vhd
 │   └── wb
@@ -20,4 +22,4 @@ vhdl
         └── wb
             └── peripheral_wb_pkg.vhd
 
-10 directories, 10 files
+11 directories, 11 files
