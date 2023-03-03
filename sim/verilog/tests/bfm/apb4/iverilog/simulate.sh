@@ -42,7 +42,5 @@
 ##                                                                               ##
 ###################################################################################
 
-../../../../../../rtl/vhdl/pkg/peripheral/wb/peripheral_mpram_wb_pkg.vhd
-
-../../../../../../rtl/vhdl/peripheral/wb/peripheral_ram_generic_wb.vhd
-../../../../../../rtl/vhdl/peripheral/wb/peripheral_mpram_wb.vhd
+make clean
+make

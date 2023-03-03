@@ -42,4 +42,8 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-sv work ../../../../../../bench/verilog/tests/core/wb/main/mpsoc_mpram_testbench.sv
+sv work  ../../../../../../bench/verilog/tests/bfm/apb4/peripheral_gpio_apb4.sv
+
+sv work ../../../../../../bench/verilog/tests/bfm/apb4/peripheral_bfm_apb4.sv
+sv work ../../../../../../bench/verilog/tests/bfm/apb4/peripheral_bfm_master_apb4.sv
+sv work ../../../../../../bench/verilog/tests/bfm/apb4/peripheral_bfm_testbench.sv

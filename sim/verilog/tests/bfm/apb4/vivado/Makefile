@@ -42,4 +42,14 @@
 ##                                                                               ##
 ###################################################################################
 
-../../../../../../rtl/vhdl/peripheral/axi4/peripheral_mpram_axi4.vhd
+all: build simulate
+
+build:
+	xvlog -prj system.prj
+
+simulate:
+	xelab peripheral_bfm_testbench
+	xsim -R peripheral_bfm_testbench
+
+clean:
+	rm -rf *.dir *.jou *.log *.pb .Xil

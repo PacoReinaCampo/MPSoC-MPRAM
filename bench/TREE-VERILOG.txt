@@ -9,7 +9,8 @@ verilog
     │   ├── apb4
     │   │   ├── peripheral_bfm_apb4.sv
     │   │   ├── peripheral_bfm_master_apb4.sv
-    │   │   └── peripheral_bfm_testbench.sv
+    │   │   ├── peripheral_bfm_testbench.sv
+    │   │   └── peripheral_gpio_apb4.sv
     │   ├── axi4
     │   │   ├── peripheral_bfm_basic.sv
     │   │   ├── peripheral_bfm_master_axi4.sv
@@ -43,4 +44,4 @@ verilog
             └── top
                 └── peripheral_mpram_testbench.sv
 
-14 directories, 29 files
+14 directories, 30 files
