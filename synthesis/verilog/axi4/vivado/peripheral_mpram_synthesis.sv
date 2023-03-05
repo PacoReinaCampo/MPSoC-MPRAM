@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_mpram_synthesis #(
+module peripheral_mpram_synthesis #(
   parameter AXI_ID_WIDTH   = 10,
   parameter AXI_ADDR_WIDTH = 32,
   parameter AXI_DATA_WIDTH = 16,
@@ -170,7 +170,7 @@ module mpsoc_mpram_synthesis #(
   //
   
   //Data AXI4
-  mpsoc_axi4_mpram #(
+  peripheral_axi4_mpram #(
     .AXI_ID_WIDTH   ( AXI_ID_WIDTH   ),
     .AXI_ADDR_WIDTH ( AXI_ADDR_WIDTH ),
     .AXI_DATA_WIDTH ( AXI_DATA_WIDTH ),

@@ -46,7 +46,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_mpram_synthesis #(
+module peripheral_mpram_synthesis #(
   parameter AW       =   6,  // Address bus
   parameter DW       =  16,  // Data bus
   parameter MEM_SIZE = 256   // Memory size in bytes
@@ -67,7 +67,7 @@ module mpsoc_mpram_synthesis #(
   //
 
   //DUT BB
-  msp430_ram #(
+  bb_ram #(
     .AW       ( AW ),
     .DW       ( DW ),
     .MEM_SIZE ( MEM_SIZE )
@@ -81,4 +81,4 @@ module mpsoc_mpram_synthesis #(
     .ram_cen  ( ram_cen  ),
     .ram_wen  ( ram_wen  )
   );
-endmodule // msp430_ram
+endmodule // bb_ram

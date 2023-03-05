@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_mpram_synthesis #(
+module peripheral_mpram_synthesis #(
   parameter MEM_SIZE          = 256,  //Memory in Bytes
   parameter MEM_DEPTH         = 256,  //Memory depth
   parameter PLEN              = 8,
@@ -73,7 +73,7 @@ module mpsoc_mpram_synthesis #(
   //
 
   //DUT AHB3
-  mpsoc_ahb3_mpram #(
+  peripheral_ahb3_mpram #(
     .MEM_SIZE          ( MEM_SIZE ),
     .MEM_DEPTH         ( MEM_DEPTH ),
     .PLEN              ( PLEN ),
