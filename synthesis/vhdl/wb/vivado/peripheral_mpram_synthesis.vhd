@@ -110,9 +110,8 @@ architecture rtl of peripheral_mpram_synthesis is
 begin
 
   ------------------------------------------------------------------------------
-  --
   -- Module Body
-  --
+  ------------------------------------------------------------------------------
 
   --DUT WB
   wb_mpram : peripheral_wb_mpram

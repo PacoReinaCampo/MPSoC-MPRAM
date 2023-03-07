@@ -84,9 +84,8 @@ end peripheral_mpram_synthesis;
 architecture rtl of peripheral_mpram_synthesis is
 
   ------------------------------------------------------------------------------
-  --
   -- Components
-  --
+  ------------------------------------------------------------------------------
   component peripheral_ahb3_mpram
     generic (
       MEM_SIZE          : integer := 256;  --Memory in Bytes
@@ -120,9 +119,8 @@ architecture rtl of peripheral_mpram_synthesis is
 
 begin
   ------------------------------------------------------------------------------
-  --
   -- Module Body
-  --
+  ------------------------------------------------------------------------------
 
   --DUT AHB3
   ahb3_mpram : peripheral_ahb3_mpram

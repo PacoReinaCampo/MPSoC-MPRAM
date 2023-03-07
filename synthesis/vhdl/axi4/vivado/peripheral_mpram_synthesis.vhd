@@ -140,9 +140,8 @@ architecture rtl of peripheral_mpram_synthesis is
   end component;
 
   ------------------------------------------------------------------------------
-  --
   -- Variables
-  --
+  ------------------------------------------------------------------------------
 
   -- AXI4 Instruction
   signal axi4_ins_aw_id     : std_logic_vector(AXI_ID_WIDTH-1 downto 0);
@@ -246,10 +245,9 @@ architecture rtl of peripheral_mpram_synthesis is
 
 begin
 
-  --/////////////////////////////////////////////////////////////
-  --
+  ------------------------------------------------------------------------------
   -- Module Body
-  --
+  ------------------------------------------------------------------------------
 
   --Data AXI4
   data_axi4 : peripheral_axi4_mpram
