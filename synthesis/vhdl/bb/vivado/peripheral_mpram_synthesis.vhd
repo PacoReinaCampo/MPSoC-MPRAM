@@ -71,6 +71,11 @@ entity peripheral_mpram_synthesis is
 end peripheral_mpram_synthesis;
 
 architecture rtl of peripheral_mpram_synthesis is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component bb_ram
     generic (
       AW       : integer := 6;   -- Address bus

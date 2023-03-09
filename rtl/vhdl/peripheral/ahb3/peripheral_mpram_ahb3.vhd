@@ -84,6 +84,11 @@ entity peripheral_mpram_ahb3 is
 end peripheral_mpram_ahb3;
 
 architecture rtl of peripheral_mpram_ahb3 is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component peripheral_mpram_1r1w
     generic (
       ABITS      : integer := 10;

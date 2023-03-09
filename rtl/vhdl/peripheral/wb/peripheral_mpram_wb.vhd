@@ -83,6 +83,11 @@ entity peripheral_mpram_wb is
 end peripheral_mpram_wb;
 
 architecture rtl of peripheral_mpram_wb is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component peripheral_mpram_generic_wb
     generic (
       DEPTH   : integer := 256;

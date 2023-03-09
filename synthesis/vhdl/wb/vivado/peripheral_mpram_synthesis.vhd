@@ -79,6 +79,11 @@ entity peripheral_mpram_synthesis is
 end peripheral_mpram_synthesis;
 
 architecture rtl of peripheral_mpram_synthesis is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component peripheral_wb_mpram
     generic (
       --Memory parameters

@@ -70,6 +70,11 @@ entity peripheral_mpram_1r1w is
 end peripheral_mpram_1r1w;
 
 architecture rtl of peripheral_mpram_1r1w is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component peripheral_mpram_1r1w_generic
     generic (
       ABITS : integer := 10;
