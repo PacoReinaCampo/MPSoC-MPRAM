@@ -47,20 +47,20 @@
  */
 
 module peripheral_mpram_bb #(
-  parameter ADDR_MSB   =  6,         // MSB of the address bus
-  parameter MEM_SIZE   =  256        // Memory size in bytes
+  parameter ADDR_MSB   =  6, // MSB of the address bus
+  parameter MEM_SIZE   =  256 // Memory size in bytes
 )
   (
-    // OUTPUTs
-    output      [15:0] ram_dout,       // RAM data output
+  // OUTPUTs
+  output      [15:0] ram_dout, // RAM data output
 
-    // INPUTs
-    input [ADDR_MSB:0] ram_addr,       // RAM address
-    input              ram_cen,        // RAM chip enable (low active)
-    input              ram_clk,        // RAM clock
-    input       [15:0] ram_din,        // RAM data input
-    input        [1:0] ram_wen         // RAM write enable (low active)
-  );
+  // INPUTs
+  input [ADDR_MSB:0] ram_addr, // RAM address
+  input              ram_cen, // RAM chip enable (low active)
+  input              ram_clk, // RAM clock
+  input       [15:0] ram_din, // RAM data input
+  input        [1:0] ram_wen // RAM write enable (low active)
+);
 
   // RAM
   //============

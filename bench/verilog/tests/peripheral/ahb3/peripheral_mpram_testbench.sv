@@ -87,14 +87,14 @@ module peripheral_mpram_testbench;
 
   //Instantiate RISC-V RAM
   peripheral_mpram_ahb3 #(
-    .MEM_SIZE          ( 256 ),
-    .MEM_DEPTH         ( 256 ),
-    .PLEN              ( PLEN ),
-    .XLEN              ( XLEN ),
-    .TECHNOLOGY        ( TECHNOLOGY ),
-    .REGISTERED_OUTPUT ( "NO" ),
+  .MEM_SIZE          ( 256 ),
+  .MEM_DEPTH         ( 256 ),
+  .PLEN              ( PLEN ),
+  .XLEN              ( XLEN ),
+  .TECHNOLOGY        ( TECHNOLOGY ),
+  .REGISTERED_OUTPUT ( "NO" ),
 
-    .CORES_PER_TILE ( CORES_PER_TILE )
+  .CORES_PER_TILE ( CORES_PER_TILE )
   )
   ahb3_mpram (
     //AHB Slave Interface

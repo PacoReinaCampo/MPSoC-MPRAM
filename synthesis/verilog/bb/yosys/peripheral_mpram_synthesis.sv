@@ -47,19 +47,19 @@
  */
 
 module peripheral_mpram_synthesis #(
-  parameter AW       =   6,  // Address bus
-  parameter DW       =  16,  // Data bus
-  parameter MEM_SIZE = 256   // Memory size in bytes
+  parameter AW       =   6, // Address bus
+  parameter DW       =  16, // Data bus
+  parameter MEM_SIZE = 256 // Memory size in bytes
 )
   (
-    input              ram_clk,        // RAM clock
+  input              ram_clk, // RAM clock
 
-    input     [AW-1:0] ram_addr,       // RAM address
-    output    [DW-1:0] ram_dout,       // RAM data output
-    input     [DW-1:0] ram_din,        // RAM data input
-    input              ram_cen,        // RAM chip enable (low active)
-    input        [1:0] ram_wen         // RAM write enable (low active)
-  );
+  input     [AW-1:0] ram_addr, // RAM address
+  output    [DW-1:0] ram_dout, // RAM data output
+  input     [DW-1:0] ram_din, // RAM data input
+  input              ram_cen, // RAM chip enable (low active)
+  input        [1:0] ram_wen // RAM write enable (low active)
+);
 
   //////////////////////////////////////////////////////////////////
   //
@@ -68,9 +68,9 @@ module peripheral_mpram_synthesis #(
 
   //DUT BB
   bb_ram #(
-    .AW       ( AW ),
-    .DW       ( DW ),
-    .MEM_SIZE ( MEM_SIZE )
+  .AW       ( AW ),
+  .DW       ( DW ),
+  .MEM_SIZE ( MEM_SIZE )
   )
   ram (
     .ram_clk   ( ram_clk ),

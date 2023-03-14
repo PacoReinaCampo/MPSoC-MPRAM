@@ -45,19 +45,19 @@ module peripheral_mpram_1r1w_generic #(
   parameter DBITS = 32
 )
   (
-    input                        rst_ni,
-    input                        clk_i,
+  input                        rst_ni,
+  input                        clk_i,
 
-    //Write side
-    input      [ ABITS     -1:0] waddr_i,
-    input      [ DBITS     -1:0] din_i,
-    input                        we_i,
-    input      [(DBITS+7)/8-1:0] be_i,
+  //Write side
+  input      [ ABITS     -1:0] waddr_i,
+  input      [ DBITS     -1:0] din_i,
+  input                        we_i,
+  input      [(DBITS+7)/8-1:0] be_i,
 
-    //Read side
-    input      [ ABITS     -1:0] raddr_i,
-    output reg [ DBITS     -1:0] dout_o
-  );
+  //Read side
+  input      [ ABITS     -1:0] raddr_i,
+  output reg [ DBITS     -1:0] dout_o
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -65,7 +65,7 @@ module peripheral_mpram_1r1w_generic #(
   //
   genvar i;
 
-  logic [DBITS-1:0] mem_array [2**ABITS -1:0];  //memory array
+  logic [DBITS-1:0] mem_array [2**ABITS -1:0]; //memory array
 
   //////////////////////////////////////////////////////////////////////////////
   //

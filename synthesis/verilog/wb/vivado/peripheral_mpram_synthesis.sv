@@ -50,22 +50,22 @@ module peripheral_mpram_synthesis #(
   parameter AW = $clog2(DEPTH)
 )
   (
-    input           wb_clk_i,
-    input           wb_rst_i,
+  input           wb_clk_i,
+  input           wb_rst_i,
 
-    input  [AW-1:0] wb_adr_i,
-    input  [DW-1:0] wb_dat_i,
-    input  [   3:0] wb_sel_i,
-    input           wb_we_i,
-    input  [   1:0] wb_bte_i,
-    input  [   2:0] wb_cti_i,
-    input           wb_cyc_i,
-    input           wb_stb_i,
+  input  [AW-1:0] wb_adr_i,
+  input  [DW-1:0] wb_dat_i,
+  input  [   3:0] wb_sel_i,
+  input           wb_we_i,
+  input  [   1:0] wb_bte_i,
+  input  [   2:0] wb_cti_i,
+  input           wb_cyc_i,
+  input           wb_stb_i,
 
-    output reg      wb_ack_o,
-    output          wb_err_o,
-    output [DW-1:0] wb_dat_o
-  );
+  output reg      wb_ack_o,
+  output          wb_err_o,
+  output [DW-1:0] wb_dat_o
+);
 
   //////////////////////////////////////////////////////////////////
   //
@@ -74,13 +74,13 @@ module peripheral_mpram_synthesis #(
 
   //DUT WB
   peripheral_wb_mpram #(
-    //Memory parameters
-    .DEPTH   ( DEPTH   ),
-    .MEMFILE ( MEMFILE ),
+  //Memory parameters
+  .DEPTH   ( DEPTH   ),
+  .MEMFILE ( MEMFILE ),
 
-    //Wishbone parameters
-    .AW ( AW ),
-    .DW ( DW )
+  //Wishbone parameters
+  .AW ( AW ),
+  .DW ( DW )
   )
   wb_mpram (
     .wb_clk_i ( wb_clk_i ),

@@ -86,13 +86,13 @@ module peripheral_mpram_testbench;
 
   //DUT WB
   peripheral_mpram_wb #(
-    .DEPTH   ( DEPTH   ),
-    .MEMFILE ( MEMFILE ),
+  .DEPTH   ( DEPTH   ),
+  .MEMFILE ( MEMFILE ),
 
-    .DW      ( DW ),
-    .AW      ( AW ),
+  .DW      ( DW ),
+  .AW      ( AW ),
 
-    .CORES_PER_TILE ( CORES_PER_TILE )
+  .CORES_PER_TILE ( CORES_PER_TILE )
   )
   wb_mpram (
     //Wishbone Master interface

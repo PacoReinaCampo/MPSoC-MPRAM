@@ -46,20 +46,20 @@ module peripheral_mpram_1r1w #(
   parameter TECHNOLOGY = "GENERIC"
 )
   (
-    input                    rst_ni,
-    input                    clk_i,
+  input                    rst_ni,
+  input                    clk_i,
 
-    //Write side
-    input  [ ABITS     -1:0] waddr_i,
-    input  [ DBITS     -1:0] din_i,
-    input                    we_i,
-    input  [(DBITS+7)/8-1:0] be_i,
+  //Write side
+  input  [ ABITS     -1:0] waddr_i,
+  input  [ DBITS     -1:0] din_i,
+  input                    we_i,
+  input  [(DBITS+7)/8-1:0] be_i,
 
-    //Read side
-    input  [ ABITS     -1:0] raddr_i,
-    input                    re_i,
-    output [ DBITS     -1:0] dout_o
-  );
+  //Read side
+  input  [ ABITS     -1:0] raddr_i,
+  input                    re_i,
+  output [ DBITS     -1:0] dout_o
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -78,8 +78,8 @@ module peripheral_mpram_1r1w #(
     if (TECHNOLOGY == "N3XS" || TECHNOLOGY == "n3xs") begin
       //eASIC N3XS
       peripheral_mpram_1r1w_easic_n3xs #(
-        .ABITS ( ABITS ),
-        .DBITS ( DBITS )
+      .ABITS ( ABITS ),
+      .DBITS ( DBITS )
       )
       ram_inst (
         .rst_ni  ( rst_ni     ),
@@ -98,8 +98,8 @@ module peripheral_mpram_1r1w #(
     else if (TECHNOLOGY == "N3X" || TECHNOLOGY == "n3x") begin
       //eASIC N3X
       peripheral_mpram_1r1w_easic_n3x #(
-        .ABITS ( ABITS ),
-        .DBITS ( DBITS )
+      .ABITS ( ABITS ),
+      .DBITS ( DBITS )
       )
       ram_inst (
         .rst_ni  ( rst_ni     ),
@@ -116,12 +116,12 @@ module peripheral_mpram_1r1w #(
       );
     end
     else begin //(TECHNOLOGY == "GENERIC")
-      //GENERIC  -- inferrable memory
+    //GENERIC  -- inferrable memory
 
       //initial $display ("INFO   : No memory technology specified. Using generic inferred memory (%m)");
       peripheral_mpram_1r1w_generic #(
-        .ABITS ( ABITS ),
-        .DBITS ( DBITS )
+      .ABITS ( ABITS ),
+      .DBITS ( DBITS )
       )
       ram_inst (
         .rst_ni  ( rst_ni   ),

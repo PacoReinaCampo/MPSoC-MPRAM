@@ -51,22 +51,22 @@ module peripheral_spram_wb #(
   parameter AW = $clog2(DEPTH)
 )
   (
-    input           wb_clk_i,
-    input           wb_rst_i,
+  input           wb_clk_i,
+  input           wb_rst_i,
 
-    input  [AW-1:0] wb_adr_i,
-    input  [DW-1:0] wb_dat_i,
-    input  [   3:0] wb_sel_i,
-    input           wb_we_i,
-    input  [   1:0] wb_bte_i,
-    input  [   2:0] wb_cti_i,
-    input           wb_cyc_i,
-    input           wb_stb_i,
+  input  [AW-1:0] wb_adr_i,
+  input  [DW-1:0] wb_dat_i,
+  input  [   3:0] wb_sel_i,
+  input           wb_we_i,
+  input  [   1:0] wb_bte_i,
+  input  [   2:0] wb_cti_i,
+  input           wb_cyc_i,
+  input           wb_stb_i,
 
-    output reg      wb_ack_o,
-    output          wb_err_o,
-    output [DW-1:0] wb_dat_o
-  );
+  output reg      wb_ack_o,
+  output          wb_err_o,
+  output [DW-1:0] wb_dat_o
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -185,11 +185,11 @@ module peripheral_spram_wb #(
   assign wb_err_o =  1'b0;
 
   peripheral_mpram_generic_wb #(
-    .DEPTH   (DEPTH/4),
-    .MEMFILE (MEMFILE),
+  .DEPTH   (DEPTH/4),
+  .MEMFILE (MEMFILE),
 
-    .AW ($clog2(DEPTH/4)),
-    .DW (DW)
+  .AW ($clog2(DEPTH/4)),
+  .DW (DW)
   )
   ram0 (
     .clk   (wb_clk_i),

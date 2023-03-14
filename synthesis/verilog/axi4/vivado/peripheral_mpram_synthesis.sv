@@ -48,17 +48,17 @@ module peripheral_mpram_synthesis #(
   parameter AXI_USER_WIDTH = 10
 )
   (
-    input                               HRESETn,
-    input                               HCLK,
+  input                               HRESETn,
+  input                               HCLK,
 
-    output logic                        req_o,
-    output logic                        we_o,
-    output logic [AXI_ADDR_WIDTH  -1:0] addr_o,
-    output logic [AXI_DATA_WIDTH/8-1:0] be_o,
-    output logic [AXI_DATA_WIDTH  -1:0] data_o,
-    input  logic [AXI_DATA_WIDTH  -1:0] data_i
-  );
-  
+  output logic                        req_o,
+  output logic                        we_o,
+  output logic [AXI_ADDR_WIDTH  -1:0] addr_o,
+  output logic [AXI_DATA_WIDTH/8-1:0] be_o,
+  output logic [AXI_DATA_WIDTH  -1:0] data_o,
+  input  logic [AXI_DATA_WIDTH  -1:0] data_i
+);
+
   //////////////////////////////////////////////////////////////////
   //
   // Variables
@@ -163,23 +163,23 @@ module peripheral_mpram_synthesis #(
   logic [AXI_USER_WIDTH  -1:0] axi4_dat_b_user;
   logic                        axi4_dat_b_valid;
   logic                        axi4_dat_b_ready;
-    
+
   ////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
-  
+
   //Data AXI4
   peripheral_axi4_mpram #(
-    .AXI_ID_WIDTH   ( AXI_ID_WIDTH   ),
-    .AXI_ADDR_WIDTH ( AXI_ADDR_WIDTH ),
-    .AXI_DATA_WIDTH ( AXI_DATA_WIDTH ),
-    .AXI_STRB_WIDTH ( AXI_STRB_WIDTH ),
-    .AXI_USER_WIDTH ( AXI_USER_WIDTH )
+  .AXI_ID_WIDTH   ( AXI_ID_WIDTH   ),
+  .AXI_ADDR_WIDTH ( AXI_ADDR_WIDTH ),
+  .AXI_DATA_WIDTH ( AXI_DATA_WIDTH ),
+  .AXI_STRB_WIDTH ( AXI_STRB_WIDTH ),
+  .AXI_USER_WIDTH ( AXI_USER_WIDTH )
   )
   axi4_mpram (
-    .clk_i  ( HCLK    ),  // Clock
-    .rst_ni ( HRESETn ),  // Asynchronous reset active low
+    .clk_i  ( HCLK    ), // Clock
+    .rst_ni ( HRESETn ), // Asynchronous reset active low
 
     .axi_aw_id     ( axi4_dat_aw_id     ),
     .axi_aw_addr   ( axi4_dat_aw_addr   ),

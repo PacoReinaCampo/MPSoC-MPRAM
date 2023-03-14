@@ -43,8 +43,8 @@
 import peripheral_ahb3_pkg::*;
 
 module peripheral_mpram_ahb3 #(
-  parameter MEM_SIZE          = 256,  //Memory in Bytes
-  parameter MEM_DEPTH         = 256,  //Memory depth
+  parameter MEM_SIZE          = 256, //Memory in Bytes
+  parameter MEM_DEPTH         = 256, //Memory depth
   parameter PLEN              = 64,
   parameter XLEN              = 64,
   parameter TECHNOLOGY        = "GENERIC",
@@ -53,25 +53,25 @@ module peripheral_mpram_ahb3 #(
   parameter CORES_PER_TILE    = 8
 )
   (
-    input                       HRESETn,
-                                HCLK,
+  input                                     HRESETn,
+  input                                     HCLK,
 
-    //AHB Slave Interfaces (receive data from AHB Masters)
-    //AHB Masters connect to these ports
-    input      [CORES_PER_TILE-1:0]           HSEL,
-    input      [CORES_PER_TILE-1:0][PLEN-1:0] HADDR,
-    input      [CORES_PER_TILE-1:0][XLEN-1:0] HWDATA,
-    output reg [CORES_PER_TILE-1:0][XLEN-1:0] HRDATA,
-    input      [CORES_PER_TILE-1:0]           HWRITE,
-    input      [CORES_PER_TILE-1:0][     2:0] HSIZE,
-    input      [CORES_PER_TILE-1:0][     2:0] HBURST,
-    input      [CORES_PER_TILE-1:0][     3:0] HPROT,
-    input      [CORES_PER_TILE-1:0][     1:0] HTRANS,
-    input      [CORES_PER_TILE-1:0]           HMASTLOCK,
-    output reg [CORES_PER_TILE-1:0]           HREADYOUT,
-    input      [CORES_PER_TILE-1:0]           HREADY,
-    output     [CORES_PER_TILE-1:0]           HRESP
-  );
+  //AHB Slave Interfaces (receive data from AHB Masters)
+  //AHB Masters connect to these ports
+  input      [CORES_PER_TILE-1:0]           HSEL,
+  input      [CORES_PER_TILE-1:0][PLEN-1:0] HADDR,
+  input      [CORES_PER_TILE-1:0][XLEN-1:0] HWDATA,
+  output reg [CORES_PER_TILE-1:0][XLEN-1:0] HRDATA,
+  input      [CORES_PER_TILE-1:0]           HWRITE,
+  input      [CORES_PER_TILE-1:0][     2:0] HSIZE,
+  input      [CORES_PER_TILE-1:0][     2:0] HBURST,
+  input      [CORES_PER_TILE-1:0][     3:0] HPROT,
+  input      [CORES_PER_TILE-1:0][     1:0] HTRANS,
+  input      [CORES_PER_TILE-1:0]           HMASTLOCK,
+  output reg [CORES_PER_TILE-1:0]           HREADYOUT,
+  input      [CORES_PER_TILE-1:0]           HREADY,
+  output     [CORES_PER_TILE-1:0]           HRESP
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -114,7 +114,7 @@ module peripheral_mpram_ahb3 #(
 
     //get number of active lanes for a 1024bit databus (max width) for this HSIZE
     case (hsize)
-      HSIZE_B1024 : full_be = 128'hffff_ffff_ffff_ffff_ffff_ffff_ffff_ffff; 
+      HSIZE_B1024 : full_be = 128'hffff_ffff_ffff_ffff_ffff_ffff_ffff_ffff;
       HSIZE_B512  : full_be = 128'h0000_0000_0000_0000_ffff_ffff_ffff_ffff;
       HSIZE_B256  : full_be = 128'h0000_0000_0000_0000_0000_0000_ffff_ffff;
       HSIZE_B128  : full_be = 128'h0000_0000_0000_0000_0000_0000_0000_ffff;
@@ -126,7 +126,7 @@ module peripheral_mpram_ahb3 #(
 
     //What are the lesser bits in HADDR?
     case (XLEN)
-      1024    : address_offset = 7'b111_1111; 
+      1024    : address_offset = 7'b111_1111;
       0512    : address_offset = 7'b011_1111;
       0256    : address_offset = 7'b001_1111;
       0128    : address_offset = 7'b000_1111;
@@ -168,7 +168,7 @@ module peripheral_mpram_ahb3 #(
 
       //Is there read/write contention[t] on the memory?
       assign contention[t] = (waddr[t][MEM_ABITS_LSB +: MEM_ABITS] == HADDR[t][MEM_ABITS_LSB +: MEM_ABITS]) & we[t] &
-        HSEL[t] & HREADY[t] & ~HWRITE[t] & (HTRANS[t] != HTRANS_BUSY) & (HTRANS[t] != HTRANS_IDLE);
+      HSEL[t] & HREADY[t] & ~HWRITE[t] & (HTRANS[t] != HTRANS_BUSY) & (HTRANS[t] != HTRANS_IDLE);
 
       //if all bytes were written contention[t] is/can be handled by memory
       //otherwise stall a cycle (forced by N3S)
@@ -183,9 +183,9 @@ module peripheral_mpram_ahb3 #(
        */
 
       peripheral_mpram_1r1w #(
-        .ABITS      ( MEM_ABITS  ),
-        .DBITS      ( XLEN       ),
-        .TECHNOLOGY ( TECHNOLOGY ) 
+      .ABITS      ( MEM_ABITS  ),
+      .DBITS      ( XLEN       ),
+      .TECHNOLOGY ( TECHNOLOGY )
       )
       ram_1r1w (
         .rst_ni  ( HRESETn                                 ),
@@ -210,12 +210,12 @@ module peripheral_mpram_ahb3 #(
           else          HREADYOUT[t] <= ready[t];
         end
         always @* HRDATA[t] = dout[t];
-      end 
+      end
       else begin
         always @(posedge HCLK,negedge HRESETn) begin
-          if (!HRESETn)                                       HREADYOUT[t] <= 1'b1;
+          if (!HRESETn)                                      HREADYOUT[t] <= 1'b1;
           else if (HTRANS[t] == HTRANS_NONSEQ && !HWRITE[t]) HREADYOUT[t] <= 1'b0;
-          else                                                HREADYOUT[t] <= 1'b1;
+          else                                               HREADYOUT[t] <= 1'b1;
         end
         always @(posedge HCLK) begin
           if (HREADY[t]) HRDATA[t] <= dout[t];

@@ -81,8 +81,8 @@ module peripheral_mpram_testbench;
   always #100 wb_clk <= !wb_clk;
 
   peripheral_bfm_transactor_wb #(
-    .MEM_HIGH (MEMORY_SIZE-1),
-    .VERBOSE  (0)
+  .MEM_HIGH (MEMORY_SIZE-1),
+  .VERBOSE  (0)
   )
   master (
     .wb_clk_i (wb_clk),
@@ -90,7 +90,7 @@ module peripheral_mpram_testbench;
     .wb_adr_o (wb_adr),
     .wb_dat_o (wb_dat),
     .wb_sel_o (wb_sel),
-    .wb_we_o  (wb_we), 
+    .wb_we_o  (wb_we),
     .wb_cyc_o (wb_cyc),
     .wb_stb_o (wb_stb),
     .wb_cti_o (wb_cti),
@@ -111,7 +111,7 @@ module peripheral_mpram_testbench;
   end
 
   peripheral_spram_wb #(
-    .DEPTH (MEMORY_SIZE)
+  .DEPTH (MEMORY_SIZE)
   )
   dut (
     // Wishbone interface
@@ -128,5 +128,5 @@ module peripheral_mpram_testbench;
     .wb_dat_o (wb_rdt),
     .wb_ack_o (wb_ack),
     .wb_err_o ()
-  );   
+  );
 endmodule

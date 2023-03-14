@@ -59,8 +59,8 @@ module peripheral_spram_testbench;
   //
 
   //Common signals
-  logic                        clk_i;   // Clock
-  logic                        rst_ni;  // Asynchronous reset active low
+  logic                        clk_i; // Clock
+  logic                        rst_ni; // Asynchronous reset active low
 
   //AHB3 signals
   logic [AXI_ID_WIDTH    -1:0] axi_aw_id;
@@ -126,15 +126,15 @@ module peripheral_spram_testbench;
 
   //DUT AXI4
   peripheral_spram_axi4 #(
-    .AXI_ID_WIDTH   ( AXI_ID_WIDTH   ),
-    .AXI_ADDR_WIDTH ( AXI_ADDR_WIDTH ),
-    .AXI_DATA_WIDTH ( AXI_DATA_WIDTH ),
-    .AXI_STRB_WIDTH ( AXI_STRB_WIDTH ),
-    .AXI_USER_WIDTH ( AXI_USER_WIDTH )
+  .AXI_ID_WIDTH   ( AXI_ID_WIDTH   ),
+  .AXI_ADDR_WIDTH ( AXI_ADDR_WIDTH ),
+  .AXI_DATA_WIDTH ( AXI_DATA_WIDTH ),
+  .AXI_STRB_WIDTH ( AXI_STRB_WIDTH ),
+  .AXI_USER_WIDTH ( AXI_USER_WIDTH )
   )
   axi4_spram (
-    .clk_i  ( clk_i  ),  // Clock
-    .rst_ni ( rst_ni ),  // Asynchronous reset active low
+    .clk_i  ( clk_i  ), // Clock
+    .rst_ni ( rst_ni ), // Asynchronous reset active low
 
     .axi_aw_id     ( axi_aw_id     ),
     .axi_aw_addr   ( axi_aw_addr   ),

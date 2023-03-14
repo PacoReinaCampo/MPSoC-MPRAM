@@ -53,22 +53,22 @@ module peripheral_spram_wb #(
   parameter CORES_PER_TILE = 8
 )
   (
-    input                                   wb_clk_i,
-    input                                   wb_rst_i,
+  input                                   wb_clk_i,
+  input                                   wb_rst_i,
 
-    input      [CORES_PER_TILE-1:0][AW-1:0] wb_adr_i,
-    input      [CORES_PER_TILE-1:0][DW-1:0] wb_dat_i,
-    input      [CORES_PER_TILE-1:0][   3:0] wb_sel_i,
-    input      [CORES_PER_TILE-1:0]         wb_we_i,
-    input      [CORES_PER_TILE-1:0][   1:0] wb_bte_i,
-    input      [CORES_PER_TILE-1:0][   2:0] wb_cti_i,
-    input      [CORES_PER_TILE-1:0]         wb_cyc_i,
-    input      [CORES_PER_TILE-1:0]         wb_stb_i,
+  input      [CORES_PER_TILE-1:0][AW-1:0] wb_adr_i,
+  input      [CORES_PER_TILE-1:0][DW-1:0] wb_dat_i,
+  input      [CORES_PER_TILE-1:0][   3:0] wb_sel_i,
+  input      [CORES_PER_TILE-1:0]         wb_we_i,
+  input      [CORES_PER_TILE-1:0][   1:0] wb_bte_i,
+  input      [CORES_PER_TILE-1:0][   2:0] wb_cti_i,
+  input      [CORES_PER_TILE-1:0]         wb_cyc_i,
+  input      [CORES_PER_TILE-1:0]         wb_stb_i,
 
-    output reg [CORES_PER_TILE-1:0]         wb_ack_o,
-    output     [CORES_PER_TILE-1:0]         wb_err_o,
-    output     [CORES_PER_TILE-1:0][DW-1:0] wb_dat_o
-  );
+  output reg [CORES_PER_TILE-1:0]         wb_ack_o,
+  output     [CORES_PER_TILE-1:0]         wb_err_o,
+  output     [CORES_PER_TILE-1:0][DW-1:0] wb_dat_o
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -191,11 +191,11 @@ module peripheral_spram_wb #(
       assign wb_err_o[t] =  1'b0;
 
       peripheral_spram_generic_wb #(
-        .DEPTH   (DEPTH/4),
-        .MEMFILE (MEMFILE),
+      .DEPTH   (DEPTH/4),
+      .MEMFILE (MEMFILE),
 
-        .AW ($clog2(DEPTH/4)),
-        .DW (DW)
+      .AW ($clog2(DEPTH/4)),
+      .DW (DW)
       )
       ram0 (
         .clk   (wb_clk_i),

@@ -49,13 +49,13 @@ module peripheral_mpram_generic_wb #(
   parameter DW = 32
 )
   (
-    input               clk,
-    input      [   3:0] we,
-    input      [DW-1:0] din,
-    input      [AW-1:0] waddr,
-    input      [AW-1:0] raddr,
-    output reg [DW-1:0] dout
-  );
+  input               clk,
+  input      [   3:0] we,
+  input      [DW-1:0] din,
+  input      [AW-1:0] waddr,
+  input      [AW-1:0] raddr,
+  output reg [DW-1:0] dout
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -77,9 +77,9 @@ module peripheral_mpram_generic_wb #(
 
   generate
     initial
-      if(MEMFILE != "") begin
-        $display("Preloading %m from %s", MEMFILE);
-        $readmemh(MEMFILE, mem);
-      end
+    if(MEMFILE != "") begin
+      $display("Preloading %m from %s", MEMFILE);
+      $readmemh(MEMFILE, mem);
+    end
   endgenerate
 endmodule
