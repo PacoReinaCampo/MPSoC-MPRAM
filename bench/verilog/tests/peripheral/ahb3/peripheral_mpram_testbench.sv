@@ -60,23 +60,23 @@ module peripheral_mpram_testbench;
   //
 
   //Common signals
-  wire                                     HRESETn;
-  wire                                     HCLK;
+  wire                                           HRESETn;
+  wire                                           HCLK;
 
   //AHB3 signals
-  wire  [CORES_PER_TILE-1:0]                      mst_mpram_HSEL;
-  wire  [CORES_PER_TILE-1:0][PLEN           -1:0] mst_mpram_HADDR;
-  wire  [CORES_PER_TILE-1:0][XLEN           -1:0] mst_mpram_HWDATA;
-  wire  [CORES_PER_TILE-1:0][XLEN           -1:0] mst_mpram_HRDATA;
-  wire  [CORES_PER_TILE-1:0]                      mst_mpram_HWRITE;
-  wire  [CORES_PER_TILE-1:0][                2:0] mst_mpram_HSIZE;
-  wire  [CORES_PER_TILE-1:0][                2:0] mst_mpram_HBURST;
-  wire  [CORES_PER_TILE-1:0][                3:0] mst_mpram_HPROT;
-  wire  [CORES_PER_TILE-1:0][                1:0] mst_mpram_HTRANS;
-  wire  [CORES_PER_TILE-1:0]                      mst_mpram_HMASTLOCK;
-  wire  [CORES_PER_TILE-1:0]                      mst_mpram_HREADY;
-  wire  [CORES_PER_TILE-1:0]                      mst_mpram_HREADYOUT;
-  wire  [CORES_PER_TILE-1:0]                      mst_mpram_HRESP;
+  wire [CORES_PER_TILE-1:0]                      mst_mpram_HSEL;
+  wire [CORES_PER_TILE-1:0][PLEN           -1:0] mst_mpram_HADDR;
+  wire [CORES_PER_TILE-1:0][XLEN           -1:0] mst_mpram_HWDATA;
+  wire [CORES_PER_TILE-1:0][XLEN           -1:0] mst_mpram_HRDATA;
+  wire [CORES_PER_TILE-1:0]                      mst_mpram_HWRITE;
+  wire [CORES_PER_TILE-1:0][                2:0] mst_mpram_HSIZE;
+  wire [CORES_PER_TILE-1:0][                2:0] mst_mpram_HBURST;
+  wire [CORES_PER_TILE-1:0][                3:0] mst_mpram_HPROT;
+  wire [CORES_PER_TILE-1:0][                1:0] mst_mpram_HTRANS;
+  wire [CORES_PER_TILE-1:0]                      mst_mpram_HMASTLOCK;
+  wire [CORES_PER_TILE-1:0]                      mst_mpram_HREADY;
+  wire [CORES_PER_TILE-1:0]                      mst_mpram_HREADYOUT;
+  wire [CORES_PER_TILE-1:0]                      mst_mpram_HRESP;
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -87,32 +87,31 @@ module peripheral_mpram_testbench;
 
   //Instantiate RISC-V RAM
   peripheral_mpram_ahb3 #(
-  .MEM_SIZE          ( 256 ),
-  .MEM_DEPTH         ( 256 ),
-  .PLEN              ( PLEN ),
-  .XLEN              ( XLEN ),
-  .TECHNOLOGY        ( TECHNOLOGY ),
-  .REGISTERED_OUTPUT ( "NO" ),
+    .MEM_SIZE         (256),
+    .MEM_DEPTH        (256),
+    .PLEN             (PLEN),
+    .XLEN             (XLEN),
+    .TECHNOLOGY       (TECHNOLOGY),
+    .REGISTERED_OUTPUT("NO"),
 
-  .CORES_PER_TILE ( CORES_PER_TILE )
-  )
-  ahb3_mpram (
+    .CORES_PER_TILE(CORES_PER_TILE)
+  ) ahb3_mpram (
     //AHB Slave Interface
-    .HRESETn   ( HRESETn ),
-    .HCLK      ( HCLK    ),
+    .HRESETn(HRESETn),
+    .HCLK   (HCLK),
 
-    .HSEL      ( mst_mpram_HSEL      ),
-    .HADDR     ( mst_mpram_HADDR     ),
-    .HWDATA    ( mst_mpram_HWDATA    ),
-    .HRDATA    ( mst_mpram_HRDATA    ),
-    .HWRITE    ( mst_mpram_HWRITE    ),
-    .HSIZE     ( mst_mpram_HSIZE     ),
-    .HBURST    ( mst_mpram_HBURST    ),
-    .HPROT     ( mst_mpram_HPROT     ),
-    .HTRANS    ( mst_mpram_HTRANS    ),
-    .HMASTLOCK ( mst_mpram_HMASTLOCK ),
-    .HREADYOUT ( mst_mpram_HREADYOUT ),
-    .HREADY    ( mst_mpram_HREADY    ),
-    .HRESP     ( mst_mpram_HRESP     )
+    .HSEL     (mst_mpram_HSEL),
+    .HADDR    (mst_mpram_HADDR),
+    .HWDATA   (mst_mpram_HWDATA),
+    .HRDATA   (mst_mpram_HRDATA),
+    .HWRITE   (mst_mpram_HWRITE),
+    .HSIZE    (mst_mpram_HSIZE),
+    .HBURST   (mst_mpram_HBURST),
+    .HPROT    (mst_mpram_HPROT),
+    .HTRANS   (mst_mpram_HTRANS),
+    .HMASTLOCK(mst_mpram_HMASTLOCK),
+    .HREADYOUT(mst_mpram_HREADYOUT),
+    .HREADY   (mst_mpram_HREADY),
+    .HRESP    (mst_mpram_HRESP)
   );
 endmodule

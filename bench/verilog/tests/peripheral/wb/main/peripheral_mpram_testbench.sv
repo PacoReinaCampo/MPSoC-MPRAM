@@ -53,10 +53,10 @@ module peripheral_mpram_testbench;
   //
   // Variables
   //
-  reg wbm_rst = 1'b1;
+  reg         wbm_rst = 1'b1;
 
-  reg wb_clk = 1'b1;
-  reg wb_rst = 1'b1;
+  reg         wb_clk = 1'b1;
+  reg         wb_rst = 1'b1;
 
   wire [31:0] wb_adr;
   wire [31:0] wb_dat;
@@ -73,7 +73,7 @@ module peripheral_mpram_testbench;
   //
   // Module Body
   //
-  peripheral_utils_testbench peripheral_utils_testbench0();
+  peripheral_utils_testbench peripheral_utils_testbench0 ();
 
   initial #1800 wbm_rst <= 1'b0;
 
@@ -81,52 +81,50 @@ module peripheral_mpram_testbench;
   always #100 wb_clk <= !wb_clk;
 
   peripheral_bfm_transactor_wb #(
-  .MEM_HIGH (MEMORY_SIZE-1),
-  .VERBOSE  (0)
-  )
-  master (
-    .wb_clk_i (wb_clk),
-    .wb_rst_i (wbm_rst),
-    .wb_adr_o (wb_adr),
-    .wb_dat_o (wb_dat),
-    .wb_sel_o (wb_sel),
-    .wb_we_o  (wb_we),
-    .wb_cyc_o (wb_cyc),
-    .wb_stb_o (wb_stb),
-    .wb_cti_o (wb_cti),
-    .wb_bte_o (wb_bte),
-    .wb_dat_i (wb_rdt),
-    .wb_ack_i (wb_ack),
-    .wb_err_i (1'b0),
-    .wb_rty_i (1'b0),
+    .MEM_HIGH(MEMORY_SIZE - 1),
+    .VERBOSE (0)
+  ) master (
+    .wb_clk_i(wb_clk),
+    .wb_rst_i(wbm_rst),
+    .wb_adr_o(wb_adr),
+    .wb_dat_o(wb_dat),
+    .wb_sel_o(wb_sel),
+    .wb_we_o (wb_we),
+    .wb_cyc_o(wb_cyc),
+    .wb_stb_o(wb_stb),
+    .wb_cti_o(wb_cti),
+    .wb_bte_o(wb_bte),
+    .wb_dat_i(wb_rdt),
+    .wb_ack_i(wb_ack),
+    .wb_err_i(1'b0),
+    .wb_rty_i(1'b0),
     //Test Control
-    .done(done)
+    .done    (done)
   );
 
   always @(done) begin
-    if(done === 1) begin
+    if (done === 1) begin
       $display("All tests passed!");
       $finish;
     end
   end
 
   peripheral_spram_wb #(
-  .DEPTH (MEMORY_SIZE)
-  )
-  dut (
+    .DEPTH(MEMORY_SIZE)
+  ) dut (
     // Wishbone interface
-    .wb_clk_i (wb_clk),
-    .wb_rst_i (wb_rst),
-    .wb_adr_i (wb_adr[$clog2(MEMORY_SIZE)-1:0]),
-    .wb_stb_i (wb_stb),
-    .wb_cyc_i (wb_cyc),
-    .wb_cti_i (wb_cti),
-    .wb_bte_i (wb_bte),
-    .wb_we_i  (wb_we) ,
-    .wb_sel_i (wb_sel),
-    .wb_dat_i (wb_dat),
-    .wb_dat_o (wb_rdt),
-    .wb_ack_o (wb_ack),
-    .wb_err_o ()
+    .wb_clk_i(wb_clk),
+    .wb_rst_i(wb_rst),
+    .wb_adr_i(wb_adr[$clog2(MEMORY_SIZE)-1:0]),
+    .wb_stb_i(wb_stb),
+    .wb_cyc_i(wb_cyc),
+    .wb_cti_i(wb_cti),
+    .wb_bte_i(wb_bte),
+    .wb_we_i (wb_we),
+    .wb_sel_i(wb_sel),
+    .wb_dat_i(wb_dat),
+    .wb_dat_o(wb_rdt),
+    .wb_ack_o(wb_ack),
+    .wb_err_o()
   );
 endmodule

@@ -47,8 +47,7 @@ module peripheral_mpram_generic_wb #(
 
   parameter AW = $clog2(DEPTH),
   parameter DW = 32
-)
-  (
+) (
   input               clk,
   input      [   3:0] we,
   input      [DW-1:0] din,
@@ -61,15 +60,15 @@ module peripheral_mpram_generic_wb #(
   //
   // Variables
   //
-  reg [DW-1:0] mem [0:DEPTH-1] /* verilator public */;
+  reg [DW-1:0] mem[0:DEPTH-1]  /* verilator public */;
 
   //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
   always @(posedge clk) begin
-    if (we[0]) mem[waddr][7:0]   <= din[7:0];
-    if (we[1]) mem[waddr][15:8]  <= din[15:8];
+    if (we[0]) mem[waddr][7:0] <= din[7:0];
+    if (we[1]) mem[waddr][15:8] <= din[15:8];
     if (we[2]) mem[waddr][23:16] <= din[23:16];
     if (we[3]) mem[waddr][31:24] <= din[31:24];
     dout <= mem[raddr];
@@ -77,9 +76,9 @@ module peripheral_mpram_generic_wb #(
 
   generate
     initial
-    if(MEMFILE != "") begin
-      $display("Preloading %m from %s", MEMFILE);
-      $readmemh(MEMFILE, mem);
-    end
+      if (MEMFILE != "") begin
+        $display("Preloading %m from %s", MEMFILE);
+        $readmemh(MEMFILE, mem);
+      end
   endgenerate
 endmodule
