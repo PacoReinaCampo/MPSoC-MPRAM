@@ -64,8 +64,8 @@ module peripheral_mpram_bb #(
   // RAM
   //============
 
-  reg  [      15:0]                          mem          [0:(MEM_SIZE/2)-1];
-  reg  [ADDR_MSB:0]                          ram_addr_reg;
+  reg  [      15:0] mem                     [0:(MEM_SIZE/2)-1];
+  reg  [ADDR_MSB:0] ram_addr_reg;
 
   wire [      15:0] mem_val = mem[ram_addr];
 

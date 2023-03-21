@@ -50,8 +50,8 @@ entity peripheral_mpram_1r1w is
   generic (
     ABITS      : integer := 10;
     DBITS      : integer := 32;
-    TECHNOLOGY : string := "GENERIC"
-  );
+    TECHNOLOGY : string  := "GENERIC"
+    );
   port (
     rst_ni : in std_logic;
     clk_i  : in std_logic;
@@ -66,7 +66,7 @@ entity peripheral_mpram_1r1w is
     raddr_i : in  std_logic_vector(ABITS-1 downto 0);
     re_i    : in  std_logic;
     dout_o  : out std_logic_vector(DBITS-1 downto 0)
-  );
+    );
 end peripheral_mpram_1r1w;
 
 architecture rtl of peripheral_mpram_1r1w is
@@ -79,7 +79,7 @@ architecture rtl of peripheral_mpram_1r1w is
     generic (
       ABITS : integer := 10;
       DBITS : integer := 32
-    );
+      );
     port (
       rst_ni : in std_logic;
       clk_i  : in std_logic;
@@ -91,7 +91,7 @@ architecture rtl of peripheral_mpram_1r1w is
 
       raddr_i : in  std_logic_vector(ABITS-1 downto 0);
       dout_o  : out std_logic_vector(DBITS-1 downto 0)
-    );
+      );
   end component;
 
   ------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ begin
       generic map (
         ABITS => ABITS,
         DBITS => DBITS
-      )
+        )
       port map (
         rst_ni => rst_ni,
         clk_i  => clk_i,
@@ -127,7 +127,7 @@ begin
 
         raddr_i => raddr_i,
         dout_o  => mem_dout
-      );
+        );
   end generate;
 
   --TODO Handle 'be' ... requires partial old, partial new data
