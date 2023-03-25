@@ -42,6 +42,6 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-vhdl2008 work ../../../../../../rtl/vhdl/axi4/core/mpsoc_axi4_mpram.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/axi4/core/mpsoc_axi4_mpram.vhd
 
-vhdl2008 work ../../../../../../bench/vhdl/tests/core/axi4/mpsoc_mpram_testbench.vhd
+vhdl2008 work ../../../../../../bench/vhdl/code/tests/core/axi4/mpsoc_mpram_testbench.vhd

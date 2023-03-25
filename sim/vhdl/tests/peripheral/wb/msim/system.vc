@@ -42,10 +42,10 @@
 ##                                                                               ##
 ###################################################################################
 
-../../../../../../rtl/vhdl/pkg/core/vhdl_pkg.vhd
-../../../../../../rtl/vhdl/pkg/peripheral/wb/peripheral_wb_pkg.vhd
+../../../../../../rtl/vhdl/code/pkg/core/vhdl_pkg.vhd
+../../../../../../rtl/vhdl/code/pkg/peripheral/wb/peripheral_wb_pkg.vhd
 
-../../../../../../rtl/vhdl/peripheral/wb/peripheral_mpram_generic_wb.vhd
-../../../../../../rtl/vhdl/peripheral/wb/peripheral_mpram_wb.vhd
+../../../../../../rtl/vhdl/code/peripheral/wb/peripheral_mpram_generic_wb.vhd
+../../../../../../rtl/vhdl/code/peripheral/wb/peripheral_mpram_wb.vhd
 
-../../../../../../bench/vhdl/tests/peripheral/wb/peripheral_mpram_testbench.vhd
+../../../../../../bench/vhdl/code/tests/peripheral/wb/peripheral_mpram_testbench.vhd

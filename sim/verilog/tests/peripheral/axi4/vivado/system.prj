@@ -42,6 +42,6 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-sv work ../../../../../../rtl/verilog/axi4/core/peripheral_axi4_mpram.sv
+sv work ../../../../../../rtl/verilog/code/axi4/core/peripheral_axi4_mpram.sv
 
-sv work ../../../../../../bench/verilog/tests/core/axi4/peripheral_mpram_testbench.sv
+sv work ../../../../../../bench/verilog/code/tests/core/axi4/peripheral_mpram_testbench.sv
