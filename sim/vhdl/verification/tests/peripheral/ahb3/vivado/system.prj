@@ -42,10 +42,11 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-vhdl2008 work ../../../../../../../rtl/vhdl/code/ahb3/pkg/mpsoc_mpram_ahb3_pkg.vhd
+vhdl2008 work ../../../../../../../rtl/vhdl/code/pkg/core/vhdl_pkg.vhd
+vhdl2008 work ../../../../../../../rtl/vhdl/code/pkg/peripheral/ahb3/peripheral_ahb3_pkg.vhd
 
-vhdl2008 work ../../../../../../../rtl/vhdl/code/ahb3/core/mpsoc_ahb3_mpram.vhd
-vhdl2008 work ../../../../../../../rtl/vhdl/code/ahb3/core/mpsoc_ram_1r1w.vhd
-vhdl2008 work ../../../../../../../rtl/vhdl/code/ahb3/core/mpsoc_ram_1r1w_generic.vhd
+vhdl2008 work ../../../../../../../rtl/vhdl/code/peripheral/ahb3/peripheral_mpram_ahb3.vhd
+vhdl2008 work ../../../../../../../rtl/vhdl/code/peripheral/ahb3/peripheral_mpram_1r1w.vhd
+vhdl2008 work ../../../../../../../rtl/vhdl/code/peripheral/ahb3/peripheral_mpram_1r1w_generic.vhd
 
-vhdl2008 work ../../../../../../../bench/vhdl/code/tests/core/ahb3/mpsoc_mpram_testbench.vhd
+vhdl2008 work ../../../../../../../bench/vhdl/code/tests/peripheral/ahb3/peripheral_mpram_testbench.vhd

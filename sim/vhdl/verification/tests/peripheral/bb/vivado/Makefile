@@ -9,14 +9,14 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              Peripheral for MPSoC                                             ##
-##              Multi-Processor System on Chip                                   ##
+##              MPSoC-SPRAM CPU                                                  ##
+##              Simulation Test Makefile                                         ##
 ##                                                                               ##
 ###################################################################################
 
 ###################################################################################
 ##                                                                               ##
-## Copyright (c) 2015-2016 by the author(s)                                      ##
+## Copyright (c) 2018-2019 by the author(s)                                      ##
 ##                                                                               ##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy  ##
 ## of this software and associated documentation files (the "Software"), to deal ##
@@ -38,24 +38,18 @@
 ##                                                                               ##
 ## ============================================================================= ##
 ## Author(s):                                                                    ##
-##   Paco Reina Campo <pacoreinacampo@queenfield.tech>                           ##
+##   Francisco Javier Reina Campo <pacoreinacampo@queenfield.tech>               ##
 ##                                                                               ##
 ###################################################################################
 
 all: build simulate
 
 build:
-	ghdl -a --std=08 ../../../../../../../rtl/vhdl/code/pkg/core/vhdl_pkg.vhd
-	ghdl -a --std=08 ../../../../../../../rtl/vhdl/code/pkg/peripheral/wb/peripheral_wb_pkg.vhd
-
-	ghdl -a --std=08 ../../../../../../../rtl/vhdl/code/peripheral/wb/peripheral_mpram_generic_wb.vhd
-	ghdl -a --std=08 ../../../../../../../rtl/vhdl/code/peripheral/wb/peripheral_mpram_wb.vhd
-
-	ghdl -a --std=08 ../../../../../../../bench/vhdl/code/tests/peripheral/wb/peripheral_mpram_testbench.vhd
+	xvhdl -prj system.prj
 
 simulate:
-	ghdl -m --std=08 peripheral_mpram_testbench
-	ghdl -r --std=08 peripheral_mpram_testbench --ieee-asserts=disable-at-0 --disp-tree=inst > peripheral_mpram_testbench.tree
+	xelab peripheral_mpram_testbench
+	xsim -R peripheral_mpram_testbench
 
 clean:
-	rm -f *.cf *.tree
+	rm -rf *.dir *.jou *.log *.pb .Xil
