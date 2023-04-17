@@ -46,40 +46,42 @@ module peripheral_mpram_synthesis #(
   parameter PLEN              = 8,
   parameter XLEN              = 32,
   parameter TECHNOLOGY        = "GENERIC",
-  parameter REGISTERED_OUTPUT = "NO"
+  parameter REGISTERED_OUTPUT = "NO",
+
+  parameter CORES_PER_TILE = 1
 ) (
   input HRESETn,
   input HCLK,
 
-  input                 HSEL,
-  input      [PLEN-1:0] HADDR,
-  input      [XLEN-1:0] HWDATA,
-  output reg [XLEN-1:0] HRDATA,
+  input      [CORES_PER_TILE-1:0]           HSEL,
+  input      [CORES_PER_TILE-1:0][PLEN-1:0] HADDR,
+  input      [CORES_PER_TILE-1:0][XLEN-1:0] HWDATA,
+  output reg [CORES_PER_TILE-1:0][XLEN-1:0] HRDATA,
   input                 HWRITE,
-  input      [     2:0] HSIZE,
-  input      [     2:0] HBURST,
-  input      [     3:0] HPROT,
-  input      [     1:0] HTRANS,
-  input                 HMASTLOCK,
-  output reg            HREADYOUT,
-  input                 HREADY,
-  output                HRESP
+  input      [CORES_PER_TILE-1:0][     2:0] HSIZE,
+  input      [CORES_PER_TILE-1:0][     2:0] HBURST,
+  input      [CORES_PER_TILE-1:0][     3:0] HPROT,
+  input      [CORES_PER_TILE-1:0][     1:0] HTRANS,
+  input      [CORES_PER_TILE-1:0]           HMASTLOCK,
+  output reg [CORES_PER_TILE-1:0]           HREADYOUT,
+  input      [CORES_PER_TILE-1:0]           HREADY,
+  output     [CORES_PER_TILE-1:0]           HRESP
 );
 
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
 
-  //DUT AHB3
-  peripheral_ahb3_mpram #(
+  // DUT AHB3
+  peripheral_mpram_ahb3 #(
     .MEM_SIZE         (MEM_SIZE),
     .MEM_DEPTH        (MEM_DEPTH),
     .PLEN             (PLEN),
     .XLEN             (XLEN),
     .TECHNOLOGY       (TECHNOLOGY),
     .REGISTERED_OUTPUT(REGISTERED_OUTPUT)
-  ) ahb3_mpram (
+  ) mpram_ahb3 (
     .HRESETn(HRESETn),
     .HCLK   (HCLK),
 

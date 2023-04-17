@@ -42,17 +42,18 @@
 ##                                                                               ##
 ###################################################################################
 
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_ahb3_mpram.vhd
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_ram_1r1w.vhd
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_ram_1r1w_generic.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/code/pkg/core/vhdl_pkg.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/code/pkg/peripheral/ahb3/peripheral_ahb3_pkg.vhd
 
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/pkg/mpsoc_mpram_ahb3_pkg.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/code/peripheral/ahb3/peripheral_mpram_1r1w.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/code/peripheral/ahb3/peripheral_mpram_1r1w_generic.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/code/peripheral/ahb3/peripheral_mpram_ahb3.vhd
 
-read_vhdl -vhdl2008 mpsoc_mpram_synthesis.vhd
+read_vhdl -vhdl2008 peripheral_mpram_synthesis.vhd
 
 read_xdc system.xdc
 
-synth_design -part xc7z020-clg484-1 -top mpsoc_mpram_synthesis
+synth_design -part xc7z020-clg484-1 -top peripheral_mpram_synthesis
 
 opt_design
 place_design

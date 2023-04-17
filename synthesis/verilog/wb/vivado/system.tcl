@@ -42,14 +42,16 @@
 ##                                                                               ##
 ###################################################################################
 
-read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_ram_generic.sv
-read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_mpram.sv
+read_verilog -sv ../../../../rtl/verilog/code/pkg/peripheral/wb/peripheral_wb_pkg.sv
 
-read_verilog -sv mpsoc_mpram_synthesis.sv
+read_verilog -sv ../../../../rtl/verilog/code/peripheral/wb/peripheral_mpram_generic_wb.sv
+read_verilog -sv ../../../../rtl/verilog/code/peripheral/wb/peripheral_mpram_wb.sv
+
+read_verilog -sv peripheral_mpram_synthesis.sv
 
 read_xdc system.xdc
 
-synth_design -part xc7z020-clg484-1 -include_dirs ../../../../rtl/verilog/wb/pkg -top mpsoc_mpram_synthesis
+synth_design -part xc7z020-clg484-1 -top peripheral_mpram_synthesis
 
 opt_design
 place_design

@@ -66,20 +66,20 @@ module peripheral_mpram_synthesis #(
   output                HRESP
 );
 
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
 
-  //DUT AHB3
-  peripheral_ahb3_mpram #(
+  // DUT AHB3
+  peripheral_mpram_ahb3 #(
     .MEM_SIZE         (MEM_SIZE),
     .MEM_DEPTH        (MEM_DEPTH),
     .PLEN             (PLEN),
     .XLEN             (XLEN),
     .TECHNOLOGY       (TECHNOLOGY),
     .REGISTERED_OUTPUT(REGISTERED_OUTPUT)
-  ) ahb3_mpram (
+  ) mpram_ahb3 (
     .HRESETn(HRESETn),
     .HCLK   (HCLK),
 

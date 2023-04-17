@@ -66,13 +66,13 @@ module peripheral_mpram_synthesis #(
   output     [DW-1:0] wb_dat_o
 );
 
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
 
-  //DUT WB
-  peripheral_wb_mpram #(
+  // DUT WB
+  peripheral_mpram_wb #(
     //Memory parameters
     .DEPTH  (DEPTH),
     .MEMFILE(MEMFILE),
@@ -80,7 +80,7 @@ module peripheral_mpram_synthesis #(
     //Wishbone parameters
     .AW(AW),
     .DW(DW)
-  ) wb_mpram (
+  ) mpram_wb (
     .wb_clk_i(wb_clk_i),
     .wb_rst_i(wb_rst_i),
 

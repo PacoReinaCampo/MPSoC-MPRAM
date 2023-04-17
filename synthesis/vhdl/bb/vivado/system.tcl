@@ -42,15 +42,15 @@
 ##                                                                               ##
 ###################################################################################
 
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/bb/core/msp430_ram.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/code/pkg/core/vhdl_pkg.vhd
 
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/bb/pkg/msp430_pkg.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/code/peripheral/bb/peripheral_mpram_bb.vhd
 
-read_vhdl -vhdl2008 mpsoc_mpram_synthesis.vhd
+read_vhdl -vhdl2008 peripheral_mpram_synthesis.vhd
 
 read_xdc system.xdc
 
-synth_design -part xc7z020-clg484-1 -top mpsoc_mpram_synthesis
+synth_design -part xc7z020-clg484-1 -top peripheral_mpram_synthesis
 
 opt_design
 place_design

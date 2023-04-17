@@ -84,7 +84,7 @@ architecture rtl of peripheral_mpram_synthesis is
   -- Components
   ------------------------------------------------------------------------------
 
-  component peripheral_wb_mpram
+  component peripheral_mpram_wb
     generic (
       --Memory parameters
       DEPTH   : integer := 256;
@@ -118,8 +118,8 @@ begin
   -- Module Body
   ------------------------------------------------------------------------------
 
-  --DUT WB
-  wb_mpram : peripheral_wb_mpram
+  -- DUT WB
+  mpram_wb : peripheral_mpram_wb
     generic map (
       DEPTH   => DEPTH,
       MEMFILE => MEMFILE,

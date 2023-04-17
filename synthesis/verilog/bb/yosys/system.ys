@@ -9,7 +9,7 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              MPSoC-SPRAM CPU                                                  ##
+##              MPSoC-MPRAM CPU                                                  ##
 ##              Synthesis Test Makefile                                          ##
 ##                                                                               ##
 ###################################################################################
@@ -43,12 +43,12 @@
 ###################################################################################
 
 # read design
-read_verilog -sv ../../../../rtl/verilog/bb/core/msp430_ram.sv
+read_verilog -sv ../../../../rtl/verilog/code/peripheral/bb/peripheral_mpram_bb.sv
 
-read_verilog -sv mpsoc_spram_synthesis.sv
+read_verilog -sv peripheral_mpram_synthesis.sv
 
 # elaborate design hierarchy
-hierarchy -check -top mpsoc_spram_synthesis
+hierarchy -check -top peripheral_mpram_synthesis
 
 # improve design
 proc; opt; fsm; opt; memory; opt

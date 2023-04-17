@@ -42,13 +42,13 @@
 ##                                                                               ##
 ###################################################################################
 
-read_verilog -sv ../../../../rtl/verilog/axi4/core/mpsoc_axi4_mpram.sv
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/code/peripheral/axi4/peripheral_mpram_axi4.vhd
 
-read_vhdl -vhdl2008 mpsoc_mpram_synthesis.vhd
+read_vhdl -vhdl2008 peripheral_mpram_synthesis.vhd
 
 read_xdc system.xdc
 
-synth_design -part xc7z020-clg484-1 -top mpsoc_mpram_synthesis
+synth_design -part xc7z020-clg484-1 -top peripheral_mpram_synthesis
 
 opt_design
 place_design

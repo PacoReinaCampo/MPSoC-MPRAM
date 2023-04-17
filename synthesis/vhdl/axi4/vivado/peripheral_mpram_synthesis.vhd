@@ -74,7 +74,7 @@ architecture rtl of peripheral_mpram_synthesis is
   -- Components
   ------------------------------------------------------------------------------
 
-  component peripheral_axi4_mpram
+  component peripheral_mpram_axi4
     generic (
       AXI_ID_WIDTH   : integer := 10;
       AXI_ADDR_WIDTH : integer := 64;
@@ -254,8 +254,8 @@ begin
   -- Module Body
   ------------------------------------------------------------------------------
 
-  --Data AXI4
-  data_axi4 : peripheral_axi4_mpram
+  -- DUT AXI4
+  mpram_axi4 : peripheral_mpram_axi4
     generic map (
       AXI_ID_WIDTH   => AXI_ID_WIDTH,
       AXI_ADDR_WIDTH => AXI_ADDR_WIDTH,
