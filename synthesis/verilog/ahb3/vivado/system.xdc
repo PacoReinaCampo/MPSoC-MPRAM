@@ -93,7 +93,7 @@ set_property PACKAGE_PIN AA4 [get_ports {HBURST[2]}];  # "JC2_N"
 set_property PACKAGE_PIN Y4  [get_ports {HPROT[0]}];  # "JC2_P"
 set_property PACKAGE_PIN T6  [get_ports {HPROT[1]}];  # "JC3_N"
 set_property PACKAGE_PIN R6  [get_ports {HPROT[2]}];  # "JC3_P"
-set_property PACKAGE_PIN U4  [get_ports {HMASTLOCK}];  # "JC4_N"
+set_property PACKAGE_PIN U4  [get_ports {HPROT[3]}];  # "JC4_N"
 set_property PACKAGE_PIN T4  [get_ports {HREADYOUT}];  # "JC4_P"
 
 # ----------------------------------------------------------------------------
@@ -101,7 +101,7 @@ set_property PACKAGE_PIN T4  [get_ports {HREADYOUT}];  # "JC4_P"
 # ---------------------------------------------------------------------------- 
 set_property PACKAGE_PIN W7 [get_ports {HREADY}];  # "JD1_N"
 set_property PACKAGE_PIN V7 [get_ports {HRESP}];  # "JD1_P"
-#set_property PACKAGE_PIN V4 [get_ports {JD2_N}];  # "JD2_N"
+set_property PACKAGE_PIN V4 [get_ports {HMASTLOCK}];  # "JD2_N"
 #set_property PACKAGE_PIN V5 [get_ports {JD2_P}];  # "JD2_P"
 #set_property PACKAGE_PIN W5 [get_ports {JD3_N}];  # "JD3_N"
 #set_property PACKAGE_PIN W6 [get_ports {JD3_P}];  # "JD3_P"

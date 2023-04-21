@@ -53,20 +53,39 @@ module peripheral_mpram_synthesis #(
   input HRESETn,
   input HCLK,
 
-  input      [CORES_PER_TILE-1:0]           HSEL,
-  input      [CORES_PER_TILE-1:0][PLEN-1:0] HADDR,
-  input      [CORES_PER_TILE-1:0][XLEN-1:0] HWDATA,
-  output reg [CORES_PER_TILE-1:0][XLEN-1:0] HRDATA,
+  input                 HSEL,
+  input      [PLEN-1:0] HADDR,
+  input      [XLEN-1:0] HWDATA,
+  output reg [XLEN-1:0] HRDATA,
   input                 HWRITE,
-  input      [CORES_PER_TILE-1:0][     2:0] HSIZE,
-  input      [CORES_PER_TILE-1:0][     2:0] HBURST,
-  input      [CORES_PER_TILE-1:0][     3:0] HPROT,
-  input      [CORES_PER_TILE-1:0][     1:0] HTRANS,
-  input      [CORES_PER_TILE-1:0]           HMASTLOCK,
-  output reg [CORES_PER_TILE-1:0]           HREADYOUT,
-  input      [CORES_PER_TILE-1:0]           HREADY,
-  output     [CORES_PER_TILE-1:0]           HRESP
+  input      [     2:0] HSIZE,
+  input      [     2:0] HBURST,
+  input      [     3:0] HPROT,
+  input      [     1:0] HTRANS,
+  input                 HMASTLOCK,
+  output reg            HREADYOUT,
+  input                 HREADY,
+  output                HRESP
 );
+
+  //////////////////////////////////////////////////////////////////////////////
+  //
+  // Variables
+  //
+
+  wire [CORES_PER_TILE-1:0]           slv_HSEL;
+  wire [CORES_PER_TILE-1:0][PLEN-1:0] slv_HADDR;
+  wire [CORES_PER_TILE-1:0][XLEN-1:0] slv_HWDATA;
+  wire [CORES_PER_TILE-1:0][XLEN-1:0] slv_HRDATA;
+  wire [CORES_PER_TILE-1:0]           slv_HWRITE;
+  wire [CORES_PER_TILE-1:0][     2:0] slv_HSIZE;
+  wire [CORES_PER_TILE-1:0][     2:0] slv_HBURST;
+  wire [CORES_PER_TILE-1:0][     3:0] slv_HPROT;
+  wire [CORES_PER_TILE-1:0][     1:0] slv_HTRANS;
+  wire [CORES_PER_TILE-1:0]           slv_HMASTLOCK;
+  wire [CORES_PER_TILE-1:0]           slv_HREADYOUT;
+  wire [CORES_PER_TILE-1:0]           slv_HREADY;
+  wire [CORES_PER_TILE-1:0]           slv_HRESP;
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -74,6 +93,21 @@ module peripheral_mpram_synthesis #(
   //
 
   // DUT AHB3
+  assign slv_HSEL      [0] = HSEL;
+  assign slv_HADDR     [0] = HADDR;
+  assign slv_HWDATA    [0] = HWDATA;
+  assign slv_HWRITE    [0] = HWRITE;
+  assign slv_HSIZE     [0] = HSIZE;
+  assign slv_HBURST    [0] = HBURST;
+  assign slv_HPROT     [0] = HPROT;
+  assign slv_HTRANS    [0] = HTRANS;
+  assign slv_HMASTLOCK [0] = HMASTLOCK;
+  assign slv_HREADY    [0] = HREADY;
+
+  assign HRDATA    = slv_HRDATA    [0];
+  assign HREADYOUT = slv_HREADYOUT [0];
+  assign HRESP     = slv_HRESP     [0];
+
   peripheral_mpram_ahb3 #(
     .MEM_SIZE         (MEM_SIZE),
     .MEM_DEPTH        (MEM_DEPTH),
@@ -85,18 +119,18 @@ module peripheral_mpram_synthesis #(
     .HRESETn(HRESETn),
     .HCLK   (HCLK),
 
-    .HSEL     (HSEL),
-    .HADDR    (HADDR),
-    .HWDATA   (HWDATA),
-    .HRDATA   (HRDATA),
-    .HWRITE   (HWRITE),
-    .HSIZE    (HSIZE),
-    .HBURST   (HBURST),
-    .HPROT    (HPROT),
-    .HTRANS   (HTRANS),
-    .HMASTLOCK(HMASTLOCK),
-    .HREADYOUT(HREADYOUT),
-    .HREADY   (HREADY),
-    .HRESP    (HRESP)
+    .HSEL     (slv_HSEL),
+    .HADDR    (slv_HADDR),
+    .HWDATA   (slv_HWDATA),
+    .HRDATA   (slv_HRDATA),
+    .HWRITE   (slv_HWRITE),
+    .HSIZE    (slv_HSIZE),
+    .HBURST   (slv_HBURST),
+    .HPROT    (slv_HPROT),
+    .HTRANS   (slv_HTRANS),
+    .HMASTLOCK(slv_HMASTLOCK),
+    .HREADYOUT(slv_HREADYOUT),
+    .HREADY   (slv_HREADY),
+    .HRESP    (slv_HRESP)
   );
 endmodule
