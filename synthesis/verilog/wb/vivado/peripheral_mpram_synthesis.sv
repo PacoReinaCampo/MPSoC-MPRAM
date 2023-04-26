@@ -41,13 +41,15 @@
  */
 
 module peripheral_mpram_synthesis #(
-  //Memory parameters
+  // Memory Parameters
   parameter DEPTH   = 256,
   parameter MEMFILE = "",
 
-  //Wishbone parameters
+  // WishBone Parameters
   parameter DW = 32,
-  parameter AW = $clog2(DEPTH)
+  parameter AW = $clog2(DEPTH),
+
+  parameter CORES_PER_TILE = 1
 ) (
   input wb_clk_i,
   input wb_rst_i,
@@ -68,16 +70,47 @@ module peripheral_mpram_synthesis #(
 
   //////////////////////////////////////////////////////////////////////////////
   //
+  // Variables
+  //
+
+  wire [CORES_PER_TILE-1:0][AW-1:0] wb_adr;
+  wire [CORES_PER_TILE-1:0][DW-1:0] wb_dat;
+  wire [CORES_PER_TILE-1:0][   3:0] wb_sel;
+  wire [CORES_PER_TILE-1:0]         wb_we;
+  wire [CORES_PER_TILE-1:0][   1:0] wb_bte;
+  wire [CORES_PER_TILE-1:0][   2:0] wb_cti;
+  wire [CORES_PER_TILE-1:0]         wb_cyc;
+  wire [CORES_PER_TILE-1:0]         wb_stb;
+
+  wire [CORES_PER_TILE-1:0]         wb_ack;
+  wire [CORES_PER_TILE-1:0]         wb_err;
+  wire [CORES_PER_TILE-1:0][DW-1:0] wb_dat;
+
+  //////////////////////////////////////////////////////////////////////////////
+  //
   // Module Body
   //
 
   // DUT WB
+  assign wb_adr [0] = wb_adr_i;
+  assign wb_dat [0] = wb_dat_i;
+  assign wb_sel [0] = wb_sel_i;
+  assign wb_we  [0] = wb_we_i;
+  assign wb_bte [0] = wb_bte_i;
+  assign wb_cti [0] = wb_cti_i;
+  assign wb_cyc [0] = wb_cyc_i;
+  assign wb_stb [0] = wb_stb_i;
+
+  assign wb_ack_o = wb_ack [0];
+  assign wb_err_o = wb_err [0];
+  assign wb_dat_o = wb_dat [0];
+
   peripheral_mpram_wb #(
-    //Memory parameters
+    // Memory Parameters
     .DEPTH  (DEPTH),
     .MEMFILE(MEMFILE),
 
-    //Wishbone parameters
+    // WishBone Parameters
     .AW(AW),
     .DW(DW)
   ) mpram_wb (

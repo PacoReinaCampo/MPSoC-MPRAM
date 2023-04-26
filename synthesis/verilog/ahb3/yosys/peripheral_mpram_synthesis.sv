@@ -46,7 +46,9 @@ module peripheral_mpram_synthesis #(
   parameter PLEN              = 8,
   parameter XLEN              = 32,
   parameter TECHNOLOGY        = "GENERIC",
-  parameter REGISTERED_OUTPUT = "NO"
+  parameter REGISTERED_OUTPUT = "NO",
+
+  parameter CORES_PER_TILE = 1
 ) (
   input HRESETn,
   input HCLK,
@@ -68,10 +70,44 @@ module peripheral_mpram_synthesis #(
 
   //////////////////////////////////////////////////////////////////////////////
   //
+  // Variables
+  //
+
+  wire [CORES_PER_TILE-1:0]           slv_HSEL;
+  wire [CORES_PER_TILE-1:0][PLEN-1:0] slv_HADDR;
+  wire [CORES_PER_TILE-1:0][XLEN-1:0] slv_HWDATA;
+  wire [CORES_PER_TILE-1:0][XLEN-1:0] slv_HRDATA;
+  wire [CORES_PER_TILE-1:0]           slv_HWRITE;
+  wire [CORES_PER_TILE-1:0][     2:0] slv_HSIZE;
+  wire [CORES_PER_TILE-1:0][     2:0] slv_HBURST;
+  wire [CORES_PER_TILE-1:0][     3:0] slv_HPROT;
+  wire [CORES_PER_TILE-1:0][     1:0] slv_HTRANS;
+  wire [CORES_PER_TILE-1:0]           slv_HMASTLOCK;
+  wire [CORES_PER_TILE-1:0]           slv_HREADYOUT;
+  wire [CORES_PER_TILE-1:0]           slv_HREADY;
+  wire [CORES_PER_TILE-1:0]           slv_HRESP;
+
+  //////////////////////////////////////////////////////////////////////////////
+  //
   // Module Body
   //
 
   // DUT AHB3
+  assign slv_HSEL      [0] = HSEL;
+  assign slv_HADDR     [0] = HADDR;
+  assign slv_HWDATA    [0] = HWDATA;
+  assign slv_HWRITE    [0] = HWRITE;
+  assign slv_HSIZE     [0] = HSIZE;
+  assign slv_HBURST    [0] = HBURST;
+  assign slv_HPROT     [0] = HPROT;
+  assign slv_HTRANS    [0] = HTRANS;
+  assign slv_HMASTLOCK [0] = HMASTLOCK;
+  assign slv_HREADY    [0] = HREADY;
+
+  assign HRDATA    = slv_HRDATA    [0];
+  assign HREADYOUT = slv_HREADYOUT [0];
+  assign HRESP     = slv_HRESP     [0];
+
   peripheral_mpram_ahb3 #(
     .MEM_SIZE         (MEM_SIZE),
     .MEM_DEPTH        (MEM_DEPTH),
@@ -83,18 +119,18 @@ module peripheral_mpram_synthesis #(
     .HRESETn(HRESETn),
     .HCLK   (HCLK),
 
-    .HSEL     (HSEL),
-    .HADDR    (HADDR),
-    .HWDATA   (HWDATA),
-    .HRDATA   (HRDATA),
-    .HWRITE   (HWRITE),
-    .HSIZE    (HSIZE),
-    .HBURST   (HBURST),
-    .HPROT    (HPROT),
-    .HTRANS   (HTRANS),
-    .HMASTLOCK(HMASTLOCK),
-    .HREADYOUT(HREADYOUT),
-    .HREADY   (HREADY),
-    .HRESP    (HRESP)
+    .HSEL     (slv_HSEL),
+    .HADDR    (slv_HADDR),
+    .HWDATA   (slv_HWDATA),
+    .HRDATA   (slv_HRDATA),
+    .HWRITE   (slv_HWRITE),
+    .HSIZE    (slv_HSIZE),
+    .HBURST   (slv_HBURST),
+    .HPROT    (slv_HPROT),
+    .HTRANS   (slv_HTRANS),
+    .HMASTLOCK(slv_HMASTLOCK),
+    .HREADYOUT(slv_HREADYOUT),
+    .HREADY   (slv_HREADY),
+    .HRESP    (slv_HRESP)
   );
 endmodule

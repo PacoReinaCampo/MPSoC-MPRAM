@@ -52,10 +52,10 @@ use work.peripheral_mpram_wb_pkg.all;
 
 entity peripheral_mpram_synthesis is
   generic (
-    --Memory parameters
+    -- Memory Parameters
     DEPTH   : integer := 256;
     MEMFILE : string  := "";
-    --Wishbone parameters
+    -- WishBone Parameters
     DW      : integer := 32;
     AW      : integer := integer(log2(real(DEPTH)))
   );
@@ -86,10 +86,10 @@ architecture rtl of peripheral_mpram_synthesis is
 
   component peripheral_mpram_wb
     generic (
-      --Memory parameters
+      -- Memory Parameters
       DEPTH   : integer := 256;
       MEMFILE : string  := "";
-      --Wishbone parameters
+      -- WishBone Parameters
       DW      : integer := 32;
       AW      : integer := integer(log2(real(DEPTH)))
     );
