@@ -42,9 +42,9 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-+incdir+../../../../../../../rtl/verilog/code/pkg/wb
+../../../../../../../rtl/verilog/code/pkg/peripheral/wb/peripheral_wb_pkg.sv
 
-../../../../../../../bench/verilog/code/tests/peripheral/wb/main/peripheral_mpram_testbench.sv
-
-../../../../../../../rtl/verilog/code/peripheral/wb/peripheral_ram_generic_wb.sv
+../../../../../../../rtl/verilog/code/peripheral/wb/peripheral_mpram_generic_wb.sv
 ../../../../../../../rtl/verilog/code/peripheral/wb/peripheral_mpram_wb.sv
+
+../../../../../../../bench/verilog/code/tests/peripheral/wb/top/peripheral_mpram_testbench.sv
