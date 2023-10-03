@@ -45,7 +45,7 @@
 all: build simulate
 
 build:
-	iverilog -g2012 -o system.vvp -c system.vc -s peripheral_mpram_testbench -I ../../../../../../../rtl/verilog/code/axi4/pkg
+	iverilog -g2012 -o system.vvp -c system.s -s peripheral_mpram_testbench -I ../../../../../../../rtl/verilog/code/axi4/pkg
 
 simulate:
 	vvp system.vvp

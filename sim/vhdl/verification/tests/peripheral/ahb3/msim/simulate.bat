@@ -46,6 +46,6 @@
 call ../../../../../../../settings64_vivado.bat
 
 vlib work
-vcom -2008 -f system.vc
+vcom -2008 -f system.f
 vsim -c -do run.do work.peripheral_mpram_testbench
 pause
