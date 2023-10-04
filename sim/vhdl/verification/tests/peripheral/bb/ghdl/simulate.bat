@@ -44,13 +44,7 @@
 
 @echo off
 call ../../../../../../../settings64_ghdl.bat
-
-ghdl -a --std=08 ../../../../../../../rtl/vhdl/code/pkg/peripheral/wb/peripheral_wb_pkg.vhd
-
-ghdl -a --std=08 ../../../../../../../rtl/vhdl/code/peripheral/wb/peripheral_mpram_generic_wb.vhd
-ghdl -a --std=08 ../../../../../../../rtl/vhdl/code/peripheral/wb/peripheral_mpram_wb.vhd
-
-ghdl -a --std=08 ../../../../../../../bench/vhdl/code/tests/peripheral/wb/peripheral_mpram_testbench.vhd
+sh system.s
 
 ghdl -e --std=08 peripheral_mpram_testbench
 ghdl -r --std=08 peripheral_mpram_testbench --ieee-asserts=disable-at-0 --vcd=peripheral_mpram_testbench.vcd --wave=system.ghw --stop-time=1ms
