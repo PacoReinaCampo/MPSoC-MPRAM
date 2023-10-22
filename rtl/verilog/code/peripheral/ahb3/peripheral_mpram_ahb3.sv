@@ -43,8 +43,8 @@
 import peripheral_ahb3_pkg::*;
 
 module peripheral_mpram_ahb3 #(
-  parameter MEM_SIZE          = 256,        //Memory in Bytes
-  parameter MEM_DEPTH         = 256,        //Memory depth
+  parameter MEM_SIZE          = 256,        // Memory in Bytes
+  parameter MEM_DEPTH         = 256,        // Memory depth
   parameter PLEN              = 64,
   parameter XLEN              = 64,
   parameter TECHNOLOGY        = "GENERIC",
@@ -55,8 +55,8 @@ module peripheral_mpram_ahb3 #(
   input HRESETn,
   input HCLK,
 
-  //AHB Slave Interfaces (receive data from AHB Masters)
-  //AHB Masters connect to these ports
+  // AHB Slave Interfaces (receive data from AHB Masters)
+  // AHB Masters connect to these ports
   input      [CORES_PER_TILE-1:0]           HSEL,
   input      [CORES_PER_TILE-1:0][PLEN-1:0] HADDR,
   input      [CORES_PER_TILE-1:0][XLEN-1:0] HWDATA,
@@ -111,7 +111,7 @@ module peripheral_mpram_ahb3 #(
     logic [  6:0] haddr_masked;
     logic [  6:0] address_offset;
 
-    //get number of active lanes for a 1024bit databus (max width) for this HSIZE
+    // get number of active lanes for a 1024bit databus (max width) for this HSIZE
     case (hsize)
       HSIZE_B1024: full_be = 128'hffff_ffff_ffff_ffff_ffff_ffff_ffff_ffff;
       HSIZE_B512:  full_be = 128'h0000_0000_0000_0000_ffff_ffff_ffff_ffff;
@@ -123,7 +123,7 @@ module peripheral_mpram_ahb3 #(
       default:     full_be = 128'h0000_0000_0000_0000_0000_0000_0000_0001;
     endcase
 
-    //What are the lesser bits in HADDR?
+    // What are the lesser bits in HADDR?
     case (XLEN)
       1024:    address_offset = 7'b111_1111;
       0512:    address_offset = 7'b011_1111;
@@ -135,12 +135,12 @@ module peripheral_mpram_ahb3 #(
       default: address_offset = 7'b000_0000;
     endcase
 
-    //generate masked address
+    // generate masked address
     haddr_masked = haddr & address_offset;
 
-    //create byte-enable
+    // create byte-enable
     gen_be       = full_be[BE_SIZE-1:0] << haddr_masked;
-  endfunction  //gen_be
+  endfunction  // gen_be
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -149,28 +149,35 @@ module peripheral_mpram_ahb3 #(
 
   generate
     for (t = 0; t < CORES_PER_TILE; t = t + 1) begin
-      //generate internal write signal
-      //This causes read/write contention[t], which is handled by memory
+      // generate internal write signal
+      // This causes read/write contention[t], which is handled by memory
       always @(posedge HCLK) begin
-        if (HREADY[t]) we[t] <= HSEL[t] & HWRITE[t] & (HTRANS[t] != HTRANS_BUSY) & (HTRANS[t] != HTRANS_IDLE);
-        else we[t] <= 1'b0;
+        if (HREADY[t]) begin
+          we[t] <= HSEL[t] & HWRITE[t] & (HTRANS[t] != HTRANS_BUSY) & (HTRANS[t] != HTRANS_IDLE);
+        end else begin
+          we[t] <= 1'b0;
+        end
       end
-      //decode Byte-Enables
+      // decode Byte-Enables
       always @(posedge HCLK) begin
-        if (HREADY[t]) be[t] <= gen_be(HSIZE[t], HADDR[t]);
+        if (HREADY[t]) begin
+          be[t] <= gen_be(HSIZE[t], HADDR[t]);
+        end
       end
 
-      //store write address
+      // store write address
       always @(posedge HCLK) begin
-        if (HREADY[t]) waddr[t] <= HADDR[t];
+        if (HREADY[t]) begin
+          waddr[t] <= HADDR[t];
+        end
       end
 
-      //Is there read/write contention[t] on the memory?
+      // Is there read/write contention[t] on the memory?
       assign contention[t] = (waddr[t][MEM_ABITS_LSB +: MEM_ABITS] == HADDR[t][MEM_ABITS_LSB +: MEM_ABITS]) & we[t] & HSEL[t] & HREADY[t] & ~HWRITE[t] & (HTRANS[t] != HTRANS_BUSY) & (HTRANS[t] != HTRANS_IDLE);
 
-      //if all bytes were written contention[t] is/can be handled by memory
-      //otherwise stall a cycle (forced by N3S)
-      //We could do an exception for N3S here, but this file should be technology agnostic
+      // if all bytes were written contention[t] is/can be handled by memory
+      // otherwise stall a cycle (forced by N3S)
+      // We could do an exception for N3S here, but this file should be technology agnostic
       assign ready[t]      = ~(contention[t] & ~&be[t]);
 
       /*
@@ -198,23 +205,34 @@ module peripheral_mpram_ahb3 #(
         .dout_o (dout[t])
       );
 
-      //AHB bus response
-      assign HRESP[t] = HRESP_OKAY;  //always OK
+      // AHB bus response
+      assign HRESP[t] = HRESP_OKAY;  // always OK
 
       if (REGISTERED_OUTPUT == "NO") begin
         always @(posedge HCLK, negedge HRESETn) begin
-          if (!HRESETn) HREADYOUT[t] <= 1'b1;
-          else HREADYOUT[t] <= ready[t];
+          if (!HRESETn) begin
+            HREADYOUT[t] <= 1'b1;
+          end else begin
+            HREADYOUT[t] <= ready[t];
+          end
         end
-        always @* HRDATA[t] = dout[t];
+        always @* begin
+          HRDATA[t] = dout[t];
+        end
       end else begin
         always @(posedge HCLK, negedge HRESETn) begin
-          if (!HRESETn) HREADYOUT[t] <= 1'b1;
-          else if (HTRANS[t] == HTRANS_NONSEQ && !HWRITE[t]) HREADYOUT[t] <= 1'b0;
-          else HREADYOUT[t] <= 1'b1;
+          if (!HRESETn) begin
+            HREADYOUT[t] <= 1'b1;
+          end else if (HTRANS[t] == HTRANS_NONSEQ && !HWRITE[t]) begin
+            HREADYOUT[t] <= 1'b0;
+          end else begin
+            HREADYOUT[t] <= 1'b1;
+          end
         end
         always @(posedge HCLK) begin
-          if (HREADY[t]) HRDATA[t] <= dout[t];
+          if (HREADY[t]) begin
+            HRDATA[t] <= dout[t];
+          end
         end
       end
     end

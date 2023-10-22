@@ -62,7 +62,7 @@ module peripheral_mpram_bb #(
 );
 
   // RAM
-  //============
+  // ============
 
   reg  [      15:0] mem                     [0:(MEM_SIZE/2)-1];
   reg  [ADDR_MSB:0] ram_addr_reg;
@@ -71,9 +71,13 @@ module peripheral_mpram_bb #(
 
   always @(posedge ram_clk) begin
     if (~ram_cen & ram_addr < (MEM_SIZE / 2)) begin
-      if (ram_wen == 2'b00) mem[ram_addr] <= ram_din;
-      else if (ram_wen == 2'b01) mem[ram_addr] <= {ram_din[15:8], mem_val[7:0]};
-      else if (ram_wen == 2'b10) mem[ram_addr] <= {mem_val[15:8], ram_din[7:0]};
+      if (ram_wen == 2'b00) begin
+        mem[ram_addr] <= ram_din;
+      end else if (ram_wen == 2'b01) begin
+        mem[ram_addr] <= {ram_din[15:8], mem_val[7:0]};
+      end else if (ram_wen == 2'b10) begin
+        mem[ram_addr] <= {mem_val[15:8], ram_din[7:0]};
+      end
       ram_addr_reg <= ram_addr;
     end
   end

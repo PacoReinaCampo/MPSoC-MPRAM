@@ -42,11 +42,11 @@
  */
 
 module peripheral_spram_wb #(
-  //Memory parameters
+  // Memory parameters
   parameter DEPTH   = 256,
   parameter MEMFILE = "",
 
-  //Wishbone parameters
+  // Wishbone parameters
   parameter DW = 32,
   parameter AW = $clog2(DEPTH),
 
@@ -123,18 +123,24 @@ module peripheral_spram_wb #(
 
     integer        shift;
     begin
-      if (dw == 64) shift = 3;
-      else if (dw == 32) shift = 2;
-      else if (dw == 16) shift = 1;
-      else shift = 0;
+      if (dw == 64) begin
+        shift = 3;
+      end else if (dw == 32) begin
+        shift = 2;
+      end else if (dw == 16) begin
+        shift = 1;
+      end else begin
+        shift = 0;
+      end
       adr = adr_i >> shift;
-      if (cti_i == CTI_INC_BURST)
+      if (cti_i == CTI_INC_BURST) begin
         case (bte_i)
           BTE_LINEAR:  adr = adr + 1;
           BTE_WRAP_4:  adr = {adr[31:2], adr[1:0] + 2'd1};
           BTE_WRAP_8:  adr = {adr[31:3], adr[2:0] + 3'd1};
           BTE_WRAP_16: adr = {adr[31:4], adr[3:0] + 4'd1};
         endcase  // case (burst_type_i)
+      end
       wb_next_adr = adr << shift;
     end
   endfunction
@@ -175,7 +181,7 @@ module peripheral_spram_wb #(
       always @(posedge wb_clk_i) begin
         adr_r[t]    <= adr[t];
         valid_r[t]  <= valid[t];
-        //Ack generation
+        // Ack generation
         wb_ack_o[t] <= valid[t] & (!((wb_cti_i[t] == 3'b000) | (wb_cti_i[t] == 3'b111)) | !wb_ack_o[t]);
         if (wb_rst_i) begin
           adr_r[t]    <= {AW{1'b0}};
@@ -186,7 +192,7 @@ module peripheral_spram_wb #(
 
       assign ram_we[t]   = wb_we_i[t] & valid[t] & wb_ack_o[t];
 
-      //TODO:ck for burst address errors
+      // TO-DO:ck for burst address errors
       assign wb_err_o[t] = 1'b0;
 
       peripheral_spram_generic_wb #(

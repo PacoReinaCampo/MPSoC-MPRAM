@@ -67,18 +67,27 @@ module peripheral_mpram_generic_wb #(
   // Module Body
   //
   always @(posedge clk) begin
-    if (we[0]) mem[waddr][7:0] <= din[7:0];
-    if (we[1]) mem[waddr][15:8] <= din[15:8];
-    if (we[2]) mem[waddr][23:16] <= din[23:16];
-    if (we[3]) mem[waddr][31:24] <= din[31:24];
+    if (we[0]) begin
+      mem[waddr][7:0] <= din[7:0];
+    end
+    if (we[1]) begin
+      mem[waddr][15:8] <= din[15:8];
+    end
+    if (we[2]) begin
+      mem[waddr][23:16] <= din[23:16];
+    end
+    if (we[3]) begin
+      mem[waddr][31:24] <= din[31:24];
+    end
     dout <= mem[raddr];
   end
 
   generate
-    initial
+    initial begin
       if (MEMFILE != "") begin
         $display("Preloading %m from %s", MEMFILE);
         $readmemh(MEMFILE, mem);
       end
+    end
   endgenerate
 endmodule

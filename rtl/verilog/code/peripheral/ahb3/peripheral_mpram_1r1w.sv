@@ -48,13 +48,13 @@ module peripheral_mpram_1r1w #(
   input rst_ni,
   input clk_i,
 
-  //Write side
+  // Write side
   input [ ABITS     -1:0] waddr_i,
   input [ DBITS     -1:0] din_i,
   input                   we_i,
   input [(DBITS+7)/8-1:0] be_i,
 
-  //Read side
+  // Read side
   input  [ABITS     -1:0] raddr_i,
   input                   re_i,
   output [DBITS     -1:0] dout_o
@@ -75,7 +75,7 @@ module peripheral_mpram_1r1w #(
   //
   generate
     if (TECHNOLOGY == "N3XS" || TECHNOLOGY == "n3xs") begin
-      //eASIC N3XS
+      // eASIC N3XS
       peripheral_mpram_1r1w_easic_n3xs #(
         .ABITS(ABITS),
         .DBITS(DBITS)
@@ -93,7 +93,7 @@ module peripheral_mpram_1r1w #(
         .dout_o (mem_dout)
       );
     end else if (TECHNOLOGY == "N3X" || TECHNOLOGY == "n3x") begin
-      //eASIC N3X
+      // eASIC N3X
       peripheral_mpram_1r1w_easic_n3x #(
         .ABITS(ABITS),
         .DBITS(DBITS)
@@ -110,10 +110,14 @@ module peripheral_mpram_1r1w #(
         .re_i   (~contention),
         .dout_o (mem_dout)
       );
-    end else begin  //(TECHNOLOGY == "GENERIC")
-      //GENERIC  -- inferrable memory
+    end else begin
+      // (TECHNOLOGY == "GENERIC")
 
-      //initial $display ("INFO   : No memory technology specified. Using generic inferred memory (%m)");
+      // GENERIC  -- inferrable memory
+
+      // initial begin
+      //   $display ("INFO : No memory technology specified. Using generic inferred memory (%m)");
+      // end
       peripheral_mpram_1r1w_generic #(
         .ABITS(ABITS),
         .DBITS(DBITS)
@@ -132,10 +136,10 @@ module peripheral_mpram_1r1w #(
     end
   endgenerate
 
-  //TODO Handle 'be' ... requires partial old, partial new data
+  // TO-DO: Handle 'be' ... requires partial old, partial new data
 
-  //now ... write-first; we'll still need some bypass logic
-  assign contention = we_i && (raddr_i == waddr_i) ? re_i : 1'b0;  //prevent 'x' from propagating from eASIC memories
+  // now ... write-first; we'll still need some bypass logic
+  assign contention = we_i && (raddr_i == waddr_i) ? re_i : 1'b0;  // prevent 'x' from propagating from eASIC memories
 
   always @(posedge clk_i) begin
     contention_reg <= contention;

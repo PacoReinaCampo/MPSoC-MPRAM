@@ -289,7 +289,7 @@ module peripheral_mpram_axi4 #(
           req_addr_d = addr_o;
           // we can decrease the counter as the master has consumed the read data
           cnt_d      = cnt_q + 1;
-          // TODO: configure correct byte-lane
+          // TO-DO: configure correct byte-lane
         end
       end
       // ~> we already wrote the first word here
@@ -324,7 +324,9 @@ module peripheral_mpram_axi4 #(
           // we can decrease the counter as the master has consumed the read data
           cnt_d      = cnt_q + 1;
 
-          if (axi_w_last) state_d = SEND_B;
+          if (axi_w_last) begin
+            state_d = SEND_B;
+          end
         end
       end
       // ~> send a write acknowledge back
