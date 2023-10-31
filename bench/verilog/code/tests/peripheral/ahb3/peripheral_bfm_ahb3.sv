@@ -62,9 +62,7 @@ module peripheral_bfm_ahb3 #(
   output [           1:0] HTRANS,
   output                  HMASTLOCK,
   input                   HREADY,
-  input                   HRESP,
-
-  input tint
+  input                   HRESP
 );
 
   //////////////////////////////////////////////////////////////////////////////
