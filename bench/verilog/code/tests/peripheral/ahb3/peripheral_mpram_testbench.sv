@@ -59,11 +59,11 @@ module peripheral_mpram_testbench;
   // Variables
   //
 
-  //Common signals
+  // Common signals
   wire                                           HRESETn;
   wire                                           HCLK;
 
-  //AHB3 signals
+  // AHB3 signals
   wire [CORES_PER_TILE-1:0]                      mst_mpram_HSEL;
   wire [CORES_PER_TILE-1:0][PLEN           -1:0] mst_mpram_HADDR;
   wire [CORES_PER_TILE-1:0][XLEN           -1:0] mst_mpram_HWDATA;
@@ -83,9 +83,9 @@ module peripheral_mpram_testbench;
   // Module Body
   //
 
-  //DUT AHB3
+  // DUT AHB3
 
-  //Instantiate RISC-V RAM
+  // Instantiate RISC-V RAM
   peripheral_mpram_ahb3 #(
     .MEM_SIZE         (256),
     .MEM_DEPTH        (256),
@@ -96,7 +96,7 @@ module peripheral_mpram_testbench;
 
     .CORES_PER_TILE(CORES_PER_TILE)
   ) ahb3_mpram (
-    //AHB Slave Interface
+    // AHB Slave Interface
     .HRESETn(HRESETn),
     .HCLK   (HCLK),
 

@@ -113,7 +113,7 @@ module peripheral_mpram_synthesis #(
   logic                        axi4_ins_b_valid;
   logic                        axi4_ins_b_ready;
 
-  //AXI4 Data
+  // AXI4 Data
   logic [AXI_ID_WIDTH    -1:0] axi4_dat_aw_id;
   logic [AXI_ADDR_WIDTH  -1:0] axi4_dat_aw_addr;
   logic [                 7:0] axi4_dat_aw_len;
@@ -168,7 +168,7 @@ module peripheral_mpram_synthesis #(
   // Module Body
   //
 
-  //Data AXI4
+  // Data AXI4
   peripheral_mpram_axi4 #(
     .AXI_ID_WIDTH  (AXI_ID_WIDTH),
     .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),

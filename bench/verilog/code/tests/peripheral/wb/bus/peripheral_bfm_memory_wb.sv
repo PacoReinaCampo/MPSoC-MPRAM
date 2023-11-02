@@ -43,7 +43,7 @@
 import peripheral_wb_pkg::*;
 
 module peripheral_bfm_memory_wb #(
-  //Wishbone parameters
+  // Wishbone parameters
   parameter DW             = 32,
   parameter AW             = 32,
   parameter DEBUG          = 0,
@@ -86,7 +86,7 @@ module peripheral_bfm_memory_wb #(
   // Variables
   //
 
-  //Counters for read and write accesses
+  // Counters for read and write accesses
   integer          reads = 0;
   integer          writes = 0;
 
@@ -127,7 +127,7 @@ module peripheral_bfm_memory_wb #(
 
   always begin
     bfm0.init();
-    address = bfm0.address;  //Fetch start address
+    address = bfm0.address;  // Fetch start address
 
     if (bfm0.op === WRITE) begin
       writes = writes + 1;
@@ -135,7 +135,7 @@ module peripheral_bfm_memory_wb #(
       reads = reads + 1;
     end
     while (bfm0.has_next) begin
-      //Set error on out of range accesses
+      // Set error on out of range accesses
       if (address[31:ADR_LSB] > mem_words) begin
         $display("%0d : Error : Attempt to access %x, which is outside of memory", $time, address);
         bfm0.error_response();

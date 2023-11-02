@@ -47,11 +47,11 @@ module peripheral_mpram_testbench;
   // Constants
   //
 
-  //Memory parameters
+  // Memory parameters
   parameter DEPTH = 256;
   parameter MEMFILE = "";
 
-  //Wishbone parameters
+  // Wishbone parameters
   parameter DW = 32;
   parameter AW = $clog2(DEPTH);
 
@@ -62,11 +62,11 @@ module peripheral_mpram_testbench;
   // Variables
   //
 
-  //Common signals
+  // Common signals
   wire                                           clk;
   wire                                           rst;
 
-  //WB signals
+  // WB signals
   wire [CORES_PER_TILE-1:0][AW             -1:0] mst_mpram_adr_i;
   wire [CORES_PER_TILE-1:0][DW             -1:0] mst_mpram_dat_i;
   wire [CORES_PER_TILE-1:0][                3:0] mst_mpram_sel_i;
@@ -84,7 +84,7 @@ module peripheral_mpram_testbench;
   // Module Body
   //
 
-  //DUT WB
+  // DUT WB
   peripheral_mpram_wb #(
     .DEPTH  (DEPTH),
     .MEMFILE(MEMFILE),
@@ -94,7 +94,7 @@ module peripheral_mpram_testbench;
 
     .CORES_PER_TILE(CORES_PER_TILE)
   ) wb_mpram (
-    //Wishbone Master interface
+    // Wishbone Master interface
     .wb_clk_i(HRESETn),
     .wb_rst_i(HCLK),
 
