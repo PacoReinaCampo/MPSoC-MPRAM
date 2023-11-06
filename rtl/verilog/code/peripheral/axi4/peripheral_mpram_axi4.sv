@@ -232,7 +232,9 @@ module peripheral_mpram_axi4 #(
             state_d = (axi_w_last) ? SEND_B : WRITE;
             cnt_d   = 1;
             // we still have to wait for the first w_valid to arrive
-          end else state_d = WAIT_WVALID;
+          end else begin
+            state_d = WAIT_WVALID;
+          end
         end
       end
 
