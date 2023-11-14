@@ -1,6 +1,3 @@
--- Converted from bench/verilog/regression/peripheral_mpram_testbench.sv
--- by verilog2vhdl - QueenField
-
 --------------------------------------------------------------------------------
 --                                            __ _      _     _               --
 --                                           / _(_)    | |   | |              --
@@ -69,11 +66,11 @@ architecture rtl of peripheral_mpram_testbench is
   -- Variables
   ------------------------------------------------------------------------------
 
-  --Common signals
+  -- Common signals
   signal clk : std_logic;
   signal rst : std_logic;
 
-  --WB signals
+  -- WB signals
   signal mst_mpram_adr_i : std_logic_matrix(CORES_PER_TILE-1 downto 0)(AW-1 downto 0);
   signal mst_mpram_dat_i : std_logic_matrix(CORES_PER_TILE-1 downto 0)(DW-1 downto 0);
   signal mst_mpram_sel_i : std_logic_matrix(CORES_PER_TILE-1 downto 0)(3 downto 0);
@@ -92,11 +89,11 @@ architecture rtl of peripheral_mpram_testbench is
   ------------------------------------------------------------------------------
   component peripheral_mpram_wb
     generic (
-      --Memory parameters
+      -- Memory parameters
       DEPTH   : integer := 256;
       MEMFILE : string  := "";
 
-      --Wishbone parameters
+      -- Wishbone parameters
       AW : integer := integer(log2(real(DEPTH)));
       DW : integer := 32;
 
@@ -126,14 +123,14 @@ begin
   -- Module Body
   ------------------------------------------------------------------------------
 
-  --DUT WB
+  -- DUT WB
   wb_mpram : peripheral_mpram_wb
     generic map (
-      --Memory parameters
+      -- Memory parameters
       DEPTH   => DEPTH,
       MEMFILE => MEMFILE,
 
-      --Wishbone parameters
+      -- Wishbone parameters
       AW => AW,
       DW => DW,
 

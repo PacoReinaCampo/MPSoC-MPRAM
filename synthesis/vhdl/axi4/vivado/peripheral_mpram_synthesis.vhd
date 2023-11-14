@@ -1,6 +1,3 @@
--- Converted from peripheral_mpram_synthesis.sv
--- by verilog2vhdl - QueenField
-
 --------------------------------------------------------------------------------
 --                                            __ _      _     _               --
 --                                           / _(_)    | |   | |              --
@@ -41,7 +38,6 @@
 --------------------------------------------------------------------------------
 -- Author(s):
 --   Paco Reina Campo <pacoreinacampo@queenfield.tech>
---
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -198,7 +194,7 @@ architecture rtl of peripheral_mpram_synthesis is
   signal axi4_ins_b_valid : std_logic;
   signal axi4_ins_b_ready : std_logic;
 
-  --AXI4 Data
+  -- AXI4 Data
   signal axi4_dat_aw_id     : std_logic_vector(AXI_ID_WIDTH-1 downto 0);
   signal axi4_dat_aw_addr   : std_logic_vector(AXI_ADDR_WIDTH-1 downto 0);
   signal axi4_dat_aw_len    : std_logic_vector(7 downto 0);

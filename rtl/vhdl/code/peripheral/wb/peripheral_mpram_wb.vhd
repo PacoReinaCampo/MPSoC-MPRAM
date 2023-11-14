@@ -1,6 +1,3 @@
--- Converted from peripheral_mpram_wb.v
--- by verilog2vhdl - QueenField
-
 --------------------------------------------------------------------------------
 --                                            __ _      _     _               --
 --                                           / _(_)    | |   | |              --
@@ -53,11 +50,11 @@ use work.peripheral_wb_pkg.all;
 
 entity peripheral_mpram_wb is
   generic (
-    --Memory parameters
+    -- Memory parameters
     DEPTH   : integer := 256;
     MEMFILE : string  := "";
 
-    --Wishbone parameters
+    -- Wishbone parameters
     AW : integer := integer(log2(real(DEPTH)));
     DW : integer := 32;
 
@@ -247,7 +244,7 @@ begin
       if (rising_edge(wb_clk_i)) then
         adr_r(t)   <= adr(t);
         valid_r(t) <= valid(t);
-        --Ack generation
+        -- Ack generation
         wb_ack(t)  <= valid(t) and (not (to_stdlogic(wb_cti_i(t) = "000") or to_stdlogic(wb_cti_i(t) = "111")) or not wb_ack(t));
         if (wb_rst_i = '1') then
           adr_r(t)   <= (others => '0');
@@ -261,7 +258,7 @@ begin
 
     wb_ack_o(t) <= wb_ack(t);
 
-    --TODO:ck for burst address errors
+    -- TODO:ck for burst address errors
     wb_err_o(t) <= '0';
 
     ram0 : peripheral_mpram_generic_wb

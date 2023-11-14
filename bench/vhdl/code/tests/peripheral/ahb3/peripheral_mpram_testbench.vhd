@@ -1,6 +1,3 @@
--- Converted from bench/verilog/regression/peripheral_mpram_testbench.sv
--- by verilog2vhdl - QueenField
-
 --------------------------------------------------------------------------------
 --                                            __ _      _     _               --
 --                                           / _(_)    | |   | |              --
@@ -69,11 +66,11 @@ architecture rtl of peripheral_mpram_testbench is
   -- Variables
   ------------------------------------------------------------------------------
 
-  --Common signals
+  -- Common signals
   signal HRESETn : std_logic;
   signal HCLK    : std_logic;
 
-  --AHB3 signals
+  -- AHB3 signals
   signal mst_mpram_HSEL      : std_logic_vector(CORES_PER_TILE-1 downto 0);
   signal mst_mpram_HADDR     : std_logic_matrix(CORES_PER_TILE-1 downto 0)(PLEN-1 downto 0);
   signal mst_mpram_HWDATA    : std_logic_matrix(CORES_PER_TILE-1 downto 0)(XLEN-1 downto 0);
@@ -93,8 +90,8 @@ architecture rtl of peripheral_mpram_testbench is
   ------------------------------------------------------------------------------
   component peripheral_mpram_ahb3
     generic (
-      MEM_SIZE          : integer := 256;  --Memory in Bytes
-      MEM_DEPTH         : integer := 256;  --Memory depth
+      MEM_SIZE          : integer := 256;  -- Memory in Bytes
+      MEM_DEPTH         : integer := 256;  -- Memory depth
       PLEN              : integer := 64;
       XLEN              : integer := 64;
       TECHNOLOGY        : string  := "GENERIC";
@@ -106,8 +103,8 @@ architecture rtl of peripheral_mpram_testbench is
       HRESETn : in std_logic;
       HCLK    : in std_logic;
 
-      --AHB Slave Interfaces (receive data from AHB Masters)
-      --AHB Masters connect to these ports
+      -- AHB Slave Interfaces (receive data from AHB Masters)
+      -- AHB Masters connect to these ports
       HSEL      : in  std_logic_vector(CORES_PER_TILE-1 downto 0);
       HADDR     : in  std_logic_matrix(CORES_PER_TILE-1 downto 0)(PLEN-1 downto 0);
       HWDATA    : in  std_logic_matrix(CORES_PER_TILE-1 downto 0)(XLEN-1 downto 0);
@@ -129,7 +126,7 @@ begin
   -- Module Body
   ------------------------------------------------------------------------------
 
-  --DUT AHB3
+  -- DUT AHB3
   ahb3_mpram : peripheral_mpram_ahb3
     generic map (
       MEM_SIZE          => 256,
