@@ -50,4 +50,4 @@ simulate:
 	vvp system.vvp
 
 clean:
-	rm -rf system.vvp
+	rm -rf *.vvp
