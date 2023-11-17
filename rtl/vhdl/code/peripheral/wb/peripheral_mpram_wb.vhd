@@ -258,7 +258,7 @@ begin
 
     wb_ack_o(t) <= wb_ack(t);
 
-    -- TODO:ck for burst address errors
+    -- TO-DO:ck for burst address errors
     wb_err_o(t) <= '0';
 
     ram0 : peripheral_mpram_generic_wb

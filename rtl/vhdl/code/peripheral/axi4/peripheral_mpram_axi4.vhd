@@ -273,7 +273,7 @@ begin
           -- we can decrease the counter as the master has consumed the read data
           cnt_d      <= cnt_q+1;
         end if;
-      -- TODO: configure correct byte-lane
+      -- TO-DO: configure correct byte-lane
       -- ~> we already wrote the first word here
       when WRITE =>
 
