@@ -9,11 +9,12 @@
 //                  |_|                                                       //
 //                                                                            //
 //                                                                            //
-//              Peripheral-NTM for MPSoC                                      //
-//              Neural Turing Machine for MPSoC                               //
+//              MPSoC-RISCV CPU                                               //
+//              Memory - Technology Independent (Inferrable) Memory Wrapper   //
+//              AMBA3 AHB-Lite Bus Interface                                  //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2022-2025 by the author(s)
+// Copyright (c) 2018-2019 by the author(s)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,10 +38,63 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-`include "peripheral_transaction.sv"
-`include "peripheral_generator.sv"
-`include "peripheral_driver.sv"
-`include "peripheral_monitor.sv"
-`include "peripheral_scoreboard.sv"
-`include "peripheral_agent.sv"
-`include "peripheral_environment.sv"
+module peripheral_spram_generic_axi4 #(
+  parameter AXI_ADDR_WIDTH = 10,
+  parameter AXI_DATA_WIDTH = 32
+) (
+  input rst_ni,
+  input clk_i,
+
+  input req_i,
+  input we_i,
+
+  input [AXI_DATA_WIDTH/8-1:0] be_i,
+
+  input [AXI_ADDR_WIDTH-1:0] addr_i,
+  input [AXI_DATA_WIDTH-1:0] data_i,
+
+  output reg [AXI_DATA_WIDTH-1:0] data_o
+);
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Variables
+  //////////////////////////////////////////////////////////////////////////////
+
+  genvar i;
+
+  logic [AXI_DATA_WIDTH-1:0] mem_array[2**AXI_ADDR_WIDTH-1:0];  // memory array
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Body
+  //////////////////////////////////////////////////////////////////////////////
+
+  // write side
+  generate
+    for (i = 0; i < AXI_DATA_WIDTH / 8; i = i + 1) begin : write
+      if (i * 8 + 8 > AXI_DATA_WIDTH) begin
+        always @(posedge clk_i) begin
+          if (req_i && we_i && be_i[i]) begin
+            mem_array[addr_i][AXI_DATA_WIDTH-1:i*8] <= data_i[AXI_DATA_WIDTH-1:i*8];
+          end
+        end
+      end else begin
+        always @(posedge clk_i) begin
+          if (req_i && we_i && be_i[i]) begin
+            mem_array[addr_i][i*8+:8] <= data_i[i*8+:8];
+          end
+        end
+      end
+    end
+  endgenerate
+
+  // read side
+
+  // per Altera's recommendations. Prevents bypass logic
+  always @(posedge clk_i or posedge rst_ni) begin
+    if (~rst_ni) begin
+      data_o <= '0;
+    end else begin
+      data_o <= mem_array[addr_i];
+    end
+  end
+endmodule
