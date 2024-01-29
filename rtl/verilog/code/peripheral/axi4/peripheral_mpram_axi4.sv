@@ -95,14 +95,7 @@ module peripheral_mpram_axi4 #(
   output logic [                 1:0] axi_b_resp,
   output logic [AXI_USER_WIDTH  -1:0] axi_b_user,
   output logic                        axi_b_valid,
-  input  logic                        axi_b_ready,
-
-  output logic                        req_o,
-  output logic                        we_o,
-  output logic [AXI_ADDR_WIDTH  -1:0] addr_o,
-  output logic [AXI_DATA_WIDTH/8-1:0] be_o,
-  output logic [AXI_DATA_WIDTH  -1:0] data_o,
-  input  logic [AXI_DATA_WIDTH  -1:0] data_i
+  input  logic                        axi_b_ready
 );
 
   logic req_int;
@@ -115,7 +108,7 @@ module peripheral_mpram_axi4 #(
   logic [AXI_DATA_WIDTH-1:0] data_i_int;
   logic [AXI_DATA_WIDTH-1:0] data_o_int;
 
-  peripheral_mpram_bridge_axi4 mpram_bridge_axi4 #(
+  peripheral_mpram_bridge_axi4 #(
     .AXI_ID_WIDTH  (AXI_ID_WIDTH),
     .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
     .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
