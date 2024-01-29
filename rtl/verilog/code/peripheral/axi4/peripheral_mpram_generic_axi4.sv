@@ -38,7 +38,7 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-module peripheral_spram_generic_axi4 #(
+module peripheral_mpram_generic_axi4 #(
   parameter AXI_ADDR_WIDTH = 10,
   parameter AXI_DATA_WIDTH = 32
 ) (
