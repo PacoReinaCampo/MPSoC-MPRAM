@@ -13,9 +13,7 @@ code
     │   │   └── peripheral_gpio_apb4.sv
     │   ├── axi4
     │   │   ├── peripheral_bfm_basic.sv
-    │   │   ├── peripheral_bfm_master_axi4.sv
     │   │   ├── peripheral_bfm_master_generic_axi4.sv
-    │   │   ├── peripheral_bfm_slave_axi4.sv
     │   │   ├── peripheral_bfm_slave_generic_axi4.sv
     │   │   └── peripheral_bfm_testbench.sv
     │   └── wb
@@ -26,11 +24,15 @@ code
     │       └── peripheral_bfm_transactor_wb.sv
     └── peripheral
         ├── ahb3
+        │   ├── peripheral_bfm_ahb3.sv
+        │   ├── peripheral_bfm_master_ahb3.sv
         │   └── peripheral_mpram_testbench.sv
         ├── axi4
-        │   └── peripheral_spram_testbench.sv
+        │   └── peripheral_mpram_testbench.sv
         ├── bb
         │   └── peripheral_spram_testbench.sv
+        ├── biu
+        │   └── peripheral_mpram_testbench.sv
         └── wb
             ├── bus
             │   ├── peripheral_bfm_master_wb.sv
@@ -44,4 +46,4 @@ code
             └── top
                 └── peripheral_mpram_testbench.sv
 
-14 directories, 30 files
+15 directories, 31 files
