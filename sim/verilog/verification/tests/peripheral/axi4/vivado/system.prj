@@ -46,4 +46,4 @@ sv work ../../../../../../../rtl/verilog/code/peripheral/axi4/peripheral_mpram_a
 sv work ../../../../../../../rtl/verilog/code/peripheral/axi4/peripheral_mpram_bridge_axi4.sv
 sv work ../../../../../../../rtl/verilog/code/peripheral/axi4/peripheral_mpram_generic_axi4.sv
 
-sv work ../../../../../../../bench/verilog/code/tests/peripheral/axi4/peripheral_mpram_testbench.sv
+sv work ../../../../../../../verification/tasks/library/peripheral/axi4/peripheral_mpram_testbench.sv

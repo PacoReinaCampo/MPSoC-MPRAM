@@ -47,4 +47,4 @@
 ../../../../../../../rtl/verilog/code/peripheral/biu/peripheral_mpram_bridge_biu.sv
 ../../../../../../../rtl/verilog/code/peripheral/biu/peripheral_mpram_generic_biu.sv
 
-../../../../../../../bench/verilog/code/tests/peripheral/biu/peripheral_mpram_testbench.sv
+../../../../../../../verification/tasks/library/peripheral/biu/peripheral_mpram_testbench.sv

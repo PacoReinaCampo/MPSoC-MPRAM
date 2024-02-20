@@ -47,4 +47,4 @@ sv work ../../../../../../../rtl/verilog/code/peripheral/biu/peripheral_mpram_bi
 sv work ../../../../../../../rtl/verilog/code/peripheral/biu/peripheral_mpram_bridge_biu.sv
 sv work ../../../../../../../rtl/verilog/code/peripheral/biu/peripheral_mpram_generic_biu.sv
 
-sv work ../../../../../../../bench/verilog/code/tests/peripheral/biu/peripheral_mpram_testbench.sv
+sv work ../../../../../../../verification/tasks/library/peripheral/biu/peripheral_mpram_testbench.sv
