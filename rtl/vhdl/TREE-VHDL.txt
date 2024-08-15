@@ -7,7 +7,7 @@ code
 │   ├── apb4
 │   │   ├── peripheral_mpram_1r1w_generic.vhd
 │   │   ├── peripheral_mpram_1r1w.vhd
-│   │   └── peripheral_mpram_ahb3.vhd
+│   │   └── peripheral_mpram_apb4.vhd
 │   ├── axi4
 │   │   └── peripheral_mpram_axi4.vhd
 │   ├── bb
@@ -15,7 +15,7 @@ code
 │   ├── biu
 │   │   ├── peripheral_mpram_1r1w_generic.vhd
 │   │   ├── peripheral_mpram_1r1w.vhd
-│   │   └── peripheral_mpram_ahb3.vhd
+│   │   └── peripheral_mpram_biu.vhd
 │   └── wb
 │       ├── peripheral_mpram_generic_wb.vhd
 │       └── peripheral_mpram_wb.vhd
@@ -26,13 +26,13 @@ code
         ├── ahb3
         │   └── peripheral_ahb3_pkg.vhd
         ├── apb4
-        │   └── peripheral_ahb3_pkg.vhd
+        │   └── peripheral_apb4_pkg.vhd
         ├── axi4
         │   └── peripheral_axi4_pkg.vhd
         ├── bb
         │   └── peripheral_bb_pkg.vhd
         ├── biu
-        │   └── peripheral_ahb3_pkg.vhd
+        │   └── peripheral_biu_pkg.vhd
         └── wb
             └── peripheral_wb_pkg.vhd
 
