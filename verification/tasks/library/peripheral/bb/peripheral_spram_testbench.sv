@@ -58,7 +58,7 @@ module peripheral_spram_testbench;
   logic                        clk_i;  // Clock
   logic                        rst_ni;  // Asynchronous reset active low
 
-  // AHB3 signals
+  // AHB4 signals
   logic [AXI_ID_WIDTH    -1:0] axi_aw_id;
   logic [AXI_ADDR_WIDTH  -1:0] axi_aw_addr;
   logic [                 7:0] axi_aw_len;

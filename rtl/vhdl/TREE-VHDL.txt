@@ -1,9 +1,9 @@
 code
 ├── peripheral
-│   ├── ahb3
+│   ├── ahb4
 │   │   ├── peripheral_mpram_1r1w_generic.vhd
 │   │   ├── peripheral_mpram_1r1w.vhd
-│   │   └── peripheral_mpram_ahb3.vhd
+│   │   └── peripheral_mpram_ahb4.vhd
 │   ├── apb4
 │   │   ├── peripheral_mpram_1r1w_generic.vhd
 │   │   ├── peripheral_mpram_1r1w.vhd
@@ -23,8 +23,8 @@ code
     ├── core
     │   └── vhdl_pkg.vhd
     └── peripheral
-        ├── ahb3
-        │   └── peripheral_ahb3_pkg.vhd
+        ├── ahb4
+        │   └── peripheral_ahb4_pkg.vhd
         ├── apb4
         │   └── peripheral_apb4_pkg.vhd
         ├── axi4

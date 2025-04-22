@@ -45,7 +45,7 @@ use ieee.numeric_std.all;
 use ieee.math_real.all;
 
 use work.vhdl_pkg.all;
-use work.peripheral_ahb3_pkg.all;
+use work.peripheral_ahb4_pkg.all;
 
 entity peripheral_mpram_testbench is
 end peripheral_mpram_testbench;
@@ -70,7 +70,7 @@ architecture rtl of peripheral_mpram_testbench is
   signal HRESETn : std_logic;
   signal HCLK    : std_logic;
 
-  -- AHB3 signals
+  -- AHB4 signals
   signal mst_mpram_HSEL      : std_logic_vector(CORES_PER_TILE-1 downto 0);
   signal mst_mpram_HADDR     : std_logic_matrix(CORES_PER_TILE-1 downto 0)(PLEN-1 downto 0);
   signal mst_mpram_HWDATA    : std_logic_matrix(CORES_PER_TILE-1 downto 0)(XLEN-1 downto 0);
@@ -88,7 +88,7 @@ architecture rtl of peripheral_mpram_testbench is
   ------------------------------------------------------------------------------
   -- Components
   ------------------------------------------------------------------------------
-  component peripheral_mpram_ahb3
+  component peripheral_mpram_ahb4
     generic (
       MEM_SIZE          : integer := 256;  -- Memory in Bytes
       MEM_DEPTH         : integer := 256;  -- Memory depth
@@ -126,8 +126,8 @@ begin
   -- Module Body
   ------------------------------------------------------------------------------
 
-  -- DUT AHB3
-  ahb3_mpram : peripheral_mpram_ahb3
+  -- DUT AHB4
+  ahb4_mpram : peripheral_mpram_ahb4
     generic map (
       MEM_SIZE          => 256,
       MEM_DEPTH         => 256,

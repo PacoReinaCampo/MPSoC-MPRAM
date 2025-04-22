@@ -88,7 +88,7 @@ module peripheral_mpram_synthesis #(
   // Body
   //////////////////////////////////////////////////////////////////////////////
 
-  // DUT AHB3
+  // DUT AHB4
   assign slv_HSEL      [0] = HSEL;
   assign slv_HADDR     [0] = HADDR;
   assign slv_HWDATA    [0] = HWDATA;
@@ -104,14 +104,14 @@ module peripheral_mpram_synthesis #(
   assign HREADYOUT = slv_HREADYOUT [0];
   assign HRESP     = slv_HRESP     [0];
 
-  peripheral_mpram_ahb3 #(
+  peripheral_mpram_ahb4 #(
     .MEM_SIZE         (MEM_SIZE),
     .MEM_DEPTH        (MEM_DEPTH),
     .PLEN             (PLEN),
     .XLEN             (XLEN),
     .TECHNOLOGY       (TECHNOLOGY),
     .REGISTERED_OUTPUT(REGISTERED_OUTPUT)
-  ) mpram_ahb3 (
+  ) mpram_ahb4 (
     .HRESETn(HRESETn),
     .HCLK   (HCLK),
 

@@ -89,7 +89,7 @@
 all: build simulate
 
 build:
-	xvlog -i ../../../../../../../rtl/verilog/code/pkg/ahb3 -prj system.prj
+	xvlog -i ../../../../../../../rtl/verilog/code/pkg/ahb4 -prj system.prj
 
 simulate:
 	xelab peripheral_mpram_testbench
