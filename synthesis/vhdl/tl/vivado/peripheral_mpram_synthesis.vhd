@@ -44,7 +44,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-use work.peripheral_ahb4_pkg.all;
+use work.peripheral_tl_pkg.all;
 
 entity peripheral_mpram_synthesis is
   generic (
@@ -82,7 +82,7 @@ architecture rtl of peripheral_mpram_synthesis is
   ------------------------------------------------------------------------------
   -- Components
   ------------------------------------------------------------------------------
-  component peripheral_mpram_ahb4
+  component peripheral_mpram_tl
     generic (
       MEM_SIZE          : integer := 256;  -- Memory in Bytes
       MEM_DEPTH         : integer := 256;  -- Memory depth
@@ -119,7 +119,7 @@ begin
   ------------------------------------------------------------------------------
 
   -- DUT AHB4
-  mpram_ahb4 : peripheral_mpram_ahb4
+  mpram_tl : peripheral_mpram_tl
     generic map (
       MEM_SIZE          => MEM_SIZE,
       MEM_DEPTH         => MEM_DEPTH,

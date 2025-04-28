@@ -104,14 +104,14 @@ module peripheral_mpram_synthesis #(
   assign HREADYOUT = slv_HREADYOUT [0];
   assign HRESP     = slv_HRESP     [0];
 
-  peripheral_mpram_ahb4 #(
+  peripheral_mpram_tl #(
     .MEM_SIZE         (MEM_SIZE),
     .MEM_DEPTH        (MEM_DEPTH),
     .PLEN             (PLEN),
     .XLEN             (XLEN),
     .TECHNOLOGY       (TECHNOLOGY),
     .REGISTERED_OUTPUT(REGISTERED_OUTPUT)
-  ) mpram_ahb4 (
+  ) mpram_tl (
     .HRESETn(HRESETn),
     .HCLK   (HCLK),
 
