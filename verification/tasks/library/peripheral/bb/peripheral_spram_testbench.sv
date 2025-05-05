@@ -11,7 +11,7 @@
 //                                                                            //
 //              MPSoC-RISCV CPU                                               //
 //              Master Slave Interface Tesbench                               //
-//              AMBA3 AXI-Lite Bus Interface                                  //
+//              AMBA4 AXI-Lite Bus Interface                                  //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2018-2019 by the author(s)
